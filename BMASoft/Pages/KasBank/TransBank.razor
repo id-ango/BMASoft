@@ -1,0 +1,102 @@
+﻿@page "/TransBank"
+@inject NavigationManager navigationmanager
+@inject BMASoft.Services.IKasBankService service
+
+<div class="row">
+    <div>
+        <h1>Transaksi Bank</h1>
+    </div>
+
+</div>
+<div class="row">
+
+    <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
+
+</div>
+<br />
+<br />
+
+@if (toDoList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="col-lg-12 control-section">
+        <div class="content-wrapper">
+            <div class="row">
+                <SfGrid DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true">
+                    <GridGroupSettings Columns="@GroupedColumns"></GridGroupSettings>
+                    <GridColumns>
+                        <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="150">
+                            <GridCommandColumns>
+                                <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { Content = "Edit" })">
+                                </GridCommandColumn>
+                                <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { Content = "Delete" })">
+                                </GridCommandColumn>
+                            </GridCommandColumns>
+                        </GridColumn>
+                        <GridColumn Field=@nameof(CbTransH.KodeBank) HeaderText="Bank" TextAlign="TextAlign.Right" Width="40"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransH.DocNo) HeaderText="No Bukti" Width="150"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransH.Tanggal) HeaderText=" Tanggal" Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Right" Width="130"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransH.Keterangan) HeaderText="Keterangan" TextAlign="TextAlign.Right" Width="120"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransH.Saldo) HeaderText="Keterangan" Format="N2" TextAlign="TextAlign.Right" Width="120"></GridColumn>
+
+                    </GridColumns>
+                </SfGrid>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+
+    private List<CbTransH> toDoList;
+
+    public string[] GroupedColumns = new string[] { "KodeBank" };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await LoadBank();
+
+    }
+
+    async Task LoadBank()
+    {
+
+        toDoList = await service.GetTransH();
+    }
+
+    private void Tambah()
+    {
+        navigationmanager.NavigateTo("AddTransBank");
+    }
+
+    private async void Rubah(CbTransH xKdBank)
+    {
+        //Rubahbanks.bankId = xKdBank.CbBankId;
+        //Rubahbanks.kdbank = xKdBank.KodeBank;
+        //Rubahbanks.namabank = xKdBank.NmBank;
+        //Rubahbanks.kurs = xKdBank.Kurs;
+        //status = 2;
+        //TblButton = !TblButton;
+        await LoadBank();
+        //StateHasChanged();
+
+    }
+
+    private async void Hapus(CbTransH xKdBank)
+    {
+        //Rubahbanks.bankId = xKdBank.CbBankId;
+        //Rubahbanks.kdbank = xKdBank.KodeBank;
+        //Rubahbanks.namabank = xKdBank.NmBank;
+        //Rubahbanks.kurs = xKdBank.Kurs;
+        //status = 3;
+        //TblButton = !TblButton;
+        await LoadBank();
+        //StateHasChanged();
+    }
+}

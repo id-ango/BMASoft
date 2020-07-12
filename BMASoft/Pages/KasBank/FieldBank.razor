@@ -1,0 +1,162 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject NavigationManager navigationmanager
+@inject BMASoft.Services.IKasBankService service
+
+
+@if (pilihmana())
+{
+    <EditForm Model="@banks" OnValidSubmit="HandleValidSubmit">
+
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <label for="kodebank">Kode Bank</label> <br />
+        <InputText id="kodebank" @bind-Value="banks.kdbank" style="text-transform:uppercase" disabled=@((cekStatus==3 || cekStatus==2) ? "disabled":null) /> <br />
+        <label for="nmbank">Nama Bank</label> <br />
+        <InputText id="nmbank" @bind-Value="banks.namabank" disabled=@(cekStatus==3 ? "disabled":null) /> <br />
+        <label for="kurs">Kurs</label> <br />
+        <InputSelect id="kurs" style="text-transform:uppercase" @bind-Value=banks.kurs disabled=@(cekStatus==3 ? "disabled":null)>
+            <option value=""></option>
+            <option value="USD">USD</option>
+            <option value="EUR">EURO</option>
+        </InputSelect> <br /><br />
+        @*<SfButton type="submit" Disabled="addButton" Icon="save" Text="Save" Style="margin-bottom: 20px; width: 100px; height: 75px" />
+            <SfButton type="submit" Disabled="editButton" Text="Update" Icon="check_circle" ButtonStyle="ButtonStyle.Secondary" Style="margin-bottom: 20px; width: 100px;  height: 75px" />
+            <SfButton type="submit" Disabled="deleteButton" Text="Delete" Icon="delete_forever" Style="margin-bottom: 20px; width: 100px;  height: 75px" />*@
+        <SfButton Type="Submit" Disabled="addButton" Content="Save" CssClass="e-primary" />
+        <SfButton Type="Submit" Disabled="editButton" Content="Update" CssClass="e-success" />
+        <SfButton Type="Submit" Disabled="deleteButton" Content="Delete" CssClass="e-danger" />
+    </EditForm>
+
+}
+
+<SfToast ID="toast_default" @ref="ToastObj" Title="INFORMATION" Content="@ToastContent" TimeOut="5000" Icon="e-meeting">
+    <ToastPosition X="@ToastPosition"></ToastPosition>
+</SfToast>
+
+<br />
+
+@code {
+
+    [Parameter]
+    public int cekStatus { get; set; }
+
+    [Parameter]
+    public bool tombol { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> Simpan { get; set; }
+
+    [CascadingParameter(Name = "TambahBank")]
+    public BankView banks { get; set; }
+
+    [CascadingParameter(Name = "EditBank")]
+    public BankView Editbanks { get; set; }
+
+    private int selectedId = -1;
+
+    private bool addButton { get; set; }
+    private bool editButton { get; set; }
+    private bool deleteButton { get; set; }
+
+    SfToast ToastObj;
+    private string ToastPosition = "Right";
+    private string ToastContent { get; set; } = " ";
+
+
+    private void ShowToast()
+    {
+
+        this.ToastObj.Show();
+    }
+
+    private bool pilihmana()
+    {
+        switch (cekStatus)
+        {
+            case 1:
+                addButton = false;
+                editButton = deleteButton = true;
+                break;
+            case 2:
+                editButton = false;
+                addButton = deleteButton = true;
+                if (selectedId == -1)
+                {
+                    banks.kdbank = Editbanks.kdbank;
+                    banks.namabank = Editbanks.namabank;
+                    banks.kurs = Editbanks.kurs;
+                    banks.bankId = Editbanks.bankId;
+                    selectedId = Editbanks.bankId;
+                }
+                if (tombol == true)
+                    selectedId = -1;
+
+                break;
+            case 3:
+                deleteButton = false;
+                editButton = addButton = true;
+
+                banks.kdbank = Editbanks.kdbank;
+                banks.namabank = Editbanks.namabank;
+                banks.kurs = Editbanks.kurs;
+                banks.bankId = Editbanks.bankId;
+                selectedId = Editbanks.bankId;
+
+                break;
+
+        }
+
+        return !tombol;
+    }
+
+
+
+    //bank banks = new bank();
+
+    private async Task HandleValidSubmit()
+    {
+        switch (cekStatus)
+        {
+            case 1:
+                var newAdd = await service.AddBank(banks);
+                if(!newAdd)
+                {
+                    ToastContent = "Kode Kas/Bank ini Sudah Ada";
+                    await Task.Delay(100);
+                    await this.ToastObj.Show();
+                }
+                break;
+            case 2:
+                var newEdit = await service.EditBank(banks);
+                break;
+            case 3:
+                var newDel = await service.DelBank(banks);
+                if (newDel)
+                {
+                    ToastContent = "Kas/Bank sudah dihapus";
+                    await Task.Delay(100);
+                    await this.ToastObj.Show();
+                }
+                break;
+        };
+
+
+
+        banks.kdbank = "";
+        banks.namabank = "";
+        banks.kurs = "";
+        refreshTambah();
+        navigationmanager.NavigateTo("SetupBank", false);
+        //add = !add;
+        //StateHasChanged();
+
+    }
+    private void refreshTambah()
+    {
+        tombol = !tombol;
+        Simpan.InvokeAsync(tombol);
+
+    }
+
+
+}

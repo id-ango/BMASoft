@@ -1,0 +1,154 @@
+﻿@page "/SetupBank"
+@using BMASoft.Data.Models
+@using System.ComponentModel.DataAnnotations
+@inject BMASoft.Services.IKasBankService service
+
+<style>
+    .e-edit-icon::before {
+        content: '\ea9a';
+    }
+
+    .e-delete-icon::before {
+        content: '\e94a';
+    }
+</style>
+
+<div class="row">
+    <div>
+        <h1>Setup Bank</h1>
+    </div>
+
+</div>
+<div class="row">
+    <SfButton @onclick="Tambah" CssClass="e-primary" IsPrimary="true">Add</SfButton>
+
+</div>
+<br />
+<br />
+
+@if (toDoList == null)
+{
+    <p><em>Loading...</em></p>
+}
+@*else if (toDoList.Length == 0)
+    {
+        <p>No Record</p>
+    }*@
+else
+{
+    <div class="row">
+        <div class="col-md-5">
+
+            <CascadingValue Name="TambahBank" Value="banks">
+                <CascadingValue Name="EditBank" Value="Rubahbanks">
+                    <FieldBank cekStatus="status" tombol="TblButton" Simpan="simpan"></FieldBank>
+                </CascadingValue>
+            </CascadingValue>
+        </div>
+        <div class="col-md-7">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Kode</th>
+                        <th>Nama</th>
+                        <th>Saldo</th>
+                        <th>Balance</th>
+                        <th>Kurs</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var toDoItem in toDoList)
+                    {
+                        <tr>
+                            <td>
+
+
+                                <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(toDoItem))"></SfButton>
+                                <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(toDoItem))"></SfButton>
+
+
+                            </td>
+                            <td>@toDoItem.KodeBank</td>
+                            <td>@toDoItem.NmBank</td>
+                            <td>@toDoItem.Saldo.ToString("##,#.##")</td>
+                            <td>@toDoItem.KSaldo.ToString("##,#.##")</td>
+                            <td>@toDoItem.Kurs</td>
+                            @*<td><input type="button" class="btn btn-primary" value="Edit" @onclick="(() => PrepareForEdit(toDoItem))" data-toggle="modal" data-target="#taskModal" /></td>
+                                <td><input type="button" class="btn btn-danger" value="Delete" @onclick="(() => PrepareForDelete(toDoItem))" data-toggle="modal" data-target="#confirmDeleteModal" /></td>*@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@code {
+
+    private List<CbBank> toDoList;
+    private bool TblButton { get; set; } = true;
+
+
+    private int status { get; set; }
+
+    BankView banks = new BankView();
+    BankView Rubahbanks = new BankView();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await LoadBank();
+
+    }
+
+    async Task LoadBank()
+    {
+      
+            toDoList = await service.GetBank();
+       
+       
+    }
+
+    private void simpan(bool jadisimpan)
+    {
+        TblButton = jadisimpan;
+        Tambah();
+
+    }
+
+    private async void Tambah()
+    {
+        status = 1;
+        TblButton = !TblButton;
+        await LoadBank();
+        StateHasChanged();
+    }
+    private async void Rubah(CbBank xKdBank)
+    {
+        Rubahbanks.bankId = xKdBank.CbBankId;
+        Rubahbanks.kdbank = xKdBank.KodeBank;
+        Rubahbanks.namabank = xKdBank.NmBank;
+        Rubahbanks.kurs = xKdBank.Kurs;
+        status = 2;
+        TblButton = !TblButton;
+        await LoadBank();
+        StateHasChanged();
+
+    }
+
+    private async void Hapus(CbBank xKdBank)
+    {
+        Rubahbanks.bankId = xKdBank.CbBankId;
+        Rubahbanks.kdbank = xKdBank.KodeBank;
+        Rubahbanks.namabank = xKdBank.NmBank;
+        Rubahbanks.kurs = xKdBank.Kurs;
+        status = 3;
+        TblButton = !TblButton;
+        await LoadBank();
+        StateHasChanged();
+    }
+
+
+}

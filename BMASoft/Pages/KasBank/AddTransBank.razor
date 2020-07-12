@@ -1,0 +1,461 @@
+﻿@page "/AddTransBank"
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager navigationmanager
+@inject BMASoft.Services.IKasBankService service
+@using Newtonsoft.Json 
+
+<style>
+    .e-edit-icon::before {
+        content: '\ea9a';
+    }
+
+    .e-delete-icon::before {
+        content: '\e94a';
+    }
+
+    .e-add-icon::before {
+        content: '\e7f9';
+    }
+
+    .e-save-icon::before {
+        content: '\e735';
+    }
+
+    .form-message {
+        padding: 0.5rem;
+        font-weight: 700;
+    }
+
+    #toast_default .e-meeting::before {
+        content: "\e705";
+        font-size: 17px;
+    }
+
+    .bootstrap4 #toast_default .e-meeting::before {
+        content: "\e763";
+        font-size: 20px;
+    }
+</style>
+
+
+
+<div class="container">
+    <div class="master">
+        <h2>Transaksi Kas/Bank</h2>
+
+        <EditForm Model="@Transh" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <div class="float-md-right">
+                <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
+            </div>
+
+            <label>@kurs</label> <br />
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="CbBank" DataSource="banks" Placeholder="Select Bank" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.KodeBank">
+                    <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="NmBank" Value="KodeBank"></ComboBoxFieldSettings>
+                </SfComboBox>
+                <ValidationMessage For="@(() => Transh.KodeBank)" />
+            </div>
+
+            <div class="form-group">
+                <SfDatePicker TValue="DateTime" @bind-Value="Transh.Tanggal" Placeholder="Tanggal" FloatLabelType="FloatLabelType.Auto" Format="dd-MMM-yy">
+                </SfDatePicker>
+                <ValidationMessage For="@(() => Transh.Tanggal)" />
+            </div>
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@Transh.Keterangan" Multiline="true" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+                <ValidationMessage For="@(() => Transh.Keterangan)" />
+            </div>
+
+
+        </EditForm>
+        <div class="details">
+
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <td>Source</td>
+                        <td>Keterangan</td>
+                        <td>Jumlah</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Transh.TransDs != null)
+                    {
+                        @foreach (var detail in Transh.TransDs)
+                        {
+                            <tr>
+                                <td>@detail.SrcCode</td>
+                                <td>@detail.Keterangan</td>
+                                <td>@detail.Jumlah.ToString("#,##0.##")</td>
+                                <td>
+                                    <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(detail))"></SfButton>
+                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(detail))"></SfButton>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                    <tr>
+                        <td>
+                            <SfButton CssClass="e-small e-link" IconCss="e-icons e-add-icon" @onclick="@OnAddLine">Add Line</SfButton>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td> </td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+
+
+        </div>
+        <div class="float-md-right form-message">
+            <span>Saldo   : @Transh.Saldo.ToString("#,##0.##")</span>
+        </div>
+        <div class="float-md-right form-message">
+            <span> Balance : @Transh.KSaldo.ToString("#,##0.##")</span>
+        </div>
+    </div>
+</div>
+<SfDialog @bind-Visible="@IsVisible" Width="500px" ShowCloseIcon="true" IsModal="true">
+    <DialogTemplates>
+        <Content>
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="CbSrcCode" DataSource="srccode" Placeholder="Select Code" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transd.SrcCode">
+                    <ComboBoxFieldSettings Text="NamaSrc" Value="SrcCode"></ComboBoxFieldSettings>
+                </SfComboBox>
+
+            </div>
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@Transd.Keterangan" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <SfNumericTextBox CssClass="e-outline" @bind-Value="@Transd.KValue" @onfocusout="KursUbah" Placeholder="Kurs" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="form-group col">
+
+                        <SfNumericTextBox CssClass="e-outline" @bind-Value="@Transd.KTerima" @onfocusout="TerimaUbah" Placeholder="Receipt" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
+                    </div>
+
+                    <div class="form-group col">
+                        <SfNumericTextBox CssClass="e-outline" @bind-Value="@Transd.KBayar" @onfocusout="BayarUbah" Placeholder="Payment" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <SfNumericTextBox CssClass="e-outline" @bind-Value="@Transd.Terima" Placeholder="Terima" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
+                    </div>
+
+                    <div class="col">
+                        <SfNumericTextBox CssClass="e-outline" @bind-Value="@Transd.Bayar" Placeholder="Bayar" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
+                    </div>
+                </div>
+            </div>
+
+        </Content>
+    </DialogTemplates>
+    <DialogButtons>
+        <DialogButton OnClick="@OkClick" Content="OK" IsPrimary="true" />
+        <DialogButton OnClick="@CancelClick" Content="Cancel" />
+    </DialogButtons>
+</SfDialog>
+
+<SfDialog @bind-Visible="@IsKurs" Width="500px" ShowCloseIcon="true" IsModal="true">
+    <DialogTemplates>
+        <Content>
+            <div class="form-group col">
+                <SfComboBox TValue="string" TItem="CbSrcCode" DataSource="srccode" Placeholder="Select Code" FloatLabelType="FloatLabelType.Auto" @bind-Value="@TransK.SrcCode">
+                    <ComboBoxFieldSettings Text="NamaSrc" Value="SrcCode"></ComboBoxFieldSettings>
+                </SfComboBox>
+
+            </div>
+            <div class="form-group col">
+                <SfTextBox CssClass="e-outline" @bind-Value="@TransK.Keterangan" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+
+            </div>
+
+
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <SfNumericTextBox CssClass="e-outline" @bind-Value="@TransK.Terima" @onfocusout="KTerimaUbah" Placeholder="Terima" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
+                    </div>
+
+                    <div class="col">
+                        <SfNumericTextBox CssClass="e-outline" @bind-Value="@TransK.Bayar" @onfocusout="KBayarUbah" Placeholder="Bayar" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
+                    </div>
+                </div>
+            </div>
+
+        </Content>
+    </DialogTemplates>
+    <DialogButtons>
+        <DialogButton OnClick="@OkkClick" Content="OK" IsPrimary="true" />
+        <DialogButton OnClick="@CancelClick" Content="Cancel" />
+    </DialogButtons>
+</SfDialog>
+<SfToast ID="toast_default" @ref="ToastObj" Title="Delete Record" Content="@ToastContent" TimeOut="5000" Icon="e-meeting">
+    <ToastPosition X="@ToastPosition"></ToastPosition>
+</SfToast>
+
+@code {
+
+    private TranshView Transh = new TranshView() { TransDs = new List<TransDView>() };
+
+    private List<CbBank> banks;
+    private List<CbSrcCode> srccode;
+    private TransDView Transd = new TransDView();
+    private TransDView TransK = new TransDView();
+    //   private List<TransDView> TransDs = new List<TransDView>();
+    private string enabled { get; set; }
+
+    public string kurs { get; set; } = "";
+
+    private bool IsVisible { get; set; } = false;
+    private bool IsKurs { get; set; } = false;
+    private bool IsEdit { get; set; } = false;
+
+    SfToast ToastObj;
+    private string ToastPosition = "Right";
+    private string ToastContent { get; set; } = " ";
+
+    private void ShowOnClick()
+    {
+        this.ToastObj.Show();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Transh.Tanggal = DateTime.Now;
+
+        await LoadBank();
+        await LoadSrcCode();
+    }
+
+    async Task LoadBank()
+    {
+
+        banks = await service.GetBank();
+
+    }
+
+    async Task LoadSrcCode()
+    {
+
+        srccode = await service.GetSrcCode();
+
+    }
+
+    public void OnChangeBank(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        var itemData = JsonConvert.DeserializeObject<CbBank>(args.ItemData != null ? args.ItemData.ToString() : "");
+        this.kurs = itemData?.Kurs;
+
+    }
+
+    private void OkClick()
+    {
+        this.IsVisible = false;
+        this.IsKurs = false;
+        if (Transd.SrcCode != null && !IsEdit)
+        {
+            Transh.TransDs.Add(new TransDView()
+            {
+                SrcCode = Transd.SrcCode,
+                Keterangan = Transd.Keterangan,
+                Terima = Transd.Terima,
+                Bayar = Transd.Bayar,
+                KTerima = Transd.KTerima,
+                KBayar = Transd.KBayar,
+                KValue = Transd.KValue,
+                Kurs = Transh.Kurs
+            });
+        }
+
+        Transd = new TransDView();
+    }
+
+    private void OkkClick()
+    {
+        this.IsVisible = false;
+        this.IsKurs = false;
+        if (TransK.SrcCode != null && !IsEdit)
+        {
+            Transh.TransDs.Add(new TransDView()
+            {
+                SrcCode = TransK.SrcCode,
+                Keterangan = TransK.Keterangan,
+                Terima = TransK.Terima,
+                Bayar = TransK.Bayar,
+                KTerima = TransK.KTerima,
+                KBayar = TransK.KBayar,
+                KValue = TransK.KValue,
+                Kurs = Transh.Kurs
+            });
+        }
+
+        TransK = new TransDView();
+    }
+
+    private void CancelClick()
+    {
+        this.IsVisible = false;
+        this.IsKurs = false;
+        Transd = new TransDView();
+        TransK = new TransDView();
+    }
+
+    private void OnAddLine()
+    {
+        if (this.kurs != null && this.kurs.Length != 0)
+        {
+            this.IsVisible = true;
+            this.IsKurs = false;
+        }
+        else
+        {
+            this.IsVisible = false;
+            this.IsKurs = true;
+        }
+        IsEdit = false;
+        ShowOnClick();
+    }
+    private void OnEditLine()
+    {
+        if (this.kurs != null)
+        {
+            this.IsVisible = true;
+            this.IsKurs = false;
+        }
+        else
+        {
+            this.IsVisible = false;
+            this.IsKurs = true;
+        }
+        IsEdit = true;
+
+    }
+
+    private void OnBtnSimpan()
+    {
+        if (this.kurs != null)
+        {
+            this.IsVisible = true;
+            this.IsKurs = false;
+        }
+        else
+        {
+            this.IsVisible = false;
+            this.IsKurs = true;
+        }
+
+
+    }
+
+    private void TerimaUbah()
+    {
+
+        Transd.Terima = Transd.KValue * Transd.KTerima;
+        if (Transd.Terima != 0)
+        {
+            Transd.KBayar = 0;
+            Transd.Bayar = Transd.KValue * Transd.KBayar;
+        }
+    }
+
+
+    private void BayarUbah()
+    {
+        Transd.Bayar = Transd.KValue * Transd.KBayar;
+        if (Transd.Bayar != 0)
+        {
+
+            Transd.KTerima = 0;
+            Transd.Terima = Transd.KValue * Transd.KTerima;
+
+        }
+
+    }
+
+    private void KTerimaUbah()
+    {
+
+
+        if (TransK.Terima != 0)
+        {
+            TransK.KBayar = 0;
+            TransK.Bayar = 0;
+        }
+    }
+
+
+    private void KBayarUbah()
+    {
+
+        if (TransK.Bayar != 0)
+        {
+
+            TransK.KTerima = 0;
+            TransK.Terima = 0;
+
+        }
+
+    }
+
+    private void KursUbah()
+    {
+        Transd.Terima = Transd.KValue * Transd.KTerima;
+        Transd.Bayar = Transd.KValue * Transd.KBayar;
+    }
+
+    private void Rubah(TransDView transd)
+    {
+        Transd = new TransDView();
+        Transd = transd;
+
+        TransK = new TransDView();
+        TransK = transd;
+
+        OnEditLine();
+
+
+
+    }
+
+    private void Hapus(TransDView transd)
+    {
+
+        Transh.TransDs.Remove(transd);
+        ShowOnClick();
+
+
+
+    }
+
+    private async Task HandleValidSubmit()
+    {
+
+        var newEdit = await service.AddTransH(Transh);
+
+        navigationmanager.NavigateTo("TransBank", false);
+        //add = !add;
+        //StateHasChanged();
+
+    }
+}
