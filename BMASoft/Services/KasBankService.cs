@@ -21,6 +21,7 @@ namespace BMASoft.Services
         Task<bool> EditSrcCode(SrcCodeView codeview);
         Task<bool> DelSrcCode(SrcCodeView codeview);
         Task<List<CbTransH>> GetTransH();
+        Task<List<CbTransD>> GetTransD();
         Task<bool> AddTransH(TranshView transH);
     }
 
@@ -193,6 +194,11 @@ namespace BMASoft.Services
             return await _context.CbTransHs.Include(p =>p.CbTransDs).ToListAsync();
         }
 
+        public async Task<List<CbTransD>> GetTransD()
+        {
+            return await _context.CbTransDs.ToListAsync();
+        }
+
         public async Task<bool> AddTransH(TranshView trans)
         {
             //string test = codeview.SrcCode.ToUpper();
@@ -200,7 +206,7 @@ namespace BMASoft.Services
            
             CbTransH transH = new CbTransH
             {
-                DocNo = "Test200101",
+                DocNo = GetNumber(trans.KodeBank.ToUpper()),
                 KodeBank = trans.KodeBank.ToUpper(),
                 Tanggal = trans.Tanggal,
                 Keterangan = trans.Keterangan,
@@ -274,6 +280,39 @@ namespace BMASoft.Services
         }
 
         #endregion Transaksi Bank Class
+
+        public string GetNumber(string kodeno)
+        {
+            string kodeurut = kodeno + '-';
+            string thnbln = DateTime.Now.ToString("yyMM");
+            string xbukti = kodeurut + thnbln;
+            var maxvalue = "";
+            var maxlist = _context.CbTransHs.Where(x => x.DocNo.Substring(0, 7).Equals(xbukti)).ToList();
+            if (maxlist != null)
+            {
+                maxvalue = maxlist.Max(x => x.DocNo);
+
+            }
+
+            //            var maxvalue = (from e in db.CbTransHs where  e.Docno.Substring(0, 7) == kodeno + thnbln select e).Max();
+            string nourut = "000";
+            if (maxvalue == null)
+            {
+                nourut = "000";
+            }
+            else
+            {
+                nourut = maxvalue.Substring(7, 3);
+            }
+
+            //  nourut =Convert.ToString(Int32.Parse(nourut) + 1);
+
+
+            string cAngNo = kodeurut+ thnbln + (Int32.Parse(nourut) + 1).ToString("000");
+            // var maxvalue = (from e in db.AptTranss where e.NoRef.Substring(0, 7) == "ANG" + cAngNo select e.NoRef.Max()).FirstOrDefault();
+            return cAngNo;
+
+        }
     }
 
 }

@@ -27,8 +27,26 @@ else
             <div class="row">
                 <SfGrid DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true">
                     <GridGroupSettings Columns="@GroupedColumns"></GridGroupSettings>
+                    <GridTemplates>
+                        <DetailTemplate>
+                            @{ 
+                                var transbank = (context as CbTransH);
+                            }
+                            <div style="padding:25px">
+                                <SfGrid DataSource="@toDoDetail" AllowPaging="true" Query="@(new Query().Where("CbTransHId", "equal", transbank.CbTransHId))">
+                                    <GridPageSettings PageSize="6"></GridPageSettings>
+                                    <GridColumns>
+                                        <GridColumn Field=@nameof(CbTransD.CbTransDId) HeaderText="ID" TextAlign="TextAlign.Right" Width="50"> </GridColumn>
+                                        <GridColumn Field=@nameof(CbTransD.SrcCode) HeaderText="Code" Width="50"></GridColumn>
+                                        <GridColumn Field=@nameof(CbTransD.Keterangan) HeaderText="Keterangan" TextAlign="TextAlign.Right" Width="110" ></GridColumn>
+                                        <GridColumn Field=@nameof(CbTransD.Jumlah) HeaderText="Jumlah" Width="90" Format="N2"></GridColumn>
+                                    </GridColumns>
+                                </SfGrid>
+                            </div>
+                        </DetailTemplate>
+                    </GridTemplates>
                     <GridColumns>
-                        <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="150">
+                        <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="100">
                             <GridCommandColumns>
                                 <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { Content = "Edit" })">
                                 </GridCommandColumn>
@@ -36,11 +54,11 @@ else
                                 </GridCommandColumn>
                             </GridCommandColumns>
                         </GridColumn>
-                        <GridColumn Field=@nameof(CbTransH.KodeBank) HeaderText="Bank" TextAlign="TextAlign.Right" Width="40"></GridColumn>
-                        <GridColumn Field=@nameof(CbTransH.DocNo) HeaderText="No Bukti" Width="150"></GridColumn>
-                        <GridColumn Field=@nameof(CbTransH.Tanggal) HeaderText=" Tanggal" Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Right" Width="130"></GridColumn>
-                        <GridColumn Field=@nameof(CbTransH.Keterangan) HeaderText="Keterangan" TextAlign="TextAlign.Right" Width="120"></GridColumn>
-                        <GridColumn Field=@nameof(CbTransH.Saldo) HeaderText="Keterangan" Format="N2" TextAlign="TextAlign.Right" Width="120"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransH.KodeBank) HeaderText="Bank" Width="50"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransH.DocNo) HeaderText="No Bukti" Width="70"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransH.Tanggal) HeaderText=" Tanggal" Format="d" Type="ColumnType.Date"  Width="60"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransH.Keterangan) HeaderText="Keterangan"  Width="170"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransH.Saldo) HeaderText="Saldo" Format="N2"  Width="100"></GridColumn>
 
                     </GridColumns>
                 </SfGrid>
@@ -53,6 +71,7 @@ else
 @code {
 
     private List<CbTransH> toDoList;
+    private List<CbTransD> toDoDetail;
 
     public string[] GroupedColumns = new string[] { "KodeBank" };
 
@@ -68,6 +87,7 @@ else
     {
 
         toDoList = await service.GetTransH();
+        toDoDetail = await service.GetTransD();
     }
 
     private void Tambah()
