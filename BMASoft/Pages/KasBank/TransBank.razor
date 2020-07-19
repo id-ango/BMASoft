@@ -2,6 +2,26 @@
 @inject NavigationManager navigationmanager
 @inject BMASoft.Services.IKasBankService service
 
+
+<style>
+    .e-edit-icon::before {
+        content: '\ea9a';
+    }
+
+    .e-delete-icon::before {
+        content: '\e94a';
+    }
+
+    .e-print-icon::before {
+        content: '\e34b';
+    }
+
+    .e-search:before {
+        content: '\e993';
+    }
+</style>
+
+
 <div class="row">
     <div>
         <h1>Transaksi Bank</h1>
@@ -25,20 +45,20 @@ else
     <div class="col-lg-12 control-section">
         <div class="content-wrapper">
             <div class="row">
-                <SfGrid DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true">
+                <SfGrid DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true" AllowFiltering="true">
                     <GridGroupSettings Columns="@GroupedColumns"></GridGroupSettings>
+
                     <GridTemplates>
                         <DetailTemplate>
-                            @{ 
+                            @{
                                 var transbank = (context as CbTransH);
                             }
                             <div style="padding:25px">
                                 <SfGrid DataSource="@toDoDetail" AllowPaging="true" Query="@(new Query().Where("CbTransHId", "equal", transbank.CbTransHId))">
                                     <GridPageSettings PageSize="6"></GridPageSettings>
                                     <GridColumns>
-                                        <GridColumn Field=@nameof(CbTransD.CbTransDId) HeaderText="ID" TextAlign="TextAlign.Right" Width="50"> </GridColumn>
                                         <GridColumn Field=@nameof(CbTransD.SrcCode) HeaderText="Code" Width="50"></GridColumn>
-                                        <GridColumn Field=@nameof(CbTransD.Keterangan) HeaderText="Keterangan" TextAlign="TextAlign.Right" Width="110" ></GridColumn>
+                                        <GridColumn Field=@nameof(CbTransD.Keterangan) HeaderText="Keterangan" TextAlign="TextAlign.Right" Width="110"></GridColumn>
                                         <GridColumn Field=@nameof(CbTransD.Jumlah) HeaderText="Jumlah" Width="90" Format="N2"></GridColumn>
                                     </GridColumns>
                                 </SfGrid>
@@ -46,35 +66,62 @@ else
                         </DetailTemplate>
                     </GridTemplates>
                     <GridColumns>
-                        <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="100">
-                            <GridCommandColumns>
-                                <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { Content = "Edit" })">
-                                </GridCommandColumn>
-                                <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { Content = "Delete" })">
-                                </GridCommandColumn>
-                            </GridCommandColumns>
+
+                        <GridColumn HeaderText="" Width="80">
+                            <Template>
+                                @{
+                                    var trans2 = (context as CbTransH);
+                                    <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.CbTransHId))"></SfButton>
+                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.CbTransHId))"></SfButton>
+
+                                }
+
+                            </Template>
+                            @*<GridCommandColumns>
+                                    <GridCommandColumn  ButtonOption="@(new CommandButtonOptions() { CssClass="e-small e-success", IconCss="e-icons e-edit-icon" })">
+                                    </GridCommandColumn>
+                                    <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { CssClass="e-small e-danger", IconCss="e-icons e-delete-icon" })">
+                                    </GridCommandColumn>
+                                    <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { CssClass="e-small e-info", IconCss="e-icons e-print-icon" })">
+                                    </GridCommandColumn>
+                                </GridCommandColumns>*@
                         </GridColumn>
                         <GridColumn Field=@nameof(CbTransH.KodeBank) HeaderText="Bank" Width="50"></GridColumn>
                         <GridColumn Field=@nameof(CbTransH.DocNo) HeaderText="No Bukti" Width="70"></GridColumn>
-                        <GridColumn Field=@nameof(CbTransH.Tanggal) HeaderText=" Tanggal" Format="d" Type="ColumnType.Date"  Width="60"></GridColumn>
-                        <GridColumn Field=@nameof(CbTransH.Keterangan) HeaderText="Keterangan"  Width="170"></GridColumn>
-                        <GridColumn Field=@nameof(CbTransH.Saldo) HeaderText="Saldo" Format="N2"  Width="100"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransH.Tanggal) HeaderText=" Tanggal" Format="d" Type="ColumnType.Date" Width="60"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransH.Keterangan) HeaderText="Keterangan" Width="170"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransH.Saldo) HeaderText="Saldo" Format="N2" Width="100"></GridColumn>
 
                     </GridColumns>
                 </SfGrid>
             </div>
         </div>
     </div>
+    <SfDialog @bind-Visible="@IsVisible" Width="500px" ShowCloseIcon="true" IsModal="true">
+        <DialogTemplates>
+            <Content>
+                <h2>Do you want to Delete? </h2>
+            </Content>
+        </DialogTemplates>
+        <DialogButtons>
+            <DialogButton OnClick="@OkkClick" Content="OK" IsPrimary="true" />
+            <DialogButton OnClick="@CancelClick" Content="Cancel" />
+        </DialogButtons>
+    </SfDialog>
 }
 
 
 @code {
 
+    private int id { get; set; }
+
     private List<CbTransH> toDoList;
     private List<CbTransD> toDoDetail;
+    private CbTransH TransAll = new CbTransH() { CbTransDs = new List<CbTransD>() };
+
 
     public string[] GroupedColumns = new string[] { "KodeBank" };
-
+    private bool IsVisible { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -95,28 +142,25 @@ else
         navigationmanager.NavigateTo("AddTransBank");
     }
 
-    private async void Rubah(CbTransH xKdBank)
+
+
+    private void Rubah(int xKdBank)
     {
-        //Rubahbanks.bankId = xKdBank.CbBankId;
-        //Rubahbanks.kdbank = xKdBank.KodeBank;
-        //Rubahbanks.namabank = xKdBank.NmBank;
-        //Rubahbanks.kurs = xKdBank.Kurs;
-        //status = 2;
-        //TblButton = !TblButton;
-        await LoadBank();
-        //StateHasChanged();
+        navigationmanager.NavigateTo($"EditTransBank/{xKdBank}");
 
     }
 
-    private async void Hapus(CbTransH xKdBank)
+    private async void Hapus(int xKdBank)
     {
-        //Rubahbanks.bankId = xKdBank.CbBankId;
-        //Rubahbanks.kdbank = xKdBank.KodeBank;
-        //Rubahbanks.namabank = xKdBank.NmBank;
-        //Rubahbanks.kurs = xKdBank.Kurs;
-        //status = 3;
-        //TblButton = !TblButton;
-        await LoadBank();
-        //StateHasChanged();
+        this.IsVisible = true;
+        TransAll = await service.GetTrans(xKdBank);
+        StateHasChanged();
+    }
+
+    private async void OkkClick()
+    {
+        var newEdit = await service.DelTransH(Transh);
+
+        // navigationmanager.NavigateTo("TransBank", false);
     }
 }

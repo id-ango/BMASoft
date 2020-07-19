@@ -20,9 +20,12 @@ namespace BMASoft.Services
         Task<bool> AddSrcCode(SrcCodeView codeview);
         Task<bool> EditSrcCode(SrcCodeView codeview);
         Task<bool> DelSrcCode(SrcCodeView codeview);
+        Task<CbTransH> GetTrans(int id);
         Task<List<CbTransH>> GetTransH();
         Task<List<CbTransD>> GetTransD();
         Task<bool> AddTransH(TranshView transH);
+        Task<bool> EditTransH(TranshView transH);
+        Task<bool> DelTransH(TranshView transH);
     }
 
     public class KasBankService : IKasBankService
@@ -189,6 +192,11 @@ namespace BMASoft.Services
 
         #region Transaksi Bank Class
 
+        public async Task<CbTransH> GetTrans(int id)
+        {
+            return await _context.CbTransHs.Include(p => p.CbTransDs).Where(x =>x.CbTransHId == id).FirstOrDefaultAsync();
+        }
+
         public async Task<List<CbTransH>> GetTransH()
         {
             return await _context.CbTransHs.Include(p =>p.CbTransDs).ToListAsync();
@@ -236,15 +244,44 @@ namespace BMASoft.Services
 
         }
 
-        public async Task<bool> EditTransH(SrcCodeView codeview)
+        public async Task<bool> EditTransH(TranshView trans)
         {
+            //string test = codeview.SrcCode.ToUpper();
+            //var cekFirst = _context.CbSrcCodes.Where(x => x.SrcCode == test).ToList();
+
+            CbTransH transH = new CbTransH
+            {                
+                DocNo = trans.DocNo,
+                KodeBank = trans.KodeBank.ToUpper(),
+                Tanggal = trans.Tanggal,
+                Keterangan = trans.Keterangan,
+                Kurs = trans.Kurs,
+                CbTransDs = new List<CbTransD>()
+            };
+            foreach (var item in trans.TransDs)
+            {
+                transH.CbTransDs.Add(new CbTransD()
+                {
+                    SrcCode = item.SrcCode,
+                    Keterangan = item.Keterangan,
+                    Terima = item.Terima,
+                    Bayar = item.Bayar,
+                    KTerima = item.KTerima,
+                    KBayar = item.KBayar,
+                    KValue = item.KValue,
+                    Kurs = item.Kurs
+                });
+            }
+
             try
             {
-                var ExistingSrcCode = _context.CbSrcCodes.Where(x => x.CbSrcCodeId == codeview.SrcCodeId).FirstOrDefault();
-                if (ExistingSrcCode != null)
+                var ExistingTrans = _context.CbTransHs.Where(x => x.CbTransHId == trans.CbTransHId).FirstOrDefault();
+                if (ExistingTrans != null)
                 {
-                    ExistingSrcCode.NamaSrc = codeview.NamaSrc;
-                    ExistingSrcCode.GlAcct = codeview.GlAcct;
+                    transH.DocNo = ExistingTrans.DocNo;
+                    _context.CbTransHs.Remove(ExistingTrans);
+                   // await _context.SaveChangesAsync();
+                    _context.CbTransHs.Add(transH);
                     await _context.SaveChangesAsync();
                     return true;
                 }
@@ -256,16 +293,17 @@ namespace BMASoft.Services
 
             return false;
 
+
         }
 
-        public async Task<bool> DelTransH(SrcCodeView codeview)
+        public async Task<bool> DelTransH(TranshView trans)
         {
             try
             {
-                var ExistingSrcCode = _context.CbSrcCodes.Where(x => x.CbSrcCodeId == codeview.SrcCodeId).FirstOrDefault();
-                if (ExistingSrcCode != null)
-                {
-                    _context.CbSrcCodes.Remove(ExistingSrcCode);
+                var ExistingTrans = _context.CbTransHs.Where(x => x.CbTransHId == trans.CbTransHId).FirstOrDefault();
+                if (ExistingTrans != null)
+                {  
+                    _context.CbTransHs.Remove(ExistingTrans);
                     await _context.SaveChangesAsync();
                     return true;
                 }

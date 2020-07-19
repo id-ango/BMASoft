@@ -54,7 +54,7 @@ namespace BMASoft
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mjg0NzMwQDMxMzgyZTMyMmUzMEhkQkJ0RFU1UHkrbUx3U25Fc1lNbjc0dnZIbmE4NGJkanZkMHJYb1FTUHc9;Mjg0NzMxQDMxMzgyZTMyMmUzME1YQTBkcXloNDN3Y0Q0aUtKUHJlUWYyZkdtMjlKMDg2SVZSS1QzbVNxamM9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mjg5NzEzQDMxMzgyZTMyMmUzMGNKeml0SEpQMWoyQTdIOS81L2JaaWtZbitDQ3BNODB3Und2djZRZi9Tc2s9;Mjg5NzE0QDMxMzgyZTMyMmUzMEhjY2VEVlBHbHRNdmxGQjJtbERFTmIrMDdacVozMlp6NDltMkxTbG0wcGs9");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

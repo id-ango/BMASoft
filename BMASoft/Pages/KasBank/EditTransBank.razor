@@ -1,4 +1,4 @@
-﻿@page "/AddTransBank"
+﻿@page "/EditTransBank/{id:int}"
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager navigationmanager
 @inject BMASoft.Services.IKasBankService service
@@ -41,35 +41,43 @@
 
 <div class="container">
     <div class="master">
-        <h2>Transaksi Kas/Bank</h2>
-
-        <EditForm Model="@Transh" OnValidSubmit="HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <div class="float-md-right">
-                <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
+        <div class="row">
+            <div class="col-7">
+                <h2>Transaksi Kas/Bank</h2>
             </div>
 
-            <label>@kurs</label> <br />
-            <div class="form-group">
-                <SfComboBox TValue="string" TItem="CbBank" DataSource="banks" Placeholder="Select Bank" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.KodeBank">
-                    <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
-                    <ComboBoxFieldSettings Text="NmBank" Value="KodeBank"></ComboBoxFieldSettings>
-                </SfComboBox>
-                <ValidationMessage For="@(() => Transh.KodeBank)" />
+            <div class="col-5 float-right">
+                <h2 style="color:blue">@Transh.DocNo</h2>
             </div>
+        </div>
+   
+            <EditForm Model="@Transh" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <div class=" row float-md-right">
+                    <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
+                </div>
 
-            <div class="form-group">
-                <SfDatePicker TValue="DateTime" @bind-Value="Transh.Tanggal" Placeholder="Tanggal" FloatLabelType="FloatLabelType.Auto" Format="dd-MMM-yy">
-                </SfDatePicker>
-                <ValidationMessage For="@(() => Transh.Tanggal)" />
-            </div>
-            <div class="form-group">
-                <SfTextBox CssClass="e-outline" @bind-Value="@Transh.Keterangan" Multiline="true" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
-                <ValidationMessage For="@(() => Transh.Keterangan)" />
-            </div>
+                <label>@kurs</label> <br />
+                <div class="form-group">
+                    <SfComboBox TValue="string" TItem="CbBank" DataSource="banks" Placeholder="Select Bank" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.KodeBank">
+                        <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
+                        <ComboBoxFieldSettings Text="NmBank" Value="KodeBank"></ComboBoxFieldSettings>
+                    </SfComboBox>
+                    <ValidationMessage For="@(() => Transh.KodeBank)" />
+                </div>
 
+                <div class="form-group">
+                    <SfDatePicker TValue="DateTime" @bind-Value="Transh.Tanggal" Placeholder="Tanggal" FloatLabelType="FloatLabelType.Auto" Format="dd-MMM-yy">
+                    </SfDatePicker>
+                    <ValidationMessage For="@(() => Transh.Tanggal)" />
+                </div>
+                <div class="form-group">
+                    <SfTextBox CssClass="e-outline" @bind-Value="@Transh.Keterangan" Multiline="true" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+                    <ValidationMessage For="@(() => Transh.Keterangan)" />
+                </div>
+            </EditForm>
+    
 
-        </EditForm>
         <div class="details">
 
             <table class="table table-responsive">
@@ -180,7 +188,7 @@
     <DialogTemplates>
         <Content>
             <div class="form-group col">
-                <SfComboBox TValue="string" TItem="CbSrcCode" DataSource="srccode" Placeholder="Select Code" FloatLabelType="FloatLabelType.Auto" @bind-Value="@TransK.SrcCode">
+                <SfComboBox TValue="string" TItem="CbSrcCode" DataSource="srccode" Placeholder="Select Code" FloatLabelType="FloatLabelType.Auto" @bind-Value="@TransK.SrcCode" >
                     <ComboBoxFieldSettings Text="NamaSrc" Value="SrcCode"></ComboBoxFieldSettings>
                 </SfComboBox>
 
@@ -216,7 +224,10 @@
 
 @code {
 
+    [Parameter] public int Id { get; set; }
+
     private TranshView Transh = new TranshView() { TransDs = new List<TransDView>() };
+    private CbTransH TransAll = new CbTransH() { CbTransDs = new List<CbTransD>() };
 
     private List<CbBank> banks;
     private List<CbSrcCode> srccode;
@@ -242,25 +253,50 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Transh.Tanggal = DateTime.Now;
+        // Transh.Tanggal = DateTime.Now;
 
         await LoadBank();
         await LoadSrcCode();
+        await LoadTrans();
     }
 
     async Task LoadBank()
     {
-
         banks = await service.GetBank();
-
     }
 
     async Task LoadSrcCode()
     {
-
         srccode = await service.GetSrcCode();
-
     }
+
+    async Task LoadTrans()
+    {
+        TransAll = await service.GetTrans(Id);
+        Transh.CbTransHId = Id;
+        Transh.DocNo = TransAll.DocNo;
+        Transh.Tanggal = TransAll.Tanggal;
+        Transh.Kurs = TransAll.Kurs;
+        Transh.KodeBank = TransAll.KodeBank;
+        kurs = TransAll.Kurs;
+        Transh.Keterangan = TransAll.Keterangan;
+        foreach(var item in TransAll.CbTransDs)
+        {
+            Transh.TransDs.Add(new TransDView
+            {
+                Bayar = item.Bayar,
+                KBayar = item.KBayar,
+                Keterangan = item.Keterangan,
+                Kurs = item.Kurs,
+                SrcCode = item.SrcCode,
+                Terima = item.Terima,
+                KTerima = item.KTerima,
+                KValue = item.KValue
+            });
+        }
+    }
+
+
 
     public void OnChangeBank(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
     {
@@ -284,11 +320,12 @@
                 KTerima = Transd.KTerima,
                 KBayar = Transd.KBayar,
                 KValue = Transd.KValue,
-                Kurs = kurs
+                Kurs = Transh.Kurs
             });
         }
 
         Transd = new TransDView();
+     //   StateHasChanged();
     }
 
     private void OkkClick()
@@ -306,19 +343,20 @@
                 KTerima = TransK.KTerima,
                 KBayar = TransK.KBayar,
                 KValue = TransK.KValue,
-                Kurs = kurs
+                Kurs = Transh.Kurs
             });
         }
 
         TransK = new TransDView();
+    //    StateHasChanged();
     }
 
     private void CancelClick()
     {
         this.IsVisible = false;
         this.IsKurs = false;
-        Transd = new TransDView();
-        TransK = new TransDView();
+        //    Transd = new TransDView();
+        //    TransK = new TransDView();
     }
 
     private void OnAddLine()
@@ -426,10 +464,10 @@
 
     private void Rubah(TransDView transd)
     {
-        Transd = new TransDView();
+        //  Transd = new TransDView();
         Transd = transd;
 
-        TransK = new TransDView();
+        //  TransK = new TransDView();
         TransK = transd;
 
         OnEditLine();
@@ -450,8 +488,8 @@
 
     private async Task HandleValidSubmit()
     {
-        Transh.Kurs = kurs;
-        var newEdit = await service.AddTransH(Transh);
+
+        var newEdit = await service.EditTransH(Transh);
 
         navigationmanager.NavigateTo("TransBank", false);
         //add = !add;
