@@ -37,7 +37,7 @@
 else
 {
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-4">
 
             <CascadingValue Name="TambahBank" Value="banks">
                 <CascadingValue Name="EditBank" Value="Rubahbanks">
@@ -45,39 +45,34 @@ else
                 </CascadingValue>
             </CascadingValue>
         </div>
-        <div class="col-md-7">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Kode</th>
-                        <th>Nama</th>
-                        <th>GL Akun</th>
-                        <th>Group</th>
+        <div class="col-md-8">
+            <SfGrid DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" >
+                
+                <GridColumns>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var toDoItem in toDoList)
-                    {
-                        <tr>
-                            <td>
+                    <GridColumn HeaderText="" Width="80">
+                        <Template>
+                            @{
+                                var trans2 = (context as CbSrcCode);
+                              
+                                <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2))"></SfButton>
+                                <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2))"></SfButton>
 
-                                <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(toDoItem))"></SfButton>
-                                <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(toDoItem))"></SfButton>
+                            }
 
-                            </td>
-                            <td>@toDoItem.SrcCode</td>
-                            <td>@toDoItem.NamaSrc</td>
-                            <td>@toDoItem.GlAcct</td>
-                            <td>@toDoItem.Grp</td>
+                        </Template>
 
-                            @*<td><input type="button" class="btn btn-primary" value="Edit" @onclick="(() => PrepareForEdit(toDoItem))" data-toggle="modal" data-target="#taskModal" /></td>
-                                <td><input type="button" class="btn btn-danger" value="Delete" @onclick="(() => PrepareForDelete(toDoItem))" data-toggle="modal" data-target="#confirmDeleteModal" /></td>*@
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                    </GridColumn>
+                    <GridColumn Field=@nameof(CbSrcCode.SrcCode) HeaderText="Kode" Width="50"></GridColumn>
+                    <GridColumn Field=@nameof(CbSrcCode.NamaSrc) HeaderText="Nama" Width="170"></GridColumn>
+                    <GridColumn Field=@nameof(CbSrcCode.GlAcct) HeaderText=" GL Akun" Width="70"></GridColumn>
+                    <GridColumn Field=@nameof(CbSrcCode.Grp) HeaderText="Group" Width="70"></GridColumn>
+                 
+                </GridColumns>
+            </SfGrid>
+
+
+
         </div>
     </div>
 }
