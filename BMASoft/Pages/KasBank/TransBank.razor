@@ -19,6 +19,7 @@
     .e-search:before {
         content: '\e993';
     }
+  
 </style>
 
 
@@ -45,6 +46,7 @@ else
     <div class="col-lg-12 control-section">
         <div class="content-wrapper">
             <div class="row">
+                
                 <SfGrid DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true" AllowFiltering="true">
                     <GridGroupSettings Columns="@GroupedColumns"></GridGroupSettings>
 
@@ -77,14 +79,7 @@ else
                                 }
 
                             </Template>
-                            @*<GridCommandColumns>
-                                    <GridCommandColumn  ButtonOption="@(new CommandButtonOptions() { CssClass="e-small e-success", IconCss="e-icons e-edit-icon" })">
-                                    </GridCommandColumn>
-                                    <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { CssClass="e-small e-danger", IconCss="e-icons e-delete-icon" })">
-                                    </GridCommandColumn>
-                                    <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { CssClass="e-small e-info", IconCss="e-icons e-print-icon" })">
-                                    </GridCommandColumn>
-                                </GridCommandColumns>*@
+                           
                         </GridColumn>
                         <GridColumn Field=@nameof(CbTransH.KodeBank) HeaderText="Bank" Width="50"></GridColumn>
                         <GridColumn Field=@nameof(CbTransH.DocNo) HeaderText="No Bukti" Width="70"></GridColumn>
@@ -94,17 +89,22 @@ else
 
                     </GridColumns>
                 </SfGrid>
+                                  
             </div>
         </div>
     </div>
-    <SfDialog @bind-Visible="@IsVisible" Width="500px" ShowCloseIcon="true" IsModal="true">
+    <SfDialog @bind-Visible="@IsVisible" Width="400px" ShowCloseIcon="true" IsModal="true">
         <DialogTemplates>
+            <Header>
+                Delete Items
+            </Header>
             <Content>
-                <h2>Do you want to Delete? </h2>
+                Are you sure you want to permanently delete these items ?
             </Content>
         </DialogTemplates>
+      
         <DialogButtons>
-            <DialogButton OnClick="@OkkClick" Content="OK" IsPrimary="true" />
+            <DialogButton OnClick="@OkkClick" Content="OK" IsPrimary="true"  />
             <DialogButton OnClick="@CancelClick" Content="Cancel" />
         </DialogButtons>
     </SfDialog>
@@ -115,12 +115,13 @@ else
 
     private int id { get; set; }
 
-    private List<CbTransH> toDoList;
-    private List<CbTransD> toDoDetail;
+    private List<CbTransH> toDoList  ;
+    private List<CbTransD> toDoDetail  ;
     private CbTransH TransAll = new CbTransH() { CbTransDs = new List<CbTransD>() };
 
-
+  
     public string[] GroupedColumns = new string[] { "KodeBank" };
+
     private bool IsVisible { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
@@ -150,17 +151,37 @@ else
 
     }
 
-    private async void Hapus(int xKdBank)
+    private void Hapus(int xKdBank)
     {
         this.IsVisible = true;
-        TransAll = await service.GetTrans(xKdBank);
-        StateHasChanged();
+        this.id = xKdBank;
+
     }
 
     private async void OkkClick()
     {
-        var newEdit = await service.DelTransH(Transh);
 
-        // navigationmanager.NavigateTo("TransBank", false);
+        var HapusStatus =  await service.DelTransH(this.id);
+        this.IsVisible = false;
+
+        //      StateHasChanged();
+
+        navigationmanager.NavigateTo("TransBank", true);
+        //  await LoadBank();
+        //  await OnInitializedAsync();
     }
+
+    private  void CancelClick()
+    {
+
+        this.IsVisible = false;
+
+        //    StateHasChanged();
+
+        navigationmanager.NavigateTo("TransBank", false);
+        //    await LoadBank();
+        //      await OnInitializedAsync();
+    }
+
+   
 }

@@ -25,7 +25,7 @@ namespace BMASoft.Services
         Task<List<CbTransD>> GetTransD();
         Task<bool> AddTransH(TranshView transH);
         Task<bool> EditTransH(TranshView transH);
-        Task<bool> DelTransH(TranshView transH);
+        Task<bool> DelTransH(int id);
     }
 
     public class KasBankService : IKasBankService
@@ -280,7 +280,6 @@ namespace BMASoft.Services
                 {
                     transH.DocNo = ExistingTrans.DocNo;
                     _context.CbTransHs.Remove(ExistingTrans);
-                   // await _context.SaveChangesAsync();
                     _context.CbTransHs.Add(transH);
                     await _context.SaveChangesAsync();
                     return true;
@@ -296,13 +295,13 @@ namespace BMASoft.Services
 
         }
 
-        public async Task<bool> DelTransH(TranshView trans)
+        public async Task<bool> DelTransH(int id)
         {
             try
             {
-                var ExistingTrans = _context.CbTransHs.Where(x => x.CbTransHId == trans.CbTransHId).FirstOrDefault();
+                var ExistingTrans = _context.CbTransHs.Where(x => x.CbTransHId == id).FirstOrDefault();
                 if (ExistingTrans != null)
-                {  
+                    {  
                     _context.CbTransHs.Remove(ExistingTrans);
                     await _context.SaveChangesAsync();
                     return true;
