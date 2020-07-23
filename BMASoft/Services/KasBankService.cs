@@ -197,9 +197,9 @@ namespace BMASoft.Services
             return await _context.CbTransHs.Include(p => p.CbTransDs).Where(x =>x.CbTransHId == id).FirstOrDefaultAsync();
         }
 
-        public async Task<List<CbTransH>> GetTransH()
+        public Task<List<CbTransH>> GetTransH()
         {
-            return await _context.CbTransHs.Include(p =>p.CbTransDs).ToListAsync();
+            return  _context.CbTransHs.Include(p =>p.CbTransDs).OrderByDescending(x =>x.Tanggal).ToListAsync();
         }
 
         public async Task<List<CbTransD>> GetTransD()

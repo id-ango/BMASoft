@@ -14,28 +14,28 @@
 </style>
 
 
-@if(true)
+@if (true)
 {
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
 
-            <h1>Setup Source Code</h1>
-            <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
+                <h1>Setup Source Code</h1>
+                <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
 
-            <br />
-            <br />
-        </div>
-        <div class="col-md-6">
+                <br />
+                <br />
+            </div>
+            <div class="col-md-6">
 
-            <CascadingValue Name="TambahBank" Value="banks">
-                <CascadingValue Name="EditBank" Value="Rubahbanks">
-                    <FieldSrcCode cekStatus="status" tombol="TblButton" Simpan="simpan"></FieldSrcCode>
+                <CascadingValue Name="TambahBank" Value="banks">
+                    <CascadingValue Name="EditBank" Value="Rubahbanks">
+                        <FieldSrcCode cekStatus="status" tombol="TblButton" Simpan="simpan"></FieldSrcCode>
+                    </CascadingValue>
                 </CascadingValue>
-            </CascadingValue>
+            </div>
         </div>
     </div>
-</div>
 
     <div class="col-md-12">
         @if (toDoList == null)
@@ -71,7 +71,7 @@
             </SfGrid>
         }
     </div>
-                                }
+}
 
 
 @code {

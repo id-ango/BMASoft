@@ -18,4 +18,12 @@
     <PackageReference Include="Syncfusion.Licensing" Version="18.2.0.45" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Hutang\" />
+    <Folder Include="Pages\Beli\" />
+    <Folder Include="Pages\Jual\" />
+    <Folder Include="Pages\Ledger\" />
+    <Folder Include="Pages\Piutang\" />
+  </ItemGroup>
+
 </Project>
