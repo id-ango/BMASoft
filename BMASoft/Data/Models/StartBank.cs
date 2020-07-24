@@ -48,22 +48,11 @@ namespace BMASoft.Data.Models
         public string Kurs { get; set; }     
         public bool NonPPN { get; set; }
         public bool Cek { get; set; }
-        public decimal Saldo
-        {
-            get
-            {
-                return CbTransDs.Sum(p => p.Jumlah);
-            }
-        }
-        public decimal KSaldo
-        {
-            get
-            {
-                return CbTransDs.Sum(p => p.KJumlah);
-            }
-
-        }
-
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Saldo { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal KSaldo { get; set; }
+        
         public List<CbTransD> CbTransDs { get; set; }
 
    
@@ -80,16 +69,8 @@ namespace BMASoft.Data.Models
         public string SrcCode { get; set; }
         public string GlAcct { get; set; }
         public string Keterangan { get; set; }
-       
-        public decimal Jumlah
-        {  
-            get
-            {
-                return Terima - Bayar;
-            }
-              
-        }
-
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Jumlah { get; set; }       
         [Column(TypeName = "decimal(18,4)")]
         public decimal Terima { get; set; }
         [Column(TypeName = "decimal(18,4)")]
@@ -97,15 +78,8 @@ namespace BMASoft.Data.Models
         public string Kurs { get; set; }
         [Column(TypeName ="decimal(18,4)")]
         public decimal KValue { get; set; }
-        public decimal KJumlah
-        {
-           get
-            {
-                return KTerima - KBayar;
-            }
-               
-          
-        }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal KJumlah { get; set; }      
         [Column(TypeName = "decimal(18,4)")]
         public decimal KTerima { get; set; }
         [Column(TypeName = "decimal(18,4)")]

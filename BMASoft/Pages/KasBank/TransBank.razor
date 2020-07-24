@@ -56,11 +56,11 @@ else
                                 var transbank = (context as CbTransH);
                             }
                             <div style="padding:25px">
-                                <SfGrid DataSource="@toDoDetail" AllowPaging="true" Query="@(new Query().Where("CbTransHId", "equal", transbank.CbTransHId))">
-                                    <GridPageSettings PageSize="6"></GridPageSettings>
+                                <SfGrid DataSource="@toDoDetail" Query="@(new Query().Where("CbTransHId", "equal", transbank.CbTransHId))">
+                                   
                                     <GridColumns>
                                         <GridColumn Field=@nameof(CbTransD.SrcCode) HeaderText="Code" Width="30"></GridColumn>
-                                        <GridColumn Field=@nameof(CbTransD.Keterangan) HeaderText="Keterangan" TextAlign="TextAlign.Right" Width="110"></GridColumn>
+                                        <GridColumn Field=@nameof(CbTransD.Keterangan) HeaderText="Keterangan"  Width="110"></GridColumn>
                                         <GridColumn Field=@nameof(CbTransD.Jumlah) HeaderText="Jumlah" Width="90" Format="N2"></GridColumn>
                                     </GridColumns>
                                 </SfGrid>
@@ -117,10 +117,11 @@ else
 
     private List<CbTransH> toDoList  ;
     private List<CbTransD> toDoDetail  ;
-    private CbTransH TransAll = new CbTransH() { CbTransDs = new List<CbTransD>() };
+//    private CbTransH TransAll = new CbTransH() ;
+    //  private CbTransH TransAll = new CbTransH() { CbTransDs = new List<CbTransD>() };
 
-  
     public string[] GroupedColumns = new string[] { "KodeBank" };
+ 
 
     private bool IsVisible { get; set; } = false;
 
@@ -134,7 +135,7 @@ else
     async Task LoadBank()
     {
 
-        toDoList = await service.GetTransH();
+        toDoList = await service.Get3TransH();
         toDoDetail = await service.GetTransD();
     }
 
@@ -183,5 +184,5 @@ else
         //      await OnInitializedAsync();
     }
 
-   
+
 }

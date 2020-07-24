@@ -22,6 +22,7 @@ namespace BMASoft.Services
         Task<bool> DelSrcCode(SrcCodeView codeview);
         Task<CbTransH> GetTrans(int id);
         Task<List<CbTransH>> GetTransH();
+        Task<List<CbTransH>> Get3TransH();
         Task<List<CbTransD>> GetTransD();
         Task<bool> AddTransH(TranshView transH);
         Task<bool> EditTransH(TranshView transH);
@@ -199,7 +200,16 @@ namespace BMASoft.Services
 
         public Task<List<CbTransH>> GetTransH()
         {
-            return  _context.CbTransHs.Include(p =>p.CbTransDs).OrderByDescending(x =>x.Tanggal).ToListAsync();
+            // return  _context.CbTransHs.Include(p =>p.CbTransDs).OrderByDescending(x =>x.Tanggal).ToListAsync();
+            return _context.CbTransHs.OrderByDescending(x => x.Tanggal).ToListAsync();
+
+        }
+
+        public Task<List<CbTransH>> Get3TransH()
+        {
+            // return  _context.CbTransHs.Include(p =>p.CbTransDs).OrderByDescending(x =>x.Tanggal).ToListAsync();
+            return _context.CbTransHs.OrderByDescending(x => x.Tanggal).Where( x=>x.Tanggal>DateTime.Today.AddMonths(-3)).ToListAsync();
+
         }
 
         public async Task<List<CbTransD>> GetTransD()
@@ -219,6 +229,8 @@ namespace BMASoft.Services
                 Tanggal = trans.Tanggal,
                 Keterangan = trans.Keterangan,
                 Kurs = trans.Kurs,
+                Saldo = trans.Saldo,
+                KSaldo = trans.KSaldo,
                 CbTransDs = new List<CbTransD>()
             };
             foreach (var item in trans.TransDs)
@@ -232,6 +244,8 @@ namespace BMASoft.Services
                     KTerima = item.KTerima,
                     KBayar = item.KBayar,
                     KValue = item.KValue,
+                    Jumlah = item.Jumlah,
+                    KJumlah = item.KJumlah,
                     Kurs = item.Kurs
                 });
             }
@@ -256,6 +270,8 @@ namespace BMASoft.Services
                 Tanggal = trans.Tanggal,
                 Keterangan = trans.Keterangan,
                 Kurs = trans.Kurs,
+                Saldo = trans.Saldo,
+                KSaldo = trans.KSaldo,
                 CbTransDs = new List<CbTransD>()
             };
             foreach (var item in trans.TransDs)
@@ -269,6 +285,8 @@ namespace BMASoft.Services
                     KTerima = item.KTerima,
                     KBayar = item.KBayar,
                     KValue = item.KValue,
+                    Jumlah = item.Jumlah,
+                    KJumlah = item.KJumlah,
                     Kurs = item.Kurs
                 });
             }
