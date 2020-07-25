@@ -41,7 +41,7 @@ namespace BMASoft.Migrations
                     b.Property<decimal>("KSaldo")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<decimal>("KSldAawal")
+                    b.Property<decimal>("KSldAwal")
                         .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("KodeBank")

@@ -105,10 +105,10 @@ else
 
     async Task LoadBank()
     {
-      
-            toDoList = await service.GetBank();
-       
-       
+
+        toDoList = await service.GetBank();
+
+
     }
 
     private void simpan(bool jadisimpan)
@@ -131,6 +131,11 @@ else
         Rubahbanks.kdbank = xKdBank.KodeBank;
         Rubahbanks.namabank = xKdBank.NmBank;
         Rubahbanks.kurs = xKdBank.Kurs;
+        Rubahbanks.ClrDate = xKdBank.ClrDate;
+        Rubahbanks.SldAWal = xKdBank.SldAWal;
+        Rubahbanks.KSldAwal = xKdBank.KSldAwal;
+        Rubahbanks.Acctset = xKdBank.Acctset;
+
         status = 2;
         TblButton = !TblButton;
         await LoadBank();
@@ -143,6 +148,10 @@ else
         Rubahbanks.bankId = xKdBank.CbBankId;
         Rubahbanks.kdbank = xKdBank.KodeBank;
         Rubahbanks.namabank = xKdBank.NmBank;
+        Rubahbanks.ClrDate = xKdBank.ClrDate;
+        Rubahbanks.SldAWal = xKdBank.SldAWal;
+        Rubahbanks.KSldAwal = xKdBank.KSldAwal;
+        Rubahbanks.Acctset = xKdBank.Acctset;
         Rubahbanks.kurs = xKdBank.Kurs;
         status = 3;
         TblButton = !TblButton;

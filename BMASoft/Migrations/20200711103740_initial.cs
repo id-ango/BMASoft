@@ -18,7 +18,7 @@ namespace BMASoft.Migrations
                     Kurs = table.Column<string>(maxLength: 3, nullable: true),
                     Acctset = table.Column<string>(maxLength: 6, nullable: true),
                     SldAWal = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
-                    KSldAawal = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
+                    KSldAwal = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     ClrDate = table.Column<DateTime>(nullable: false),
                     Saldo = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     KSaldo = table.Column<decimal>(type: "decimal(18,4)", nullable: false),

@@ -56,7 +56,12 @@ namespace BMASoft.Services
                     KodeBank = banks.kdbank.ToUpper(),
                     NmBank = banks.namabank,
                     Kurs = banks.kurs,
-                    ClrDate = DateTime.Today
+                    ClrDate = banks.ClrDate,
+                    SldAWal = banks.SldAWal,
+                    KSldAwal = banks.KSldAwal,
+                    Saldo =  banks.SldAWal,
+                    KSaldo = banks.KSldAwal
+
                 };
                 _context.Banks.Add(Bank);
                 await _context.SaveChangesAsync();
@@ -79,6 +84,12 @@ namespace BMASoft.Services
                 {
                     ExistingBank.NmBank = banks.namabank;
                     ExistingBank.Kurs = banks.kurs;
+                    ExistingBank.ClrDate = banks.ClrDate;                  
+                    ExistingBank.SldAWal = banks.SldAWal;
+                    ExistingBank.KSldAwal = banks.KSldAwal;
+                    ExistingBank.Saldo = banks.SldAWal;
+                    ExistingBank.KSaldo = banks.KSldAwal;
+
                     await _context.SaveChangesAsync();
                     return true;
                 }

@@ -33,7 +33,7 @@ namespace BMASoft.Data
                 .HasIndex(p => p.KodeBank)
                 .IsUnique();
             builder.Entity<CbBank>().Property(p => p.KSaldo).HasColumnType("decimal(18,4)");
-            builder.Entity<CbBank>().Property(p => p.KSldAawal).HasColumnType("decimal(18,4)");
+            builder.Entity<CbBank>().Property(p => p.KSldAwal).HasColumnType("decimal(18,4)");
             builder.Entity<CbBank>().Property(p => p.Saldo).HasColumnType("decimal(18,4)");
             builder.Entity<CbBank>().Property(p => p.SldAWal).HasColumnType("decimal(18,4)");
         }

@@ -22,12 +22,13 @@ namespace BMASoft.Data.Models
         [Column(TypeName = "decimal(18,4)")]
         public decimal SldAWal { get; set; }
         [Column(TypeName = "decimal(18,4)")]
-        public decimal KSldAawal { get; set; }
+        public decimal KSldAwal { get; set; }
         public DateTime ClrDate { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal Saldo { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal KSaldo { get; set; }
+        public bool NonPpn { get; set; }
         public string GrpBank { get; set; }
     }
 
@@ -147,6 +148,18 @@ namespace BMASoft.Data.Models
         public string namabank { get; set; }
         [StringLength(3, ErrorMessage = "Kurs terlalu panjang (3 character limit).")]
         public string kurs { get; set; }
+        [StringLength(7, ErrorMessage ="Akun terlalu panjang (7 character limit).")]
+        public string Acctset { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal SldAWal { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal KSldAwal { get; set; }
+        public DateTime ClrDate { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Saldo { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal KSaldo { get; set; }
+        public bool NonPpn { get; set; } 
     }
 
     public class SrcCodeView
