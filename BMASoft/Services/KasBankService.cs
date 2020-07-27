@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace BMASoft.Services
@@ -235,7 +236,7 @@ namespace BMASoft.Services
            
             CbTransH transH = new CbTransH
             {
-                DocNo = GetNumber(trans.KodeBank.ToUpper()),
+                DocNo = GetNumber(trans.KodeDoc.ToUpper()),
                 KodeBank = trans.KodeBank.ToUpper(),
                 Tanggal = trans.Tanggal,
                 Keterangan = trans.Keterangan,
@@ -260,8 +261,10 @@ namespace BMASoft.Services
                     Kurs = item.Kurs
                 });
             }
-
-
+            var bank = (from e in _context.Banks where e.KodeBank == trans.KodeBank select e).FirstOrDefault();
+            bank.Saldo += trans.Saldo;
+            bank.KSaldo += trans.KSaldo;
+            _context.Banks.Update(bank);
             _context.CbTransHs.Add(transH);
             await _context.SaveChangesAsync();
             return true;
@@ -307,8 +310,14 @@ namespace BMASoft.Services
                 var ExistingTrans = _context.CbTransHs.Where(x => x.CbTransHId == trans.CbTransHId).FirstOrDefault();
                 if (ExistingTrans != null)
                 {
-                    transH.DocNo = ExistingTrans.DocNo;
+                    transH.DocNo = ExistingTrans.DocNo;                    
                     _context.CbTransHs.Remove(ExistingTrans);
+                    var bank = (from e in _context.Banks where e.KodeBank == trans.KodeBank select e).FirstOrDefault();
+                    bank.Saldo -= ExistingTrans.Saldo;
+                    bank.KSaldo -= ExistingTrans.KSaldo;
+                    bank.Saldo += trans.Saldo;
+                    bank.KSaldo += trans.KSaldo;
+                    _context.Banks.Update(bank);
                     _context.CbTransHs.Add(transH);
                     await _context.SaveChangesAsync();
                     return true;
@@ -330,7 +339,11 @@ namespace BMASoft.Services
             {
                 var ExistingTrans = _context.CbTransHs.Where(x => x.CbTransHId == id).FirstOrDefault();
                 if (ExistingTrans != null)
-                    {  
+                    {
+                    var bank = (from e in _context.Banks where e.KodeBank == ExistingTrans.KodeBank select e).FirstOrDefault();
+                    bank.Saldo -= ExistingTrans.Saldo;
+                    bank.KSaldo -= ExistingTrans.KSaldo;
+                    _context.Banks.Update(bank);
                     _context.CbTransHs.Remove(ExistingTrans);
                     await _context.SaveChangesAsync();
                     return true;
@@ -351,9 +364,9 @@ namespace BMASoft.Services
         {
             string kodeurut = kodeno + '-';
             string thnbln = DateTime.Now.ToString("yyMM");
-            string xbukti = kodeurut + thnbln;
+            string xbukti = kodeurut + thnbln.Substring(0,2)+'2'+ thnbln.Substring(2,2)+'-';
             var maxvalue = "";
-            var maxlist = _context.CbTransHs.Where(x => x.DocNo.Substring(0, 7).Equals(xbukti)).ToList();
+            var maxlist = _context.CbTransHs.Where(x => x.DocNo.Substring(0,10).Equals(xbukti)).ToList();
             if (maxlist != null)
             {
                 maxvalue = maxlist.Max(x => x.DocNo);
@@ -361,20 +374,20 @@ namespace BMASoft.Services
             }
 
             //            var maxvalue = (from e in db.CbTransHs where  e.Docno.Substring(0, 7) == kodeno + thnbln select e).Max();
-            string nourut = "000";
+            string nourut = "00000";
             if (maxvalue == null)
             {
-                nourut = "000";
+                nourut = "00000";
             }
             else
             {
-                nourut = maxvalue.Substring(7, 3);
+                nourut = maxvalue.Substring(10, 5);
             }
 
             //  nourut =Convert.ToString(Int32.Parse(nourut) + 1);
 
 
-            string cAngNo = kodeurut+ thnbln + (Int32.Parse(nourut) + 1).ToString("000");
+            string cAngNo = xbukti + (Int32.Parse(nourut) + 1).ToString("00000");
             // var maxvalue = (from e in db.AptTranss where e.NoRef.Substring(0, 7) == "ANG" + cAngNo select e.NoRef.Max()).FirstOrDefault();
             return cAngNo;
 

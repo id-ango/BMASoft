@@ -1,0 +1,168 @@
+﻿@page "/dashboard-layout/bank"
+@using Syncfusion.Blazor.Layouts
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Charts
+@inject NavigationManager NavigationManager
+@inject BMASoft.Services.IKasBankService service
+
+<div class="control-section" id="target">
+
+    <SfDashboardLayout @ref="dashboardObject" Columns="2" AllowResizing="true">
+        <ChildContent>
+            <div id="one" class="e-panel" data-row="0" data-col="0" data-sizeX="1" data-sizeY="1">
+                <div class="e-panel-container">
+                 
+                            <SfAccumulationChart Title="Saldo Kas/Bank" EnableAnimation="false">
+                                <AccumulationChartEvents Load="BeforeRender" />
+                                <AccumulationChartTooltipSettings Enable="true"></AccumulationChartTooltipSettings>
+                                <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
+                                <AccumulationChartSeriesCollection>
+                                    <AccumulationChartSeries DataSource="@dataSource" XName="NmBank" YName="Saldo" Name="Kas Bank" Radius="@OuterRadius" StartAngle="@StartAngle" EndAngle="@EndAngle"
+                                                             InnerRadius="0%" ExplodeIndex="@ExplodeIndex" Explode="true" ExplodeOffset="@ExplodeRadius">
+                                        <AccumulationDataLabelSettings Visible="true" Name="NmBank" Position="AccumulationLabelPosition.Outside"></AccumulationDataLabelSettings>
+                                    </AccumulationChartSeries>
+                                </AccumulationChartSeriesCollection>
+
+                            </SfAccumulationChart>
+                  
+                </div>
+            </div>
+            <div id="two" class="e-panel" data-row="0" data-col="1" data-sizeX="1" data-sizeY="1">
+                <div class="e-panel-container">
+                    <div class="text-align">1</div>
+                </div>
+            </div>
+            <div id="three" class="e-panel" data-row="1" data-col="0" data-sizeX="1" data-sizeY="1">
+                <div class="e-panel-container">
+                    <div class="text-align">2</div>
+                </div>
+            </div>
+            <div id="four" class="e-panel" data-row="1" data-col="1" data-sizeX="1" data-sizeY="1">
+                <div class="e-panel-container">
+                    <div class="text-align">3</div>
+                </div>
+            </div>
+            @*<div id="five" class="e-panel" data-row="2" data-col="2" data-sizeX="2" data-sizeY="1">
+                <div class="e-panel-container">
+                    <div class="text-align">4</div>
+                </div>
+            </div>
+            <div id="six" class="e-panel" data-row="0" data-col="3" data-sizeX="1" data-sizeY="1">
+                <div class="e-panel-container">
+                    <div class="text-align">5</div>
+                </div>
+            </div>
+            <div id="seven" class="e-panel" data-row="1" data-col="3" data-sizeX="1" data-sizeY="1">
+                <div class="e-panel-container">
+                    <div class="text-align">6</div>
+                </div>
+            </div>
+            <div id="eight" class="e-panel" data-row="0" data-col="4" data-sizeX="1" data-sizeY="3">
+                <div class="e-panel-container">
+                    <div class="text-align">7</div>
+                </div>
+            </div>*@
+        </ChildContent>
+    </SfDashboardLayout>
+</div>
+@code {
+    SfDashboardLayout dashboardObject;
+    public int Count = 8;
+    public int StartAngle = 0, value = 0, EndAngle = 360, radiusValue = 70, exploderadius = 10;
+    public double ExplodeIndex = 1;
+    public string OuterRadius = "70%", ExplodeRadius = "10%";
+    private List<CbBank> dataSource = new List<CbBank>();
+
+    private void changeAngle(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        value = Convert.ToInt32(args.Value);
+        StartAngle = +Convert.ToInt32(args.Value);
+        EndAngle = +Convert.ToInt32(args.Value);
+    }
+    private void ChangeOuterRadius(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        radiusValue = Convert.ToInt32(args.Value);
+        OuterRadius = args.Value + "%";
+    }
+    private void ChangeExplodeRadius(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        exploderadius = Convert.ToInt32(args.Value);
+        ExplodeRadius = args.Value + "%";
+    }
+    private void ChangeExplodeIndex(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        ExplodeIndex = Convert.ToInt32(args.Value);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await LoadBank();
+
+    }
+
+    async Task LoadBank()
+    {
+
+        dataSource = await service.GetBank();
+
+
+    }
+
+
+    string CurrentUri;
+    void BeforeRender(IAccLoadedEventArgs Args)
+    {
+        CurrentUri = NavigationManager.Uri;
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+            Args.Theme = AccumulationTheme.Material;
+        }
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            Args.Theme = AccumulationTheme.Fabric;
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            Args.Theme = AccumulationTheme.Bootstrap;
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            Args.Theme = AccumulationTheme.HighContrast;
+        }
+        else
+        {
+            Args.Theme = AccumulationTheme.Bootstrap4;
+        }
+    }
+}
+<style>
+    .e-dashboardlayout {
+        padding: 10px;
+    }
+
+        .e-dashboardlayout.e-control .e-panel:hover span {
+            display: block;
+        }
+
+        .e-dashboardlayout .e-panel .e-panel-container .text-align {
+            vertical-align: middle;
+            font-weight: 600;
+            font-size: 20px;
+            text-align: center;
+        }
+
+    .e-template-icon {
+        padding: 10px;
+        float: right;
+        display: none;
+    }
+
+    .text-align {
+        line-height: 160px;
+    }
+
+    .sb-demo-section .container-fluid {
+        background: #E5E5E5;
+    }
+</style>

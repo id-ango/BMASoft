@@ -68,6 +68,10 @@
                 <ValidationMessage For="@(() => Transh.Keterangan)" />
             </div>
 
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@Transh.KodeDoc" Placeholder="Kode" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+                <ValidationMessage For="@(() => Transh.KodeDoc)" />
+            </div>
 
         </EditForm>
         <div class="details">
