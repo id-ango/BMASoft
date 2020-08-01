@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\FileUtil.cs" />
     <Compile Remove="Migrations\20200723102913_rubahTransh.cs" />
     <Compile Remove="Migrations\20200723102913_rubahTransh.Designer.cs" />
     <Compile Remove="Migrations\20200725022915_ubahksaldo.cs" />
@@ -21,14 +22,16 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Syncfusion.Blazor" Version="18.2.0.45" />
-    <PackageReference Include="Syncfusion.Licensing" Version="18.2.0.45" />
+    <PackageReference Include="Syncfusion.Blazor" Version="18.2.0.47" />
+    <PackageReference Include="Syncfusion.Licensing" Version="18.2.0.47" />
+    <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="18.2.0.47" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Pages\Hutang\" />
     <Folder Include="Pages\Beli\" />
     <Folder Include="Pages\Jual\" />
+    <Folder Include="Pages\KasBank\Laporan\" />
     <Folder Include="Pages\Ledger\" />
     <Folder Include="Pages\Piutang\" />
   </ItemGroup>

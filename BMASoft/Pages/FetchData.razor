@@ -2,6 +2,9 @@
 
 @using BMASoft.Data
 @inject WeatherForecastService ForecastService
+@inject ExportService PDFExportService
+@inject Microsoft.JSInterop.IJSRuntime JS
+@using  System.IO;
 
 <h1>Weather forecast</h1>
 
@@ -35,6 +38,7 @@ else
         </tbody>
     </table>
 }
+<button class="btn btn-primary" @onclick="@ExportToPdf">Export to PDF</button>
 
 @code {
     private WeatherForecast[] forecasts;
@@ -43,4 +47,14 @@ else
     {
         forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
     }
+
+    protected async Task ExportToPdf()
+    {
+        using (MemoryStream excelStream = PDFExportService.CreatePdf(forecasts))
+        {
+            await JS.SaveAs("Sample.pdf", excelStream.ToArray());
+        }
+    }
+
+    
 }

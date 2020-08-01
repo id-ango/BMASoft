@@ -3,6 +3,8 @@
 @inject NavigationManager navigationmanager
 @inject BMASoft.Services.IKasBankService service
 @using Newtonsoft.Json 
+@inject Microsoft.JSInterop.IJSRuntime JS
+@using  System.IO
 
 <style>
     .e-edit-icon::before {
@@ -456,10 +458,22 @@
     {
         Transh.Kurs = kurs;
         var newEdit = await service.AddTransH(Transh);
+        if (newEdit)
+        {
+            await ExportToPdf(Transh);
+        }
 
         navigationmanager.NavigateTo("TransBank", false);
         //add = !add;
         //StateHasChanged();
 
+    }
+
+    protected async Task ExportToPdf(TranshView trans)
+    {
+        using (MemoryStream excelStream = service.PdfBuktiBank(trans))
+        {
+            await JS.SaveAs("Sample.pdf", excelStream.ToArray());
+        }
     }
 }

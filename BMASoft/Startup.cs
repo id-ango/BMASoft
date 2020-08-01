@@ -49,12 +49,13 @@ namespace BMASoft
             services.AddSingleton<WeatherForecastService>();
             services.AddSyncfusionBlazor();
             services.AddTransient<IKasBankService, KasBankService>();
+            services.AddSingleton<ExportService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mjg5NzEzQDMxMzgyZTMyMmUzMGNKeml0SEpQMWoyQTdIOS81L2JaaWtZbitDQ3BNODB3Und2djZRZi9Tc2s9;Mjg5NzE0QDMxMzgyZTMyMmUzMEhjY2VEVlBHbHRNdmxGQjJtbERFTmIrMDdacVozMlp6NDltMkxTbG0wcGs9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mjk1MjIxQDMxMzgyZTMyMmUzMEw1NTR6Nk5HWkJqa2E1S2crYzZwRFNiM25ZSHB1eVp6cXB4ZHpJem1FNFU9;Mjk1MjIyQDMxMzgyZTMyMmUzMGRYSzFRa2U2THl5R1JrWGFqSFA4cVFHOTk5Y3cydWJBT1c4Y0dmejZmRTg9");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

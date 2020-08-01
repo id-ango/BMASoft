@@ -5,9 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
+using Syncfusion.Pdf.Grid;
+using Syncfusion.Drawing;
 
 namespace BMASoft.Services
 {
@@ -28,6 +33,7 @@ namespace BMASoft.Services
         Task<bool> AddTransH(TranshView transH);
         Task<bool> EditTransH(TranshView transH);
         Task<bool> DelTransH(int id);
+        MemoryStream PdfBuktiBank(TranshView trans);
     }
 
     public class KasBankService : IKasBankService
@@ -391,6 +397,43 @@ namespace BMASoft.Services
             // var maxvalue = (from e in db.AptTranss where e.NoRef.Substring(0, 7) == "ANG" + cAngNo select e.NoRef.Max()).FirstOrDefault();
             return cAngNo;
 
+        }
+
+        public MemoryStream PdfBuktiBank(TranshView trans)
+        {
+            var buktibank = _context.CbTransHs.Include(p => p.CbTransDs).Where(x => x.DocNo == trans.DocNo).FirstOrDefaultAsync();
+
+            if (buktibank == null)
+            {
+                throw new ArgumentNullException("Transaksi cannot be null");
+            }
+
+            using (PdfDocument pdfDocument = new PdfDocument())
+            {
+              //  int paragraphAfterSpacing = 8;
+              //  int cellMargin = 8;
+
+                //Add page to the PDF document
+                PdfPage page = pdfDocument.Pages.Add();
+
+                //Create a new font
+                PdfStandardFont font = new PdfStandardFont(PdfFontFamily.TimesRoman, 16);
+
+                //Create a text element to draw a text in PDF page
+                PdfTextElement title = new PdfTextElement("BUKTI KAS/BANK", font, PdfBrushes.Black);
+                PdfLayoutResult result = title.Draw(page, new PointF(0, 0));
+
+
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    //Saving the PDF document into the stream
+                    pdfDocument.Save(stream);
+                    //Closing the PDF document
+                    pdfDocument.Close(true);
+                    return stream;
+
+                }
+            }
         }
     }
 
