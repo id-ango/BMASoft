@@ -25,6 +25,12 @@ namespace BMASoft.Data
         public DbSet<CbTransfer> CbTransfers { get; set; }
         public DbSet<CbSrcCode> CbSrcCodes { get; set; }
         public DbSet<CbGrp> CbGrps { get; set; }
+        public DbSet<ArCust> ArCusts { get; set; }
+        public DbSet<ArAcct> ArAccts { get; set; }
+        public DbSet<ArDist> ArDists { get; set; }
+        public DbSet<ArTransH> ArTransHs { get; set; }
+        public DbSet<ArTransD> ArTransDs { get; set; }
+        public DbSet<ArPiutng> ArPiutngs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -36,6 +42,10 @@ namespace BMASoft.Data
             builder.Entity<CbBank>().Property(p => p.KSldAwal).HasColumnType("decimal(18,4)");
             builder.Entity<CbBank>().Property(p => p.Saldo).HasColumnType("decimal(18,4)");
             builder.Entity<CbBank>().Property(p => p.SldAWal).HasColumnType("decimal(18,4)");
+
+            builder.Entity<ArCust>()
+                .HasIndex(p => p.Customer)
+                .IsUnique();
         }
 
     }

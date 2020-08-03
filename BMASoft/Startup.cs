@@ -49,6 +49,7 @@ namespace BMASoft
             services.AddSingleton<WeatherForecastService>();
             services.AddSyncfusionBlazor();
             services.AddTransient<IKasBankService, KasBankService>();
+            services.AddTransient<IReceivableService, ReceivableService>();
             services.AddSingleton<ExportService>();
         }
 

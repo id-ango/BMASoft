@@ -33,7 +33,6 @@
     <Folder Include="Pages\Jual\" />
     <Folder Include="Pages\KasBank\Laporan\" />
     <Folder Include="Pages\Ledger\" />
-    <Folder Include="Pages\Piutang\" />
   </ItemGroup>
 
 </Project>

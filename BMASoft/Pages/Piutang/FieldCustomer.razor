@@ -1,0 +1,157 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject NavigationManager navigationmanager
+@inject BMASoft.Services.IReceivableService service
+
+
+@if (pilihmana())
+{
+    <EditForm Model="@customer" OnValidSubmit="HandleValidSubmit">
+
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <label for="kodebank">Customer</label> <br />
+        <InputText id="kodebank" @bind-Value="customer.Customer" style="text-transform:uppercase" disabled=@((cekStatus==3 || cekStatus==2) ? "disabled":null) /> <br />
+        <label for="nmbank">Nama Customer</label> <br />
+        <InputText id="nmbank" @bind-Value="customer.NamaCust" disabled=@(cekStatus==3 ? "disabled":null) /> <br />
+        <label for="alamat">Alamat</label> <br />
+        <InputText id="alamat" @bind-Value="customer.Alamat" /> <br />
+        <label for="kota">Kota</label> <br />
+        <InputText id="kota" @bind-Value="customer.Kota" /> <br />
+        <label for="telpon">Telpon</label> <br />
+        <InputText id="telpon" @bind-Value="customer.Telpon" /> <br />
+       <br/>
+        <br/>
+
+        <SfButton Type="Submit" Disabled="addButton" Content="Save" CssClass="e-primary" />
+        <SfButton Type="Submit" Disabled="editButton" Content="Update" CssClass="e-success" />
+        <SfButton Type="Submit" Disabled="deleteButton" Content="Delete" CssClass="e-danger" />
+    </EditForm>
+
+}
+<SfToast ID="toast_default" @ref="ToastObj" Title="INFORMATION" Content="@ToastContent" TimeOut="5000" Icon="e-meeting">
+    <ToastPosition X="@ToastPosition"></ToastPosition>
+</SfToast>
+<br />
+
+@code {
+
+    [Parameter]
+    public int cekStatus { get; set; }
+
+    [Parameter]
+    public bool tombol { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> Simpan { get; set; }
+
+    [CascadingParameter(Name = "TambahCustomer")]
+    public CustomerView customer { get; set; }
+
+    [CascadingParameter(Name = "EditCustomer")]
+    public CustomerView Editcustomer { get; set; }
+
+    private int selectedId = -1;
+
+    private bool addButton { get; set; }
+    private bool editButton { get; set; }
+    private bool deleteButton { get; set; }
+
+    SfToast ToastObj;
+    private string ToastPosition = "Right";
+    private string ToastContent { get; set; } = " ";
+
+    private bool pilihmana()
+    {
+        switch (cekStatus)
+        {
+            case 1:
+                addButton = false;
+                editButton = deleteButton = true;
+                break;
+            case 2:
+                editButton = false;
+                addButton = deleteButton = true;
+                if (selectedId == -1)
+                {
+                    customer.Customer = Editcustomer.Customer;
+                    customer.NamaCust = Editcustomer.NamaCust;
+                    customer.Alamat = Editcustomer.Alamat;
+                    customer.Kota = Editcustomer.Kota;
+                    customer.Telpon = Editcustomer.Telpon;
+                    customer.ArCustId = Editcustomer.ArCustId;
+                    selectedId = Editcustomer.ArCustId;
+                }
+                if (tombol == true)
+                    selectedId = -1;
+
+                break;
+            case 3:
+                deleteButton = false;
+                editButton = addButton = true;
+
+                customer.Customer = Editcustomer.Customer;
+                customer.NamaCust = Editcustomer.NamaCust;
+                customer.Alamat = Editcustomer.Alamat;
+                customer.Kota = Editcustomer.Kota;
+                customer.Telpon = Editcustomer.Telpon;
+                customer.ArCustId = Editcustomer.ArCustId;
+                selectedId = Editcustomer.ArCustId;
+
+                break;
+
+        }
+
+        return !tombol;
+    }
+
+
+
+    // bank banks = new bank();
+
+    private async Task HandleValidSubmit()
+    {
+        switch (cekStatus)
+        {
+            case 1:
+                var newAdd = await service.AddCustomer(customer);
+                if (!newAdd)
+                {
+                    ToastContent = "Kode Customer ini Sudah Ada";
+                    await Task.Delay(100);
+                    await this.ToastObj.Show();
+                }
+                break;
+            case 2:
+                var newEdit = await service.EditCustomer(customer);
+                break;
+            case 3:
+                var newDel = await service.DelCustomer(customer);
+                if (newDel)
+                {
+                    ToastContent = "Kode Customer sudah dihapus";
+                    await Task.Delay(100);
+                    await this.ToastObj.Show();
+                }
+                break;
+        };
+
+
+        customer.Customer = "";
+        customer.NamaCust = "";
+        customer.Alamat = "";
+        customer.Kota = "";
+        customer.Telpon = "";
+        refreshTambah();
+        navigationmanager.NavigateTo("SetupCustomer", false);
+        //add = !add;
+        //StateHasChanged();
+
+    }
+    private void refreshTambah()
+    {
+        tombol = !tombol;
+        Simpan.InvokeAsync(tombol);
+
+    }
+
+}
