@@ -1,0 +1,140 @@
+﻿@page "/SetupArDist"
+@using BMASoft.Data.Models
+@using System.ComponentModel.DataAnnotations
+@inject BMASoft.Services.IReceivableService service
+
+<style>
+    .e-edit-icon::before {
+        content: '\ea9a';
+    }
+
+    .e-delete-icon::before {
+        content: '\e94a';
+    }
+</style>
+
+
+@if (true)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+
+                <h1>Setup Distribution Code</h1>
+                <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
+
+                <br />
+                <br />
+            </div>
+            <div class="col-md-6">
+
+                <CascadingValue Name="TambahAcct" Value="acctset">
+                    <CascadingValue Name="EditAcct" Value="Rubahacctsets">
+                        <FieldArAkunSet cekStatus="status" tombol="TblButton" Simpan="simpan"></FieldArAkunSet>
+                    </CascadingValue>
+                </CascadingValue>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        @if (toDoList == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+
+            <SfGrid DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" Width="auto" Height="310" Toolbar="@(new List<string>() {"Print", "Search" })">
+
+                <GridColumns>
+
+                    <GridColumn HeaderText="" Width="80">
+                        <Template>
+                            @{
+                                var trans2 = (context as ArDist);
+
+                                <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2))"></SfButton>
+                                <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2))"></SfButton>
+
+                            }
+
+                        </Template>
+
+                    </GridColumn>
+                    <GridColumn Field=@nameof(ArDist.DistCode) HeaderText="Kode" Width="60"></GridColumn>
+                    <GridColumn Field=@nameof(ArDist.Description) HeaderText="Nama" Width="170"></GridColumn>
+                    <GridColumn Field=@nameof(ArDist.Dist1) HeaderText="Dist GL" Width="70"></GridColumn>
+                   
+                </GridColumns>
+            </SfGrid>
+        }
+    </div>
+}
+
+
+@code {
+
+    private List<ArDist> toDoList;
+    private bool TblButton { get; set; } = true;
+
+
+    private int status { get; set; }
+
+    ArDistView acctset = new ArDistView();
+    ArDistView Rubahacctsets = new ArDistView();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await LoadArAkunSet();
+
+    }
+
+    async Task LoadArAkunSet()
+    {
+        toDoList = await service.GetDist();
+    }
+
+    private void simpan(bool jadisimpan)
+    {
+        TblButton = jadisimpan;
+        Tambah();
+
+    }
+
+    private async void Tambah()
+    {
+        status = 1;
+        TblButton = !TblButton;
+        await LoadArAkunSet();
+        StateHasChanged();
+    }
+    private async void Rubah(ArDist xAcctSet)
+    {
+        Rubahacctsets.ArDistId = xAcctSet.ArDistId;
+        Rubahacctsets.Description = xAcctSet.Description;
+        Rubahacctsets.Dist1 = xAcctSet.Dist1;
+
+        status = 2;
+        TblButton = !TblButton;
+        await LoadArAkunSet();
+        StateHasChanged();
+
+    }
+
+    private async void Hapus(ArDist xAcctSet)
+    {
+        Rubahacctsets.ArDistId = xAcctSet.ArAcctId;
+        Rubahacctsets.Description = xAcctSet.Description;
+        Rubahacctsets.Dist1 = xAcctSet.Dist1;
+
+        status = 3;
+        TblButton = !TblButton;
+        await LoadArAkunSet();
+        StateHasChanged();
+    }
+
+
+}

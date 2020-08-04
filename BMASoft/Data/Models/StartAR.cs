@@ -201,4 +201,29 @@ namespace BMASoft.Data.Models
         [Column(TypeName = "decimal(18,4)")]
         public decimal Piutang { get; set; }
     }
+
+    public class ArAcctView
+    {
+        public int ArAcctId { get; set; }
+        [Required(ErrorMessage ="AkunSet harus diisi")]
+        public string AcctSet { get; set; }      
+        [StringLength(100, ErrorMessage = "Keterangan terlalu panjang (100 character limit).")]
+        public string Description { get; set; }
+        public string Acct1 { get; set; }
+        public string Acct2 { get; set; }
+        public string Acct3 { get; set; }
+        public string Acct4 { get; set; }
+        public string Acct5 { get; set; }
+        public string Acct6 { get; set; }
+    }
+    
+    public class ArDistView
+    {
+        public int ArDistId { get; set; }
+        [Required(ErrorMessage = "Distribution Code harus diisi")]
+        public string DistCode { get; set; }
+        [StringLength(100, ErrorMessage = "Keterangan terlalu panjang (100 character limit).")]
+        public string Description { get; set; }
+        public string Dist1 { get; set; }
+    }
 }
