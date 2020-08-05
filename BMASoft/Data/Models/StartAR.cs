@@ -78,6 +78,8 @@ namespace BMASoft.Data.Models
         [Column(TypeName = "decimal(18,4)")]
         public decimal Unapplied { get; set; }
         public string AcctSet { get; set; }
+        public List<ArTransD> ArTransDs { get; set; }
+        public ArCust ArCust { get; set; }
 
     }
 
@@ -225,5 +227,75 @@ namespace BMASoft.Data.Models
         [StringLength(100, ErrorMessage = "Keterangan terlalu panjang (100 character limit).")]
         public string Description { get; set; }
         public string Dist1 { get; set; }
+    }
+
+    public class ArTransHView
+    {
+        [Key]
+        public int ArTransHId { get; set; }
+        public string Kode { get; set; }
+        public string Bukti { get; set; }
+        public DateTime Tanggal { get; set; }
+        public string KdBank { get; set; }
+        public string Customer { get; set; }
+        public string NoFaktur { get; set; }
+        public string Keterangan { get; set; }
+        public DateTime JthTempo { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal PPn { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal PPh { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal JumPPh { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal JumPPn { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Bruto { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Netto { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Jumlah
+        {
+            get
+            {
+                return ArTransDs.Sum(p => p.Jumlah);
+            }
+        }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Discount { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Piutang { get; set; }
+        public bool Pajak { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Unapplied { get; set; }
+        public string AcctSet { get; set; }
+        public List<ArTransDView> ArTransDs { get; set; }
+        public ArCust ArCust { get; set; }
+
+        public string NamaCustomer()
+        {
+            return ArCust.NamaCust;
+        }
+    }
+
+    public class ArTransDView
+    {
+        [Key]
+        public int ArTransDId { get; set; }
+        public DateTime Tanggal { get; set; }
+        public int KodeTran { get; set; }
+        public string Lpb { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Jumlah { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Bayar { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Sisa { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Discount { get; set; }
+        public string Keterangan { get; set; }
+        public string DistCode { get; set; }
+        public int ArTransHId { get; set; }
+        public ArTransHView ArTransH { get; set; }
     }
 }

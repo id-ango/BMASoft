@@ -30,7 +30,7 @@
 
                 <CascadingValue Name="TambahAcct" Value="acctset">
                     <CascadingValue Name="EditAcct" Value="Rubahacctsets">
-                        <FieldArAkunSet cekStatus="status" tombol="TblButton" Simpan="simpan"></FieldArAkunSet>
+                        <FieldArDist cekStatus="status" tombol="TblButton" Simpan="simpan"></FieldArDist>
                     </CascadingValue>
                 </CascadingValue>
             </div>
@@ -88,11 +88,11 @@
     protected override async Task OnInitializedAsync()
     {
 
-        await LoadArAkunSet();
+        await LoadDist();
 
     }
 
-    async Task LoadArAkunSet()
+    async Task LoadDist()
     {
         toDoList = await service.GetDist();
     }
@@ -108,7 +108,7 @@
     {
         status = 1;
         TblButton = !TblButton;
-        await LoadArAkunSet();
+        await LoadDist();
         StateHasChanged();
     }
     private async void Rubah(ArDist xAcctSet)
@@ -119,20 +119,20 @@
 
         status = 2;
         TblButton = !TblButton;
-        await LoadArAkunSet();
+        await LoadDist();
         StateHasChanged();
 
     }
 
     private async void Hapus(ArDist xAcctSet)
     {
-        Rubahacctsets.ArDistId = xAcctSet.ArAcctId;
+        Rubahacctsets.ArDistId = xAcctSet.ArDistId;
         Rubahacctsets.Description = xAcctSet.Description;
         Rubahacctsets.Dist1 = xAcctSet.Dist1;
 
         status = 3;
         TblButton = !TblButton;
-        await LoadArAkunSet();
+        await LoadDist();
         StateHasChanged();
     }
 
