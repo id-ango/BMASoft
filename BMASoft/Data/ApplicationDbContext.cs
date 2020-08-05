@@ -46,6 +46,9 @@ namespace BMASoft.Data
             builder.Entity<ArCust>()
                 .HasIndex(p => p.Customer)
                 .IsUnique();
+            builder.Entity<ArCust>().Property(p => p.TglMasuk).HasDefaultValue(null);
+            builder.Entity<ArCust>().Property(p => p.TglPost).HasDefaultValue(null);
+            builder.Entity<ArCust>().Property(p => p.LstOrder).HasDefaultValue(null);
         }
 
     }

@@ -4,14 +4,16 @@ using BMASoft.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BMASoft.Migrations
 {
     [DbContext(typeof(BmaDbContext))]
-    partial class BmaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200805075901_custArnull")]
+    partial class custArnull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,10 +103,8 @@ namespace BMASoft.Migrations
                     b.Property<string>("KotaKrm")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("LstOrder")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(null);
+                    b.Property<DateTime>("LstOrder")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("NPWP_Cust")
                         .HasColumnType("nvarchar(max)");
@@ -118,12 +118,6 @@ namespace BMASoft.Migrations
                     b.Property<decimal>("Piutang")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<string>("ProvKirim")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Provinsi")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("SldAwal")
                         .HasColumnType("decimal(18,4)");
 
@@ -133,15 +127,11 @@ namespace BMASoft.Migrations
                     b.Property<int>("Termin")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("TglMasuk")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(null);
+                    b.Property<DateTime>("TglMasuk")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("TglPost")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(null);
+                    b.Property<DateTime>("TglPost")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ArCustId");
 
