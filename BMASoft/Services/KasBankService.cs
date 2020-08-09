@@ -410,8 +410,8 @@ namespace BMASoft.Services
 
             using (PdfDocument pdfDocument = new PdfDocument())
             {
-              //  int paragraphAfterSpacing = 8;
-              //  int cellMargin = 8;
+                //  int paragraphAfterSpacing = 8;
+                //  int cellMargin = 8;
 
                 //Add page to the PDF document
                 PdfPage page = pdfDocument.Pages.Add();

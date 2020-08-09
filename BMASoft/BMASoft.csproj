@@ -35,4 +35,16 @@
     <Folder Include="Pages\Ledger\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Pages\Piutang\AddTransArIn.razor" />
+    <None Include="Pages\Piutang\EditTransArIn.razor" />
+    <None Include="Pages\Piutang\FieldArAkunSet.razor" />
+    <None Include="Pages\Piutang\FieldArDist.razor" />
+    <None Include="Pages\Piutang\FieldCustomer.razor" />
+    <None Include="Pages\Piutang\SetupArAkunSet.razor" />
+    <None Include="Pages\Piutang\SetupArDist.razor" />
+    <None Include="Pages\Piutang\SetupCustomer.razor" />
+    <None Include="Pages\Piutang\TransArIn.razor" />
+  </ItemGroup>
+
 </Project>
