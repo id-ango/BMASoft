@@ -4,14 +4,16 @@ using BMASoft.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BMASoft.Migrations
 {
     [DbContext(typeof(BmaDbContext))]
-    partial class BmaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200810024659_namacustnull")]
+    partial class namacustnull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -270,9 +272,8 @@ namespace BMASoft.Migrations
                     b.Property<string>("Keterangan")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("KodeTran")
-                        .HasColumnType("nvarchar(2)")
-                        .HasMaxLength(2);
+                    b.Property<int>("KodeTran")
+                        .HasColumnType("int");
 
                     b.Property<string>("Lpb")
                         .HasColumnType("nvarchar(max)");
@@ -315,7 +316,10 @@ namespace BMASoft.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<DateTime?>("JthTempo")
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("JthTempo")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("JumPPh")

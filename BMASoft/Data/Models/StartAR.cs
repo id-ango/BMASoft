@@ -56,12 +56,12 @@ namespace BMASoft.Data.Models
         public int ArTransHId { get; set; }
         public string Kode { get; set; }
         public string Bukti { get; set; }
-        public DateTime Tanggal { get; set; }
+        public DateTime Tanggal { get; set; }      
         public string KdBank { get; set; }
         public string Customer { get; set; }
         public string NoFaktur { get; set; }
         public string Keterangan { get; set; }
-        public DateTime JthTempo { get; set; }
+        public Nullable<DateTime> JthTempo { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal PPn { get; set; }
         [Column(TypeName = "decimal(18,4)")]
@@ -95,7 +95,8 @@ namespace BMASoft.Data.Models
         [Key]
         public int ArTransDId { get; set; }
         public DateTime Tanggal { get; set; }
-        public int KodeTran { get; set; }
+        [StringLength(2)]
+        public string KodeTran { get; set; }
         public string Lpb { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal Jumlah { get; set; }
@@ -117,7 +118,7 @@ namespace BMASoft.Data.Models
         public string Kode { get; set; }
         public string Dokumen { get; set; }
         public DateTime Tanggal { get; set; }
-        public DateTime DueDate { get; set; }
+        public Nullable<DateTime> DueDate { get; set; }
         public string KodeTran { get; set; }
         public string LPB { get; set; }
         public string Keterangan { get; set; }

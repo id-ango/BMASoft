@@ -324,6 +324,16 @@ namespace BMASoft.Services
                 Tanggal = trans.Tanggal,
                 Keterangan = trans.Keterangan,
                 Jumlah = trans.Jumlah,
+                PPn = 0,
+                PPh = 0,
+                JumPPh = 0,
+                Bruto = trans.Jumlah,
+                Netto = 0,
+                JumPPn = 0,
+                Discount = 0,
+                Piutang = 0,
+                Kode = "11",
+                
                 ArTransDs = new List<ArTransD>()
             };
             foreach (var item in trans.ArTransDs)
@@ -332,7 +342,13 @@ namespace BMASoft.Services
                 {
                     DistCode = item.DistCode,
                     Keterangan = item.Keterangan,
-                    Jumlah = item.Jumlah
+                    Jumlah = item.Jumlah,
+                    KodeTran = "11",
+                    Lpb = transH.Bukti,
+                    Sisa = item.Jumlah,
+                    Discount = 0,
+                    Bayar = 0,
+                     Tanggal = trans.Tanggal
                 });
             }
             ArPiutng transaksi = new ArPiutng
@@ -345,7 +361,8 @@ namespace BMASoft.Services
                 KodeTran = "11",
                 Jumlah = transH.Jumlah,
                 Sisa = transH.Jumlah,
-                SldSisa = transH.Jumlah
+                SldSisa = transH.Jumlah,
+                Dpp = transH.Jumlah
             };
 
             var customer = (from e in _context.ArCusts where e.Customer == trans.Customer select e).FirstOrDefault();
