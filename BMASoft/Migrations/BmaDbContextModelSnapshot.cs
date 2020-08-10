@@ -195,7 +195,7 @@ namespace BMASoft.Migrations
                     b.Property<decimal>("Dpp")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Jumlah")
@@ -270,8 +270,9 @@ namespace BMASoft.Migrations
                     b.Property<string>("Keterangan")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("KodeTran")
-                        .HasColumnType("int");
+                    b.Property<string>("KodeTran")
+                        .HasColumnType("nvarchar(2)")
+                        .HasMaxLength(2);
 
                     b.Property<string>("Lpb")
                         .HasColumnType("nvarchar(max)");
@@ -299,7 +300,7 @@ namespace BMASoft.Migrations
                     b.Property<string>("AcctSet")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ArCustId")
+                    b.Property<int>("ArCustId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Bruto")
@@ -641,7 +642,9 @@ namespace BMASoft.Migrations
                 {
                     b.HasOne("BMASoft.Data.Models.ArCust", "ArCust")
                         .WithMany()
-                        .HasForeignKey("ArCustId");
+                        .HasForeignKey("ArCustId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BMASoft.Data.Models.CbTransD", b =>

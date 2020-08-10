@@ -11,6 +11,8 @@
     <Compile Remove="Migrations\20200723102913_rubahTransh.Designer.cs" />
     <Compile Remove="Migrations\20200725022915_ubahksaldo.cs" />
     <Compile Remove="Migrations\20200725022915_ubahksaldo.Designer.cs" />
+    <Compile Remove="Migrations\20200810003122_namacust.cs" />
+    <Compile Remove="Migrations\20200810003122_namacust.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
