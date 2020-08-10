@@ -85,11 +85,9 @@ namespace BMASoft.Data.Models
         public decimal Unapplied { get; set; }
         public string AcctSet { get; set; }
         public List<ArTransD> ArTransDs { get; set; }
+        public int ArCustId { get; set; }
         public ArCust ArCust { get; set; }
-        public string NamaCustomer()
-        {
-            return ArCust.NamaCust;
-        }
+        
     }
 
     public class ArTransD
@@ -281,12 +279,9 @@ namespace BMASoft.Data.Models
         public decimal Unapplied { get; set; }
         public string AcctSet { get; set; }
         public List<ArTransDView> ArTransDs { get; set; }
+        public int ArCustId { get; set; }
         public ArCust ArCust { get; set; }
 
-        public string NamaCustomer()
-        {
-            return ArCust.NamaCust;
-        }
     }
 
     public class ArTransDView

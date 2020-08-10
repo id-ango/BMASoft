@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\KasBank\Laporan\**" />
+    <Content Remove="Pages\KasBank\Laporan\**" />
+    <EmbeddedResource Remove="Pages\KasBank\Laporan\**" />
+    <None Remove="Pages\KasBank\Laporan\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Data\FileUtil.cs" />
     <Compile Remove="Migrations\20200723102913_rubahTransh.cs" />
     <Compile Remove="Migrations\20200723102913_rubahTransh.Designer.cs" />
@@ -33,7 +40,6 @@
     <Folder Include="Pages\Hutang\" />
     <Folder Include="Pages\Beli\" />
     <Folder Include="Pages\Jual\" />
-    <Folder Include="Pages\KasBank\Laporan\" />
     <Folder Include="Pages\Ledger\" />
   </ItemGroup>
 
