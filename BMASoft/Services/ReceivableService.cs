@@ -333,6 +333,7 @@ namespace BMASoft.Services
                 Discount = 0,
                 Piutang = 0,
                 Kode = "11",
+                ArCustId = trans.ArCustId,
                 
                 ArTransDs = new List<ArTransD>()
             };
@@ -369,8 +370,8 @@ namespace BMASoft.Services
             customer.Piutang += trans.Jumlah;
           
             _context.ArCusts.Update(customer);
-            _context.ArTransHs.Add(transH);
-            _context.ArPiutngs.Add(transaksi);
+         //   _context.ArTransHs.Add(transH);
+        //    _context.ArPiutngs.Add(transaksi);
             await _context.SaveChangesAsync();
             return true;
 

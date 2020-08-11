@@ -55,7 +55,7 @@
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="ArCust" DataSource="banks" Placeholder="Select Customer" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Customer">
                     <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
-                    <ComboBoxFieldSettings Text="NamaCust" Value="ArCustId"></ComboBoxFieldSettings>
+                    <ComboBoxFieldSettings Text="NamaCust" Value="Customer"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.ArCustId)" />
             </div>
