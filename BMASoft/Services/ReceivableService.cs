@@ -293,10 +293,11 @@ namespace BMASoft.Services
             return await _context.ArTransHs.Include(p => p.ArTransDs).Where(x => x.ArTransHId == id).FirstOrDefaultAsync();
         }
 
-        public Task<List<ArTransH>> GetTransH()
+        public async Task<List<ArTransH>> GetTransH()
         {
             // return  _context.CbTransHs.Include(p =>p.CbTransDs).OrderByDescending(x =>x.Tanggal).ToListAsync();
-            return _context.ArTransHs.OrderByDescending(x => x.Tanggal).ToListAsync();
+            return await _context.ArTransHs.OrderByDescending(x => x.Tanggal).ToListAsync();
+          //  return await _context.ArTransHs.ToListAsync();
 
         }
 
@@ -327,11 +328,13 @@ namespace BMASoft.Services
                 PPn = 0,
                 PPh = 0,
                 JumPPh = 0,
-                Bruto = trans.Jumlah,
-                Netto = 0,
                 JumPPn = 0,
+                Bruto = trans.Jumlah,
+                Netto = 0,               
                 Discount = 0,
                 Piutang = 0,
+                Pajak = false,
+                Unapplied = 0,
                 Kode = "11",
                 ArCustId = trans.ArCustId,
                 
@@ -346,10 +349,10 @@ namespace BMASoft.Services
                     Jumlah = item.Jumlah,
                     KodeTran = "11",
                     Lpb = transH.Bukti,
-                    Sisa = item.Jumlah,
+                    Sisa = item.Jumlah,                   
                     Discount = 0,
                     Bayar = 0,
-                     Tanggal = trans.Tanggal
+                    Tanggal = trans.Tanggal
                 });
             }
             ArPiutng transaksi = new ArPiutng
@@ -361,17 +364,25 @@ namespace BMASoft.Services
                 Keterangan = transH.Keterangan,
                 KodeTran = "11",
                 Jumlah = transH.Jumlah,
+                Bayar = 0,
+                Discount = 0,
+                UnApplied = 0,
                 Sisa = transH.Jumlah,
                 SldSisa = transH.Jumlah,
-                Dpp = transH.Jumlah
+                Dpp = transH.Jumlah,
+                PPn = 0,
+                PPh = 0,
+                SldBayar = 0,
+                SldDisc = 0,
+                SldUnpl = 0
             };
 
             var customer = (from e in _context.ArCusts where e.Customer == trans.Customer select e).FirstOrDefault();
             customer.Piutang += trans.Jumlah;
           
             _context.ArCusts.Update(customer);
-         //   _context.ArTransHs.Add(transH);
-        //    _context.ArPiutngs.Add(transaksi);
+            _context.ArTransHs.Add(transH);
+           _context.ArPiutngs.Add(transaksi);
             await _context.SaveChangesAsync();
             return true;
 
@@ -469,10 +480,10 @@ namespace BMASoft.Services
             string thnbln = DateTime.Now.ToString("yyMM");
             string xbukti = kodeurut + thnbln.Substring(0, 2) + '2' + thnbln.Substring(2, 2) + '-';
             var maxvalue = "";
-            var maxlist = _context.CbTransHs.Where(x => x.DocNo.Substring(0, 10).Equals(xbukti)).ToList();
+            var maxlist = _context.ArTransHs.Where(x => x.Bukti.Substring(0, 10).Equals(xbukti)).ToList();
             if (maxlist != null)
             {
-                maxvalue = maxlist.Max(x => x.DocNo);
+                maxvalue = maxlist.Max(x => x.Bukti);
 
             }
 

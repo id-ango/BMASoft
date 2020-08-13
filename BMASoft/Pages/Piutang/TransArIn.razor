@@ -41,7 +41,7 @@ else
         <div class="content-wrapper">
             <div class="row">
 
-                @*<SfGrid SelectedRowIndex="2" Height="200" DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true" Toolbar="@(new List<string>() { "Search" })">
+                <SfGrid SelectedRowIndex="1" Height="200" DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true" Toolbar="@(new List<string>() { "Search" })">
                     <GridGroupSettings Columns="@GroupedColumns"></GridGroupSettings>
                     <GridPageSettings PageCount="5" PageSizes="true"></GridPageSettings>
                     <GridEvents RowSelected="RowSelecthandler" TValue="ArTransH"></GridEvents>
@@ -64,7 +64,7 @@ else
                         <GridColumn Field=@nameof(ArTransH.Jumlah) HeaderText="Saldo" Format="N2" Width="100"></GridColumn>
 
                     </GridColumns>
-                </SfGrid>*@
+                </SfGrid>
 
                 @*<SfGrid DataSource="@toDoDetail" Query="@(new Query().Where("ArTransHId", "equal",RowIndex))">
 
@@ -107,7 +107,7 @@ else
 
     public string[] GroupedColumns = new string[] { "Customer" };
     public string SelectedDoc { get; set; }
-    public int? RowIndex { get; set; } = 1003;
+    public int? RowIndex { get; set; } = 0;
     public void RowSelecthandler(RowSelectEventArgs<ArTransH> Args)
     {
         SelectedDoc = Args.Data.Bukti;
@@ -127,6 +127,7 @@ else
     {
 
         toDoList = await service.GetTransH();
+
         toDoDetail = await service.GetTransD();
     }
 
