@@ -295,8 +295,17 @@ namespace BMASoft.Services
 
         public async Task<List<ArTransH>> GetTransH()
         {
+           List<ArTransH> arTrans = new List<ArTransH>();
+           
+           arTrans = await _context.ArTransHs.OrderByDescending(x => x.Tanggal).ToListAsync();
+          foreach (var item in arTrans)
+            {
+                item.NamaCust = (from e in _context.ArCusts where e.ArCustId == item.ArCustId select e.NamaCust).FirstOrDefault();
+            }
+
+            return arTrans;
             // return  _context.CbTransHs.Include(p =>p.CbTransDs).OrderByDescending(x =>x.Tanggal).ToListAsync();
-            return await _context.ArTransHs.OrderByDescending(x => x.Tanggal).ToListAsync();
+          //  return await _context.ArTransHs.OrderByDescending(x => x.Tanggal).ToListAsync();
           //  return await _context.ArTransHs.ToListAsync();
 
         }

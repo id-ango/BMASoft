@@ -86,8 +86,10 @@ namespace BMASoft.Data.Models
         public string AcctSet { get; set; }
         public List<ArTransD> ArTransDs { get; set; }
         public int ArCustId { get; set; }
-        public ArCust ArCust { get; set; }
-        
+        public string NamaCust { get; set; }
+        //     public ArCust ArCust { get; set; }
+
+
     }
 
     public class ArTransD
