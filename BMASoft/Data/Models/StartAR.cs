@@ -149,6 +149,7 @@ namespace BMASoft.Data.Models
         public decimal SldDisc { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal SldUnpl { get; set; }
+    
 
     }
 

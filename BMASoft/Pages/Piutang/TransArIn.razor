@@ -51,8 +51,8 @@ else
                             <Template>
                                 @{
                                     var trans2 = (context as ArTransH);                                 
-                                    <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.ArTransHId))"></SfButton>
-                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ArTransHId))"></SfButton>
+                                    <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.ArTransHId,trans2.Bukti))"></SfButton>
+                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ArTransHId,trans2.Bukti))"></SfButton>
                                 }
                             </Template>
                         </GridColumn>
@@ -94,6 +94,21 @@ else
             <DialogButton OnClick="@CancelClick" Content="Cancel" />
         </DialogButtons>
     </SfDialog>
+
+    <SfDialog @bind-Visible="@IsDialog" Width="400px" ShowCloseIcon="true" IsModal="true">
+        <DialogTemplates>
+            <Header>
+                INFORMATION
+            </Header>
+            <Content>
+                Piutang ini sudah ada pembayaran
+            </Content>
+        </DialogTemplates>
+       <DialogEvents Closed="@DialogClose"></DialogEvents>
+        <DialogButtons>
+            <DialogButton IsPrimary="true" Content="OK" OnClick="@OnBtnClick" />
+        </DialogButtons>
+    </SfDialog>
 }
 
 
@@ -103,11 +118,12 @@ else
 
     private List<ArTransH> toDoList;
     private List<ArTransD> toDoDetail;
-   
+    private ArPiutng rubah;
 
     public string[] GroupedColumns = new string[] { "Customer" };
     public string SelectedDoc { get; set; }
-    public int? RowIndex { get; set; } = 0;
+    public int? RowIndex { get; set; } = 1;
+
     public void RowSelecthandler(RowSelectEventArgs<ArTransH> Args)
     {
         SelectedDoc = Args.Data.Bukti;
@@ -115,6 +131,17 @@ else
     }
 
     private bool IsVisible { get; set; } = false;
+    private bool IsDialog { get; set; } = false;
+
+    private void DialogClose(Object args)
+    {
+        this.IsVisible = false;
+    }
+
+    private void OnBtnClick()
+    {
+        this.IsDialog = false;
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -126,7 +153,7 @@ else
     async Task LoadTransAr()
     {
 
-        toDoList = await service.GetTransH();
+        toDoList = await service.Get3TransH();
 
         toDoDetail = await service.GetTransD();
     }
@@ -138,17 +165,39 @@ else
 
 
 
-    private void Rubah(int xKdBank)
+    private void Rubah(int xKdBank,string xDoc)
     {
-        navigationmanager.NavigateTo($"EditTransArIn/{xKdBank}");
+        rubah =  service.GetPiutang(xDoc);
 
+        if (rubah != null)
+        {
+            if(rubah.Jumlah != rubah.Sisa && rubah != null)
+            {
+                IsDialog = true;
+            }
+            else
+            {
+                navigationmanager.NavigateTo($"EditTransArIn/{xKdBank}");
+            }
+        }
     }
 
-    private void Hapus(int xKdBank)
+    private void Hapus(int xKdBank,string xDoc)
     {
-        this.IsVisible = true;
-        this.id = xKdBank;
+        rubah = service.GetPiutang(xDoc);
 
+        if (rubah != null)
+        {
+            if (rubah.Jumlah != rubah.Sisa && rubah != null)
+            {
+                IsDialog = true;
+            }
+            else
+            {
+                this.IsVisible = true;
+                this.id = xKdBank;
+            }
+        }
     }
 
     private async void OkkClick()
