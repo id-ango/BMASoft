@@ -50,6 +50,7 @@ namespace BMASoft
             services.AddSyncfusionBlazor();
             services.AddTransient<IKasBankService, KasBankService>();
             services.AddTransient<IReceivableService, ReceivableService>();
+            services.AddTransient<IPaymentArService, PaymentArService>();
             services.AddSingleton<ExportService>();
         }
 

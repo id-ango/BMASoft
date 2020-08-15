@@ -49,7 +49,7 @@
 
                 <GridColumns>
 
-                    <GridColumn HeaderText="" Width="80">
+                    <GridColumn HeaderText="" Width="30">
                         <Template>
                             @{
                                 var trans2 = (context as ArCust);
@@ -62,10 +62,10 @@
                         </Template>
 
                     </GridColumn>
-                    <GridColumn Field=@nameof(ArCust.Customer) HeaderText="Kode" Width="60"></GridColumn>
-                    <GridColumn Field=@nameof(ArCust.NamaCust) HeaderText="Nama" Width="170"></GridColumn>
-                    <GridColumn Field=@nameof(ArCust.Alamat) HeaderText=" Alamat" Width="70"></GridColumn>
-                    <GridColumn Field=@nameof(ArCust.Kota) HeaderText="Kota" Width="70"></GridColumn>
+                    <GridColumn Field=@nameof(ArCust.Customer) HeaderText="Kode" Width="30"></GridColumn>
+                    <GridColumn Field=@nameof(ArCust.NamaCust) HeaderText="Nama" Width="70"></GridColumn>
+                    <GridColumn Field=@nameof(ArCust.Alamat) HeaderText=" Alamat" Width="170"></GridColumn>
+                    <GridColumn Field=@nameof(ArCust.Kota) HeaderText="Kota" Width="100"></GridColumn>
                     <GridColumn Field=@nameof(ArCust.Telpon) HeaderText="Telpon" Width="70"></GridColumn>
 
                 </GridColumns>

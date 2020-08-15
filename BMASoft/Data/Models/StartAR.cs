@@ -54,6 +54,7 @@ namespace BMASoft.Data.Models
     {
         [Key]
         public int ArTransHId { get; set; }
+        [StringLength(2)]
         public string Kode { get; set; }
         public string Bukti { get; set; }
         public DateTime Tanggal { get; set; }      
@@ -97,6 +98,8 @@ namespace BMASoft.Data.Models
         [Key]
         public int ArTransDId { get; set; }
         public DateTime Tanggal { get; set; }
+        [StringLength(2)]
+        public string Kode { get; set; }
         [StringLength(2)]
         public string KodeTran { get; set; }
         public string Lpb { get; set; }
