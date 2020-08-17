@@ -165,14 +165,13 @@ else
 
     private void Tambah()
     {
-        navigationmanager.NavigateTo("AddTransArIn");
+        navigationmanager.NavigateTo("AddTransArPy");
     }
-
 
 
     private void Rubah(int xKdBank, string xDoc)
     {
-        rubah = service.GetPiutang(xDoc);
+        rubah = serviceAR.GetPiutang(xDoc);
 
         if (rubah != null)
         {
@@ -189,7 +188,7 @@ else
 
     private void Hapus(int xKdBank, string xDoc)
     {
-        rubah = service.GetPiutang(xDoc);
+        rubah = serviceAR.GetPiutang(xDoc);
 
         if (rubah != null)
         {
@@ -204,6 +203,9 @@ else
             }
         }
     }
+
+
+
 
     private async void OkkClick()
     {

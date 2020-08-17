@@ -28,7 +28,7 @@ namespace BMASoft.Services
         Task<bool> AddTransH(ArTransHView transH);
         Task<bool> EditTransH(ArTransHView transH);
         Task<bool> DelTransH(int id);
-        ArPiutng GetPiutang(string bukti);
+        List<ArPiutng> GetPiutangSisa(string customer);
     }
 
     public class PaymentArService:IPaymentArService
@@ -47,9 +47,9 @@ namespace BMASoft.Services
             return await _context.ArTransHs.Include(p => p.ArTransDs).Where(x => x.ArTransHId == id).FirstOrDefaultAsync();
         }
 
-        public ArPiutng GetPiutang(string bukti)
+        public List<ArPiutng> GetPiutangSisa(string customer)
         {
-            return _context.ArPiutngs.Where(x => x.Dokumen == bukti).FirstOrDefault();
+            return  _context.ArPiutngs.Where(x => x.Customer == customer && x.Sisa != 0).ToList();
 
         }
         public async Task<List<ArTransH>> GetTransH()
@@ -107,66 +107,76 @@ namespace BMASoft.Services
                 Customer = trans.Customer.ToUpper(),
                 Tanggal = trans.Tanggal,
                 Keterangan = trans.Keterangan,
-                Jumlah = trans.Jumlah,
+                Jumlah = trans.JumBayar,
+                Discount = trans.JumDiskon,
+                Unapplied = trans.UpdateUnapplied,
+                Piutang = trans.JumPiutang,
                 PPn = 0,
                 PPh = 0,
                 JumPPh = 0,
                 JumPPn = 0,
-                Bruto = trans.Jumlah,
-                Netto = 0,
-                Discount = 0,
-                Piutang = 0,
-                Pajak = false,
-                Unapplied = 0,
+                Bruto =0,
+                Netto = 0,                             
+                Pajak = false,              
                 Kode = "14",
                 ArCustId = trans.ArCustId,
 
                 ArTransDs = new List<ArTransD>()
             };
+
+            List<ArPiutng> transaksi = new List<ArPiutng>();
+            transaksi = _context.ArPiutngs.Where(x => x.Customer == trans.Customer && x.Sisa != 0).ToList();
+
             foreach (var item in trans.ArTransDs)
             {
                 transH.ArTransDs.Add(new ArTransD()
-                {
-                    DistCode = item.DistCode,
-                    Keterangan = item.Keterangan,
+                {                   
                     Jumlah = item.Jumlah,
                     Kode = "14",
-                    KodeTran = "11",
+                    KodeTran = item.KodeTran,
                     Lpb = transH.Bukti,
-                    Sisa = item.Jumlah,
-                    Discount = 0,
-                    Bayar = 0,
-                    Tanggal = trans.Tanggal
+                    Tanggal = trans.Tanggal,
+                    Discount = item.Discount,
+                    Bayar = item.Bayar,
+                    Sisa = item.UpdateSisa
+             
                 });
+                transaksi.Where(x=>x.Dokumen == item.Lpb).ToList()
+                    .ForEach(s => { s.Bayar = item.Bayar + item.Discount;
+                                    s.Discount = item.Discount;
+                                    s.Sisa = item.UpdateSisa;
+                                   });
             }
-            ArPiutng transaksi = new ArPiutng
-            {
-                Kode = "CA",
-                Dokumen = transH.Bukti,
-                Tanggal = transH.Tanggal,
-                Customer = transH.Customer,
-                Keterangan = transH.Keterangan,
-                KodeTran = "14",
-                Jumlah = transH.Jumlah,
-                Bayar = 0,
-                Discount = 0,
-                UnApplied = 0,
-                Sisa = transH.Jumlah,
-                SldSisa = transH.Jumlah,
-                Dpp = transH.Jumlah,
-                PPn = 0,
-                PPh = 0,
-                SldBayar = 0,
-                SldDisc = 0,
-                SldUnpl = 0
-            };
+            
+
+            //ArPiutng transaksi = new ArPiutng
+            //{
+            //    Kode = "CA",
+            //    Dokumen = transH.Bukti,
+            //    Tanggal = transH.Tanggal,
+            //    Customer = transH.Customer,
+            //    Keterangan = transH.Keterangan,
+            //    KodeTran = "14",
+            //    Jumlah = transH.Jumlah,
+            //    Bayar = 0,
+            //    Discount = 0,
+            //    UnApplied = 0,
+            //    Sisa = transH.Jumlah,
+            //    SldSisa = transH.Jumlah,
+            //    Dpp = transH.Jumlah,
+            //    PPn = 0,
+            //    PPh = 0,
+            //    SldBayar = 0,
+            //    SldDisc = 0,
+            //    SldUnpl = 0
+            //};
 
             var customer = (from e in _context.ArCusts where e.Customer == trans.Customer select e).FirstOrDefault();
             customer.Piutang += trans.Jumlah;
 
             _context.ArCusts.Update(customer);
             _context.ArTransHs.Add(transH);
-            _context.ArPiutngs.Add(transaksi);
+            _context.ArPiutngs.UpdateRange(transaksi);
             await _context.SaveChangesAsync();
             return true;
 
@@ -186,18 +196,18 @@ namespace BMASoft.Services
                 Customer = trans.Customer.ToUpper(),
                 Tanggal = trans.Tanggal,
                 Keterangan = trans.Keterangan,
-                Jumlah = trans.Jumlah,
+                Jumlah = trans.JumBayar,
                 PPn = 0,
                 PPh = 0,
                 JumPPh = 0,
                 JumPPn = 0,
-                Bruto = trans.Jumlah,
+                Bruto =0,
                 Netto = 0,
-                Discount = 0,
-                Piutang = 0,
+                Discount = trans.JumDiskon,
+                Piutang = trans.JumBayar,
                 Pajak = false,
-                Unapplied = 0,
-                Kode = "11",
+                Unapplied = trans.UpdateUnapplied,
+                Kode = "14",
                 ArCustId = trans.ArCustId,
 
                 ArTransDs = new List<ArTransD>()
@@ -205,17 +215,15 @@ namespace BMASoft.Services
             foreach (var item in trans.ArTransDs)
             {
                 transH.ArTransDs.Add(new ArTransD()
-                {
-                    DistCode = item.DistCode,
-                    Keterangan = item.Keterangan,
+                {                 
                     Jumlah = item.Jumlah,
-                    Kode = "11",
-                    KodeTran = "11",
+                    Kode = "14",
+                    KodeTran = item.KodeTran,
                     Lpb = transH.Bukti,
-                    Sisa = item.Jumlah,
-                    Discount = 0,
-                    Bayar = 0,
-                    Tanggal = trans.Tanggal
+                    Sisa = item.UpdateSisa,
+                    Discount = item.Discount,
+                    Bayar = item.Bayar,
+                    Tanggal = item.Tanggal
                 });
             }
 
@@ -307,10 +315,10 @@ namespace BMASoft.Services
 
         public string GetNumber()
         {
-            string kodeno = "ARI";
+            string kodeno = "BMY";
             string kodeurut = kodeno + '-';
             string thnbln = DateTime.Now.ToString("yyMM");
-            string xbukti = kodeurut + thnbln.Substring(0, 2) + '2' + thnbln.Substring(2, 2) + '-';
+            string xbukti = kodeurut + thnbln.Substring(0, 2) + '3' + thnbln.Substring(2, 2) + '-';
             var maxvalue = "";
             var maxlist = _context.ArTransHs.Where(x => x.Bukti.Substring(0, 10).Equals(xbukti)).ToList();
             if (maxlist != null)

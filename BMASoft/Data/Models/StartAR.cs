@@ -288,7 +288,30 @@ namespace BMASoft.Data.Models
         public List<ArTransDView> ArTransDs { get; set; }
         public int ArCustId { get; set; }
         public ArCust ArCust { get; set; }
+        public decimal JumBayar { get; set; }
+        public decimal UpdateUnapplied
+        {
+            get
+            {
+                return JumBayar - ArTransDs.Sum(p => p.Bayar);
+            }
+        }
 
+        public decimal JumDiskon
+        {
+            get
+            {
+                return ArTransDs.Sum(p => p.Discount);
+            }
+        }
+
+        public decimal JumPiutang
+        {
+            get
+            {
+                return ArTransDs.Sum(p => p.Bayar+Discount);
+            }
+        }
     }
 
     public class ArTransDView
@@ -296,7 +319,7 @@ namespace BMASoft.Data.Models
         [Key]
         public int ArTransDId { get; set; }
         public DateTime Tanggal { get; set; }
-        public int KodeTran { get; set; }
+        public string KodeTran { get; set; }
         public string Lpb { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal Jumlah { get; set; }
@@ -307,6 +330,13 @@ namespace BMASoft.Data.Models
         [Column(TypeName = "decimal(18,4)")]
         public decimal Discount { get; set; }
         public string Keterangan { get; set; }
+        public decimal UpdateSisa
+        {
+            get
+            {
+                return Jumlah - Bayar - Discount;
+            }
+        }
         public string DistCode { get; set; }
         public int ArTransHId { get; set; }
         public ArTransHView ArTransH { get; set; }
