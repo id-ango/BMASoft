@@ -1,4 +1,4 @@
-﻿@page "/TransArBayar"
+﻿@page "/TransArCa"
 @inject NavigationManager navigationmanager
 @inject BMASoft.Services.IPaymentArService service
 @inject BMASoft.Services.IReceivableService serviceAR
@@ -52,8 +52,8 @@ else
                             <Template>
                                 @{
                                     var trans2 = (context as ArTransH);
-                                    <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.ArTransHId,trans2.Bukti))"></SfButton>
-                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ArTransHId,trans2.Bukti))"></SfButton>
+                                   
+                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ArTransHId))"></SfButton>
                                 }
                             </Template>
                         </GridColumn>
@@ -74,8 +74,8 @@ else
                         <GridColumn Field=@nameof(ArTransD.Lpb) HeaderText="Code" Width="30"></GridColumn>
                         <GridColumn Field=@nameof(ArTransD.Tanggal) HeaderText="Keterangan" Width="110"></GridColumn>
                         <GridColumn Field=@nameof(ArTransD.Jumlah) HeaderText="Jumlah" Width="90" Format="N2"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransD.Discount) HeaderText="Discount" Width="90" Format="N2"></GridColumn>
                         <GridColumn Field=@nameof(ArTransD.Bayar) HeaderText="Bayar" Width="90" Format="N2"></GridColumn>
+                        <GridColumn Field=@nameof(ArTransD.Discount) HeaderText="Discount" Width="90" Format="N2"></GridColumn>
                         <GridColumn Field=@nameof(ArTransD.Sisa) HeaderText="Sisa" Width="90" Format="N2"></GridColumn>
                     </GridColumns>
                 </SfGrid>
@@ -123,7 +123,7 @@ else
 
     private List<ArTransH> toDoList;
     private List<ArTransD> toDoDetail;
-    private ArPiutng rubah;
+    private ArTransH rubah;
 
     public string[] GroupedColumns = new string[] { "Customer" };
     public string SelectedDoc { get; set; }
@@ -169,39 +169,16 @@ else
     }
 
 
-    private void Rubah(int xKdBank, string xDoc)
+    
+
+    private async void Hapus(int xKdBank)
     {
-        rubah = serviceAR.GetPiutang(xDoc);
+        rubah = await service.GetTrans(xKdBank);
 
-        if (rubah != null)
-        {
-            if (rubah.Jumlah != rubah.Sisa && rubah != null)
-            {
-                IsDialog = true;
-            }
-            else
-            {
-                navigationmanager.NavigateTo($"EditTransArIn/{xKdBank}");
-            }
-        }
-    }
-
-    private void Hapus(int xKdBank, string xDoc)
-    {
-        rubah = serviceAR.GetPiutang(xDoc);
-
-        if (rubah != null)
-        {
-            if (rubah.Jumlah != rubah.Sisa && rubah != null)
-            {
-                IsDialog = true;
-            }
-            else
-            {
+       
                 this.IsVisible = true;
                 this.id = xKdBank;
-            }
-        }
+       
     }
 
 
@@ -215,7 +192,7 @@ else
 
         //      StateHasChanged();
 
-        navigationmanager.NavigateTo("TransArIn", true);
+        navigationmanager.NavigateTo("TransArCa", true);
         //  await LoadBank();
         //  await OnInitializedAsync();
     }
@@ -227,7 +204,7 @@ else
 
         //    StateHasChanged();
 
-        navigationmanager.NavigateTo("TransArIn", false);
+        navigationmanager.NavigateTo("TransArCa", false);
         //    await LoadBank();
         //      await OnInitializedAsync();
     }

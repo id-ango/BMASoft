@@ -45,7 +45,6 @@
 
   <ItemGroup>
     <None Include="Pages\Piutang\AddTransArIn.razor" />
-    <None Include="Pages\Piutang\EditTransArIn.razor" />
     <None Include="Pages\Piutang\FieldArAkunSet.razor" />
     <None Include="Pages\Piutang\FieldArDist.razor" />
     <None Include="Pages\Piutang\FieldCustomer.razor" />

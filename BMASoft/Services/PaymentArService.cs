@@ -141,35 +141,16 @@ namespace BMASoft.Services
                     Sisa = item.UpdateSisa
              
                 });
+
                 transaksi.Where(x=>x.Dokumen == item.Lpb).ToList()
                     .ForEach(s => { s.Bayar = item.Bayar + item.Discount;
                                     s.Discount = item.Discount;
                                     s.Sisa = item.UpdateSisa;
                                    });
+               
             }
-            
-
-            //ArPiutng transaksi = new ArPiutng
-            //{
-            //    Kode = "CA",
-            //    Dokumen = transH.Bukti,
-            //    Tanggal = transH.Tanggal,
-            //    Customer = transH.Customer,
-            //    Keterangan = transH.Keterangan,
-            //    KodeTran = "14",
-            //    Jumlah = transH.Jumlah,
-            //    Bayar = 0,
-            //    Discount = 0,
-            //    UnApplied = 0,
-            //    Sisa = transH.Jumlah,
-            //    SldSisa = transH.Jumlah,
-            //    Dpp = transH.Jumlah,
-            //    PPn = 0,
-            //    PPh = 0,
-            //    SldBayar = 0,
-            //    SldDisc = 0,
-            //    SldUnpl = 0
-            //};
+            transH.ArTransDs.RemoveAll(x => x.Bayar == 0 && x.Discount == 0);
+            transaksi.RemoveAll(x => x.Bayar == 0 && x.Discount ==0);
 
             var customer = (from e in _context.ArCusts where e.Customer == trans.Customer select e).FirstOrDefault();
             customer.Piutang += trans.Jumlah;

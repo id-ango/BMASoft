@@ -56,7 +56,7 @@
 
 
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="ArCust" DataSource="banks" Placeholder="Select Customer" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Customer">
+                <SfComboBox TValue="string" TItem="ArCust" DataSource="Customers" Placeholder="Select Customer" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Customer">
                     <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaCust" Value="Customer"></ComboBoxFieldSettings>
                 </SfComboBox>
@@ -76,6 +76,14 @@
             <div class="form-group">
                 <SfNumericTextBox CssClass="e-outline" @bind-Value="@Transh.JumBayar" Placeholder="Jumlah Bayar" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
                 <ValidationMessage For="@(() => Transh.JumBayar)" />
+            </div>
+
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="CbBank" DataSource="Banks" Placeholder="Select Banks" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.KdBank">
+                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="NmBank" Value="KodeBank"></ComboBoxFieldSettings>
+                </SfComboBox>
+                <ValidationMessage For="@(() => Transh.KdBank)" />
             </div>
 
         </EditForm>
@@ -105,27 +113,28 @@
                                 <td>
                                     <span>
                                         @detail.Tanggal.ToShortDateString()
-                                </span>
-                            </td>
-                            <td>
-                                <span> @detail.Jumlah.ToString("#,##0.##")</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span> @detail.Jumlah.ToString("#,##0.##")</span>
 
-                            </td>
-                            <td>
-                                <SfNumericTextBox CssClass="e-outline" @bind-Value="@detail.Bayar" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
+                                </td>
+                                <td>
+                                    <SfNumericTextBox CssClass="e-outline" @bind-Value="@detail.Bayar" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
 
-                            </td>
-                            <td>
-                                <SfNumericTextBox CssClass="e-outline" @bind-Value="@detail.Discount" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
+                                </td>
+                                <td>
+                                    <SfNumericTextBox CssClass="e-outline" @bind-Value="@detail.Discount" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
 
-                            </td>
-                            <td>
-                                <span>@detail.UpdateSisa.ToString("#,##0.##")</span>
+                                </td>
+                                <td>
+                                    <span>@detail.UpdateSisa.ToString("#,##0.##")</span>
 
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        }
                     }
-                    }
+
 
                     <tr>
 
@@ -154,8 +163,8 @@
 @code {
 
     private ArTransHView Transh = new ArTransHView() { ArTransDs = new List<ArTransDView>() };
-
-    private List<ArCust> banks;
+    private List<CbBank> Banks;
+    private List<ArCust> Customers;
     private List<ArDist> srccode;
     private ArTransDView Transd = new ArTransDView();
     private ArTransDView TransK = new ArTransDView();
@@ -182,21 +191,21 @@
     {
         Transh.Tanggal = DateTime.Now;
 
-        await LoadBank();
-        await LoadSrcCode();
+        await LoadCustomers();
+        await LoadBanks();
     }
 
-    async Task LoadBank()
+    async Task LoadCustomers()
     {
 
-        banks = await serviceAR.GetCustomer();
+        Customers = await serviceAR.GetCustomer();
 
     }
 
-    async Task LoadSrcCode()
+    async Task LoadBanks()
     {
 
-        srccode = await serviceAR.GetDist();
+        Banks = await serviceCB.GetBank();
 
     }
 
@@ -205,9 +214,9 @@
         var itemData = JsonConvert.DeserializeObject<ArCust>(args.ItemData != null ? args.ItemData.ToString() : "");
         this.customerId = itemData.ArCustId;
         this.customer = itemData.Customer;
-        var transaksi =  service.GetPiutangSisa(this.customer);
+        var transaksi = service.GetPiutangSisa(this.customer);
         Transh.ArTransDs.Clear();
-        if(transaksi != null)
+        if (transaksi != null)
         {
             foreach (var item in transaksi)
             {
@@ -225,7 +234,7 @@
 
     }
 
-   
+
     private void OkClick()
     {
         this.IsVisible = false;
@@ -237,7 +246,7 @@
                 DistCode = Transd.DistCode,
                 Keterangan = Transd.Keterangan,
                 Jumlah = Transd.Jumlah
-               
+
             });
         }
 
