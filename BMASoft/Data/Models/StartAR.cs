@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
+﻿using BMASoft.Migrations;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Syncfusion.Blazor.CircularGauge;
 using System;
@@ -48,6 +49,14 @@ namespace BMASoft.Data.Models
         public Nullable<DateTime> LstOrder { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal Piutang { get; set; }
+        public string NamaLengkap
+        {
+            get
+            {
+                return NamaCust + " [" + Customer + "]" + " (" + Alamat + ")";
+            }
+        }
+        
     }
 
     public class ArTransH
@@ -218,6 +227,7 @@ namespace BMASoft.Data.Models
         public DateTime LstOrder { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal Piutang { get; set; }
+        public string NamaLengkap { get; set; }
     }
 
     public class ArAcctView

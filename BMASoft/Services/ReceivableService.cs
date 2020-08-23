@@ -19,7 +19,7 @@ namespace BMASoft.Services
 {
     public interface IReceivableService
     {
-        Task<List<ArCust>> GetCustomer();
+        List<ArCust> GetCustomer();
         Task<bool> AddCustomer(CustomerView customers);
         Task<bool> EditCustomer(CustomerView customers);
         Task<bool> DelCustomer(CustomerView customers);
@@ -50,9 +50,9 @@ namespace BMASoft.Services
             _context = context;
         }
 
-        public async Task<List<ArCust>> GetCustomer()
+        public List<ArCust> GetCustomer()
         {
-            return await _context.ArCusts.ToListAsync();
+            return  _context.ArCusts.OrderBy(x=>x.NamaCust).ToList();
         }
 
         public async Task<bool> AddCustomer(CustomerView customers)

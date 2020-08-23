@@ -53,9 +53,9 @@
 
         
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="ArCust" DataSource="banks" Placeholder="Select Customer" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Customer">
+                <SfComboBox TValue="string" TItem="ArCust" DataSource="customers" Placeholder="Select Customer" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Customer">
                     <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
-                    <ComboBoxFieldSettings Text="NamaCust" Value="Customer"></ComboBoxFieldSettings>
+                    <ComboBoxFieldSettings Text="NamaLengkap" Value="Customer"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.ArCustId)" />
             </div>
@@ -163,7 +163,7 @@
 
     private ArTransHView Transh = new ArTransHView() { ArTransDs = new List<ArTransDView>() };
 
-    private List<ArCust> banks;
+    private List<ArCust> customers;
     private List<ArDist> srccode;
     private ArTransDView Transd = new ArTransDView();
     private ArTransDView TransK = new ArTransDView();
@@ -189,14 +189,14 @@
     {
         Transh.Tanggal = DateTime.Now;
 
-        await LoadBank();
+         LoadCustomers();
         await LoadSrcCode();
     }
 
-    async Task LoadBank()
+    void LoadCustomers()
     {
 
-        banks = await service.GetCustomer();
+        customers = service.GetCustomer();
 
     }
 
@@ -275,9 +275,6 @@
         Transd = new ArTransDView();
         Transd = transd;
         OnEditLine();
-
-
-
     }
 
     private void Hapus(ArTransDView transd)

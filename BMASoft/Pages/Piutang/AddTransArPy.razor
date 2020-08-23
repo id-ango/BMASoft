@@ -58,7 +58,7 @@
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="ArCust" DataSource="Customers" Placeholder="Select Customer" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Customer">
                     <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
-                    <ComboBoxFieldSettings Text="NamaCust" Value="Customer"></ComboBoxFieldSettings>
+                    <ComboBoxFieldSettings Text="NamaLengkap" Value="Customer"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.ArCustId)" />
             </div>
@@ -158,14 +158,16 @@
 
     </div>
 </div>
-
+<SfToast ID="toast_default" @ref="ToastObj" Title="Delete Record" Content="@ToastContent" TimeOut="5000" Icon="e-meeting">
+    <ToastPosition X="@ToastPosition"></ToastPosition>
+</SfToast>
 
 @code {
 
     private ArTransHView Transh = new ArTransHView() { ArTransDs = new List<ArTransDView>() };
     private List<CbBank> Banks;
     private List<ArCust> Customers;
-    private List<ArDist> srccode;
+ //   private List<ArDist> srccode;
     private ArTransDView Transd = new ArTransDView();
     private ArTransDView TransK = new ArTransDView();
     //   private List<TransDView> TransDs = new List<TransDView>();
@@ -184,21 +186,21 @@
 
     private void ShowOnClick()
     {
-        this.ToastObj.Show();
+     //   this.ToastObj.Show();
     }
 
     protected override async Task OnInitializedAsync()
     {
         Transh.Tanggal = DateTime.Now;
 
-        await LoadCustomers();
+       LoadCustomers();
         await LoadBanks();
     }
 
-    async Task LoadCustomers()
+   void LoadCustomers()
     {
 
-        Customers = await serviceAR.GetCustomer();
+        Customers =  serviceAR.GetCustomer();
 
     }
 
@@ -292,15 +294,15 @@
 
 
 
-    private void Rubah(ArTransDView transd)
-    {
-        Transd = new ArTransDView();
-        Transd = transd;
-        OnEditLine();
+    //private void Rubah(ArTransDView transd)
+    //{
+    //    Transd = new ArTransDView();
+    //    Transd = transd;
+    //    OnEditLine();
 
 
 
-    }
+    //}
 
     private void Hapus(ArTransDView transd)
     {
@@ -318,7 +320,7 @@
             //   await ExportToPdf(Transh);
         }
 
-        navigationmanager.NavigateTo("TransArIn", false);
+        navigationmanager.NavigateTo("TransArCa", false);
         //add = !add;
         //StateHasChanged();
 

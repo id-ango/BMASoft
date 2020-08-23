@@ -87,16 +87,16 @@
     CustomerView Rubahcustomer = new CustomerView();
 
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
 
-        await LoadCustomer();
+         LoadCustomer();
 
     }
 
-    async Task LoadCustomer()
+    void LoadCustomer()
     {
-        toDoList = await service.GetCustomer();
+        toDoList =  service.GetCustomer();
     }
 
     private void simpan(bool jadisimpan)
@@ -106,14 +106,14 @@
 
     }
 
-    private async void Tambah()
+    private  void Tambah()
     {
         status = 1;
         TblButton = !TblButton;
-        await LoadCustomer();
+        LoadCustomer();
         StateHasChanged();
     }
-    private async void Rubah(ArCust xCustomer)
+    private void Rubah(ArCust xCustomer)
     {
         Rubahcustomer.ArCustId = xCustomer.ArCustId;
         Rubahcustomer.Customer = xCustomer.Customer;
@@ -124,12 +124,12 @@
 
         status = 2;
         TblButton = !TblButton;
-        await LoadCustomer();
+        LoadCustomer();
         StateHasChanged();
 
     }
 
-    private async void Hapus(ArCust xCustomer)
+    private void Hapus(ArCust xCustomer)
     {
         Rubahcustomer.ArCustId = xCustomer.ArCustId;
         Rubahcustomer.Customer = xCustomer.Customer;
@@ -140,7 +140,7 @@
 
         status = 3;
         TblButton = !TblButton;
-        await LoadCustomer();
+        LoadCustomer();
         StateHasChanged();
     }
 

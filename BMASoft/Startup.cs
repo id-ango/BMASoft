@@ -51,6 +51,7 @@ namespace BMASoft
             services.AddTransient<IKasBankService, KasBankService>();
             services.AddTransient<IReceivableService, ReceivableService>();
             services.AddTransient<IPaymentArService, PaymentArService>();
+            services.AddTransient<IPaymentArDpService, PaymentArDpService>();
             services.AddSingleton<ExportService>();
         }
 
