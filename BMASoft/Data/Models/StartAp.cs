@@ -10,10 +10,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace BMASoft.Data.Models
     {
-        public class ArSuppl
+        public class ApSuppl
         {
             [Key]
-            public int ArSupplId { get; set; }
+            public int ApSupplId { get; set; }
             public string Supplier { get; set; }
             public string NamaSup { get; set; }
             public string Person { get; set; }
@@ -42,26 +42,21 @@ namespace BMASoft.Data.Models
             public Nullable<DateTime> LstOrder { get; set; }
             [Column(TypeName = "decimal(18,4)")]
             public decimal Hutang { get; set; }
-            public string NamaLengkap
-            {
-                get
-                {
-                    return NamaSup + " [" + Supplier + "]" + " (" + Alamat + ")";
-                }
-            }
+        public string NamaLengkap { get; set; }
 
-        }
 
-        public class ArTransH
+    }
+
+    public class ApTransH
         {
             [Key]
-            public int ArTransHId { get; set; }
+            public int ApTransHId { get; set; }
             [StringLength(2)]
             public string Kode { get; set; }
             public string Bukti { get; set; }
             public DateTime Tanggal { get; set; }
             public string KdBank { get; set; }
-            public string Customer { get; set; }
+            public string Supplier { get; set; }
             public string NoFaktur { get; set; }
             public string Keterangan { get; set; }
             public Nullable<DateTime> JthTempo { get; set; }
@@ -82,23 +77,23 @@ namespace BMASoft.Data.Models
             [Column(TypeName = "decimal(18,4)")]
             public decimal Discount { get; set; }
             [Column(TypeName = "decimal(18,4)")]
-            public decimal Piutang { get; set; }
+            public decimal Hutang { get; set; }
             public bool Pajak { get; set; }
             [Column(TypeName = "decimal(18,4)")]
             public decimal Unapplied { get; set; }
             public string AcctSet { get; set; }
-            public List<ArTransD> ArTransDs { get; set; }
-            public int ArCustId { get; set; }
+            public List<ApTransD> ApTransDs { get; set; }
+            public int ApCustId { get; set; }
             public string NamaCust { get; set; }
             //     public ArCust ArCust { get; set; }
 
 
         }
 
-        public class ArTransD
+        public class ApTransD
         {
             [Key]
-            public int ArTransDId { get; set; }
+            public int ApTransDId { get; set; }
             public DateTime Tanggal { get; set; }
             [StringLength(2)]
             public string Kode { get; set; }
@@ -115,13 +110,13 @@ namespace BMASoft.Data.Models
             public decimal Discount { get; set; }
             public string Keterangan { get; set; }
             public string DistCode { get; set; }
-            public int ArTransHId { get; set; }
-            public ArTransH ArTransH { get; set; }
+            public int ApTransHId { get; set; }
+            public ApTransH ApTransH { get; set; }
         }
 
-        public class ArPiutng
+        public class ApHutang
         {
-            public int ArPiutngId { get; set; }
+            public int ApHutangId { get; set; }
             public string Kode { get; set; }
             public string Dokumen { get; set; }
             public DateTime Tanggal { get; set; }
@@ -129,7 +124,7 @@ namespace BMASoft.Data.Models
             public string KodeTran { get; set; }
             public string LPB { get; set; }
             public string Keterangan { get; set; }
-            public string Customer { get; set; }
+            public string Supplier { get; set; }
             [Column(TypeName = "decimal(18,4)")]
             public decimal Jumlah { get; set; }
             [Column(TypeName = "decimal(18,4)")]
@@ -158,9 +153,9 @@ namespace BMASoft.Data.Models
 
         }
 
-        public class ArAcct
+        public class ApAcct
         {
-            public int ArAcctId { get; set; }
+            public int ApAcctId { get; set; }
             public string AcctSet { get; set; }
             public string Description { get; set; }
             public string Acct1 { get; set; }
@@ -171,26 +166,26 @@ namespace BMASoft.Data.Models
             public string Acct6 { get; set; }
         }
 
-        public class ArDist
+        public class ApDist
         {
-            public int ArDistId { get; set; }
+            public int ApDistId { get; set; }
             public string DistCode { get; set; }
             public string Description { get; set; }
             public string Dist1 { get; set; }
         }
 
-        public class CustomerView
+        public class SupplierView
         {
             [Key]
-            public int ArCustId { get; set; }
+            public int ApCustId { get; set; }
             [Required]
             [MinLength(5)]
             [StringLength(5, ErrorMessage = "Kode Bank terlalu panjang (5 character limit).")]
-            public string Customer { get; set; }
+            public string Supplier { get; set; }
             [Required]
-            [StringLength(100, ErrorMessage = "Nama customer terlalu panjang (100 character limit).")]
-            public string NamaCust { get; set; }
-            public string Golongan { get; set; }
+            [StringLength(100, ErrorMessage = "Nama Supplier terlalu panjang (100 character limit).")]
+            public string NamaSup { get; set; }
+            public string Person { get; set; }
             [Required(ErrorMessage = "Alamat Harus Diisi")]
             public string Alamat { get; set; }
             [Required(ErrorMessage = "Kota Harus Diisi")]
@@ -201,7 +196,7 @@ namespace BMASoft.Data.Models
             public string ProvKirim { get; set; }
             [Required(ErrorMessage = "Telpon Harus Diisi")]
             public string Telpon { get; set; }
-            public string NPWP_Cust { get; set; }
+            public string NPWP_Sup { get; set; }
             public string AlmtNPWP { get; set; }
             public string Expedisi { get; set; }
             public int Termin { get; set; } = 0;
@@ -213,19 +208,25 @@ namespace BMASoft.Data.Models
             public string Fax { get; set; }
             [Column(TypeName = "decimal(18,4)")]
             public decimal SldAwal { get; set; }
-            public bool NonPPN { get; set; }
+            public bool Pajak { get; set; }
             public string AcctSet { get; set; }
             public DateTime TglPost { get; set; }
             public DateTime TglMasuk { get; set; }
             public DateTime LstOrder { get; set; }
             [Column(TypeName = "decimal(18,4)")]
-            public decimal Piutang { get; set; }
-            public string NamaLengkap { get; set; }
-        }
-
-        public class ArAcctView
+            public decimal Hutang { get; set; }
+        public string NamaLengkap
         {
-            public int ArAcctId { get; set; }
+            get
+            {
+                return NamaSup + " [" + Supplier + "]" + " (" + Alamat + ")";
+            }
+        }
+    }
+
+        public class ApAcctView
+        {
+            public int ApAcctId { get; set; }
             [Required(ErrorMessage = "AkunSet harus diisi")]
             public string AcctSet { get; set; }
             [StringLength(100, ErrorMessage = "Keterangan terlalu panjang (100 character limit).")]
@@ -238,9 +239,9 @@ namespace BMASoft.Data.Models
             public string Acct6 { get; set; }
         }
 
-        public class ArDistView
+        public class ApDistView
         {
-            public int ArDistId { get; set; }
+            public int ApDistId { get; set; }
             [Required(ErrorMessage = "Distribution Code harus diisi")]
             public string DistCode { get; set; }
             [StringLength(100, ErrorMessage = "Keterangan terlalu panjang (100 character limit).")]
@@ -248,15 +249,15 @@ namespace BMASoft.Data.Models
             public string Dist1 { get; set; }
         }
 
-        public class ArTransHView
+        public class ApTransHView
         {
             [Key]
-            public int ArTransHId { get; set; }
+            public int ApTransHId { get; set; }
             public string Kode { get; set; }
             public string Bukti { get; set; }
             public DateTime Tanggal { get; set; }
             public string KdBank { get; set; }
-            public string Customer { get; set; }
+            public string Supplier { get; set; }
             public string NoFaktur { get; set; }
             public string Keterangan { get; set; }
             public DateTime JthTempo { get; set; }
@@ -277,7 +278,7 @@ namespace BMASoft.Data.Models
             {
                 get
                 {
-                    return ArTransDs.Sum(p => p.Jumlah);
+                    return ApTransDs.Sum(p => p.Jumlah);
                 }
             }
             [Column(TypeName = "decimal(18,4)")]
@@ -288,15 +289,15 @@ namespace BMASoft.Data.Models
             [Column(TypeName = "decimal(18,4)")]
             public decimal Unapplied { get; set; }
             public string AcctSet { get; set; }
-            public List<ArTransDView> ArTransDs { get; set; }
-            public int ArCustId { get; set; }
-            public ArCust ArCust { get; set; }
+            public List<ApTransDView> ApTransDs { get; set; }
+            public int ApCustId { get; set; }
+            public ApSuppl ApSuppl { get; set; }
             public decimal JumBayar { get; set; }
             public decimal UpdateUnapplied
             {
                 get
                 {
-                    return JumBayar - ArTransDs.Sum(p => p.Bayar);
+                    return JumBayar - ApTransDs.Sum(p => p.Bayar);
                 }
             }
 
@@ -304,7 +305,7 @@ namespace BMASoft.Data.Models
             {
                 get
                 {
-                    return ArTransDs.Sum(p => p.Discount);
+                    return ApTransDs.Sum(p => p.Discount);
                 }
             }
 
@@ -312,15 +313,15 @@ namespace BMASoft.Data.Models
             {
                 get
                 {
-                    return ArTransDs.Sum(p => p.Bayar + Discount);
+                    return ApTransDs.Sum(p => p.Bayar + Discount);
                 }
             }
         }
 
-        public class ArTransDView
+        public class ApTransDView
         {
             [Key]
-            public int ArTransDId { get; set; }
+            public int ApTransDId { get; set; }
             public DateTime Tanggal { get; set; }
             public string KodeTran { get; set; }
             public string Lpb { get; set; }
@@ -341,8 +342,8 @@ namespace BMASoft.Data.Models
                 }
             }
             public string DistCode { get; set; }
-            public int ArTransHId { get; set; }
-            public ArTransHView ArTransH { get; set; }
+            public int ApTransHId { get; set; }
+            public ApTransHView ApTransH { get; set; }
         }
     }
 
