@@ -1,8 +1,4 @@
-﻿using BMASoft.Migrations;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Syncfusion.Blazor.CircularGauge;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
