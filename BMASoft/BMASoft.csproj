@@ -20,6 +20,8 @@
     <Compile Remove="Migrations\20200725022915_ubahksaldo.Designer.cs" />
     <Compile Remove="Migrations\20200810003122_namacust.cs" />
     <Compile Remove="Migrations\20200810003122_namacust.Designer.cs" />
+    <Compile Remove="Migrations\20200827034454_startap.cs" />
+    <Compile Remove="Migrations\20200827034454_startap.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

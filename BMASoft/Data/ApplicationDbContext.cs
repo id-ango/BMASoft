@@ -32,6 +32,13 @@ namespace BMASoft.Data
         public DbSet<ArTransD> ArTransDs { get; set; }
         public DbSet<ArPiutng> ArPiutngs { get; set; }
 
+        public DbSet<ApSuppl> ApSuppls { get; set; }
+        public DbSet<ApAcct> ApAccts { get; set; }
+        public DbSet<ApDist> ApDists { get; set; }
+        public DbSet<ApTransH> ApTransHs { get; set; }
+        public DbSet<ApTransD> ApTransDs { get; set; }
+        public DbSet<ApHutang> ApHutangs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -49,6 +56,14 @@ namespace BMASoft.Data
             builder.Entity<ArCust>().Property(p => p.TglMasuk).HasDefaultValue(null);
             builder.Entity<ArCust>().Property(p => p.TglPost).HasDefaultValue(null);
             builder.Entity<ArCust>().Property(p => p.LstOrder).HasDefaultValue(null);
+
+            builder.Entity<ApSuppl>()
+                    .HasIndex(p => p.Supplier)
+                    .IsUnique();
+            builder.Entity<ApSuppl>().Property(p => p.TglMasuk).HasDefaultValue(null);
+            builder.Entity<ApSuppl>().Property(p => p.TglPost).HasDefaultValue(null);
+            builder.Entity<ApSuppl>().Property(p => p.LstOrder).HasDefaultValue(null);
+
         }
 
     }
