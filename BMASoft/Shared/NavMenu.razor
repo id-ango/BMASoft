@@ -24,9 +24,46 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
+            <NavLink class="nav-link" href="fetchdata" @onclick="()=>expandHutangMenu = !expandHutangMenu">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Hutang
             </NavLink>
+            @if (expandHutangMenu)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="TransArCa">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Pembayaran
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="TransArDp">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Pembayaran Uang Muka
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="TransArIn">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Transaksi
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="SetupSupplier">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Supplier
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="SetupApAkunSet">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Account Set
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="SetupArDist">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Distribution
+                        </NavLink>
+                    </li>
+
+                </ul>
+
+            }
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="fetchdata" @onclick="()=>expandPiutangMenu = !expandPiutangMenu">
@@ -109,6 +146,7 @@
     private bool collapseNavMenu = true;
     private bool expandBankMenu;
     private bool expandPiutangMenu;
+    private bool expandHutangMenu;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 

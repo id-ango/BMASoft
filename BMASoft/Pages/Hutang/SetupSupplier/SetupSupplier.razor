@@ -1,0 +1,176 @@
+﻿@page "/SetupSupplier"
+@using BMASoft.Data.Models
+@using System.ComponentModel.DataAnnotations
+@inject BMASoft.Services.IPayableService service
+@inject NavigationManager navigationmanager
+
+<style>
+    .e-edit-icon::before {
+        content: '\ea9a';
+    }
+
+    .e-delete-icon::before {
+        content: '\e94a';
+    }
+
+    hurufbesar {
+        text-transform: uppercase;
+    }
+</style>
+
+
+@if (true)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+
+                <h1>Setup Supplier</h1>
+                <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
+
+                <br />
+                <br />
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        @if (toDoList == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+
+            <SfGrid DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" Width="auto" Height="310" Toolbar="@(new List<string>() {"Print", "Search" })">
+
+                <GridColumns>
+
+                    <GridColumn HeaderText="" Width="50">
+                        <Template>
+                            @{
+                                var trans2 = (context as ApSuppl);
+
+                                <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.ApSupplId))"></SfButton>
+                                <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ApSupplId))"></SfButton>
+
+                            }
+
+                        </Template>
+
+                    </GridColumn>
+                  
+                    <GridColumn Field=@nameof(ApSuppl.Supplier) HeaderText="Kode" Width="50"></GridColumn>
+                    <GridColumn Field=@nameof(ApSuppl.NamaSup) HeaderText="Nama" Width="70"></GridColumn>
+                    <GridColumn Field=@nameof(ApSuppl.Alamat) HeaderText=" Alamat" Width="170"></GridColumn>
+                    <GridColumn Field=@nameof(ApSuppl.Kota) HeaderText="Kota" Width="80"></GridColumn>
+                    <GridColumn Field=@nameof(ApSuppl.Telpon) HeaderText="Telpon" Width="60"></GridColumn>
+
+                </GridColumns>
+            </SfGrid>
+
+
+        }
+    </div>
+
+    <SfDialog @bind-Visible="@IsHapus" Width="400px" ShowCloseIcon="true" IsModal="true">
+        <DialogTemplates>
+            <Header>
+                Delete Items
+            </Header>
+            <Content>
+                Are you sure you want to permanently delete these items ?
+            </Content>
+        </DialogTemplates>
+
+        <DialogButtons>
+            <DialogButton OnClick="@OkkClick" Content="OK" IsPrimary="true" />
+            <DialogButton OnClick="@CancelClick" Content="Cancel" />
+        </DialogButtons>
+    </SfDialog>
+
+
+}
+
+
+
+
+@code {
+
+    private List<ApSuppl> toDoList;
+    private bool TblButton { get; set; } = true;
+    private bool IsAdd { get; set; } = false;
+    private bool IsRubah { get; set; } = false;
+    private bool IsHapus { get; set; } = false;
+
+    private int status { get; set; }
+
+    SupplierView supplier = new SupplierView();
+    SupplierView RubahSupplier = new SupplierView();
+
+
+
+    protected override void OnInitialized()
+    {
+
+        LoadSupplier();
+
+    }
+
+    void LoadSupplier()
+    {
+        toDoList = service.GetSupplier();
+    }
+
+    private void simpan(bool jadisimpan)
+    {
+        TblButton = jadisimpan;
+        Tambah();
+
+    }
+
+    private void Tambah()
+    {
+        navigationmanager.NavigateTo("AddSupplier");
+    }
+
+    private void Rubah(int xSupplier)
+    {
+        navigationmanager.NavigateTo($"EditSupplier/{xSupplier}");
+    }
+
+    private void Hapus(int xSupplier)
+    {
+        this.IsHapus = true;
+        this.status = xSupplier;
+
+
+    }
+
+    private async void OkkClick()
+    {
+
+        var HapusStatus = await service.DelSupplier(this.status);
+        this.IsHapus = false;
+
+        //      StateHasChanged();
+
+        navigationmanager.NavigateTo("SetupSupplier", true);
+        //  await LoadBank();
+        //  await OnInitializedAsync();
+    }
+
+    private void CancelClick()
+    {
+
+        this.IsRubah = false;
+
+        //    StateHasChanged();
+
+        navigationmanager.NavigateTo("SetupSupplier", false);
+        //    await LoadBank();
+        //      await OnInitializedAsync();
+    }
+
+}

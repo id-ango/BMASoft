@@ -83,8 +83,8 @@ namespace BMASoft.Data.Models
         public decimal Unapplied { get; set; }
         public string AcctSet { get; set; }
         public List<ApTransD> ApTransDs { get; set; }
-        public int ApCustId { get; set; }
-        public string NamaCust { get; set; }
+        public int ApSupplId { get; set; }
+        public string NamaSup { get; set; }
         //     public ArCust ArCust { get; set; }
 
 
@@ -177,7 +177,7 @@ namespace BMASoft.Data.Models
     public class SupplierView
     {
         [Key]
-        public int ApCustId { get; set; }
+        public int ApSupplId { get; set; }
         [Required]
         [MinLength(5)]
         [StringLength(5, ErrorMessage = "Kode Bank terlalu panjang (5 character limit).")]
@@ -290,7 +290,7 @@ namespace BMASoft.Data.Models
         public decimal Unapplied { get; set; }
         public string AcctSet { get; set; }
         public List<ApTransDView> ApTransDs { get; set; }
-        public int ApCustId { get; set; }
+        public int ApSupplId { get; set; }
         public ApSuppl ApSuppl { get; set; }
         public decimal JumBayar { get; set; }
         public decimal UpdateUnapplied

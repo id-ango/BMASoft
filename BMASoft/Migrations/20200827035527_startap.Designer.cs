@@ -4,14 +4,16 @@ using BMASoft.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BMASoft.Migrations
 {
     [DbContext(typeof(BmaDbContext))]
-    partial class BmaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200827035527_startap")]
+    partial class startap
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -295,7 +297,7 @@ namespace BMASoft.Migrations
                     b.Property<string>("AcctSet")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ApSupplId")
+                    b.Property<int>("ApCustId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Bruto")
@@ -332,7 +334,7 @@ namespace BMASoft.Migrations
                         .HasColumnType("nvarchar(2)")
                         .HasMaxLength(2);
 
-                    b.Property<string>("NamaSup")
+                    b.Property<string>("NamaCust")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Netto")
