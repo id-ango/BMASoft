@@ -43,7 +43,6 @@
     <Folder Include="Pages\Hutang\TransDP\" />
     <Folder Include="Pages\Hutang\TransBayar\" />
     <Folder Include="Pages\Hutang\TransPiutang\" />
-    <Folder Include="Pages\Hutang\SetupDistCode\" />
     <Folder Include="Pages\Jual\" />
     <Folder Include="Pages\Ledger\" />
   </ItemGroup>

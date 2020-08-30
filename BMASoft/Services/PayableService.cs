@@ -30,6 +30,7 @@ namespace BMASoft.Services
         Task<bool> EditAkunSet(ApAcctView codeview);
         Task<bool> DelAkunSet(int codeview);
         Task<List<ApDist>> GetDist();
+        ApDist GetDistId(int id);
         Task<bool> AddDist(ApDistView codeview);
         Task<bool> EditDist(ApDistView codeview);
         Task<bool> DelDist(ApDistView codeview);
@@ -228,7 +229,10 @@ namespace BMASoft.Services
             return await _context.ApDists.ToListAsync();
         }
 
-
+        public ApDist GetDistId(int id)
+        {
+            return _context.ApDists.Where(x => x.ApDistId == id).FirstOrDefault();
+        }
 
         public async Task<bool> AddDist(ApDistView codeview)
         {

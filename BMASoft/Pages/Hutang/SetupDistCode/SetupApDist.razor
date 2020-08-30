@@ -1,4 +1,4 @@
-﻿@page "/SetupApAKunSet"
+﻿@page "/SetupApDist"
 @using BMASoft.Data.Models
 @using System.ComponentModel.DataAnnotations
 @inject BMASoft.Services.IPayableService service
@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-md-6">
 
-                <h1>Setup Akun Set</h1>
+                <h1>Setup Distribution Code</h1>
                 <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
 
                 <br />
@@ -50,10 +50,10 @@
                     <GridColumn HeaderText="" Width="50">
                         <Template>
                             @{
-                                var trans2 = (context as  ApAcct);
+                                var trans2 = (context as ApDist);
 
-                                <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.ApAcctId))"></SfButton>
-                                <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ApAcctId))"></SfButton>
+                                <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.ApDistId))"></SfButton>
+                                <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ApDistId))"></SfButton>
 
                             }
 
@@ -61,12 +61,10 @@
 
                     </GridColumn>
 
-                    <GridColumn Field=@nameof(ApAcct.AcctSet) HeaderText="Kode" Width="50"></GridColumn>
-                    <GridColumn Field=@nameof(ApAcct.Description) HeaderText="Nama" Width="70"></GridColumn>
-                    <GridColumn Field=@nameof(ApAcct.Acct1) HeaderText="Akun 1" Width="170"></GridColumn>
-                    <GridColumn Field=@nameof(ApAcct.Acct2) HeaderText="Akun 2" Width="80"></GridColumn>
-                    <GridColumn Field=@nameof(ApAcct.Acct3) HeaderText="Akun 3" Width="60"></GridColumn>
-
+                    <GridColumn Field=@nameof(ApDist.DistCode) HeaderText="Kode" Width="50"></GridColumn>
+                    <GridColumn Field=@nameof(ApDist.Description) HeaderText="Nama" Width="70"></GridColumn>
+                    <GridColumn Field=@nameof(ApDist.Dist1) HeaderText="Akun 1" Width="170"></GridColumn>
+                   
                 </GridColumns>
             </SfGrid>
 
@@ -98,7 +96,7 @@
 
 @code {
 
-    private List<ApAcct> toDoList;
+    private List<ApDist> toDoList;
     private bool TblButton { get; set; } = true;
     private bool IsAdd { get; set; } = false;
     private bool IsRubah { get; set; } = false;
@@ -106,7 +104,7 @@
 
     private int status { get; set; }
 
-    ApAcctView supplier = new ApAcctView();
+    ApDistView supplier = new ApDistView();
 
 
 
@@ -114,13 +112,13 @@
     protected override async Task OnInitializedAsync()
     {
 
-        await LoadApAkunSet();
+        await LoadDist();
 
     }
 
-    async Task LoadApAkunSet()
+    async Task LoadDist()
     {
-        toDoList = await service.GetApAkunSet();
+        toDoList = await service.GetDist();
     }
 
     private void simpan(bool jadisimpan)
@@ -132,12 +130,12 @@
 
     private void Tambah()
     {
-        navigationmanager.NavigateTo("AddApAkunSet");
+        navigationmanager.NavigateTo("AddApDist");
     }
 
     private void Rubah(int xSupplier)
     {
-        navigationmanager.NavigateTo($"EditApAkunSet/{xSupplier}");
+        navigationmanager.NavigateTo($"EditApDist/{xSupplier}");
     }
 
     private void Hapus(int xSupplier)
@@ -156,7 +154,7 @@
 
         //      StateHasChanged();
 
-        navigationmanager.NavigateTo("SetupApAkunSet", true);
+        navigationmanager.NavigateTo("SetupApDist", true);
         //  await LoadBank();
         //  await OnInitializedAsync();
     }
@@ -168,7 +166,7 @@
 
         //    StateHasChanged();
 
-        navigationmanager.NavigateTo("SetupApAkunSet", false);
+        navigationmanager.NavigateTo("SetupApDist", false);
         //    await LoadBank();
         //      await OnInitializedAsync();
     }
