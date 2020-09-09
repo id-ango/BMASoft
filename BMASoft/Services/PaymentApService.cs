@@ -13,105 +13,105 @@ using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
 using Syncfusion.Drawing;
-using BMASoft.Pages.Piutang;
+
 
 
 namespace BMASoft.Services
 {
 
-    public interface IPaymentArService
+    public interface IPaymentApService
     {
 
-        Task<ArTransH> GetTrans(int id);
-        Task<List<ArTransH>> GetTransH();
-        Task<List<ArTransH>> Get3TransH();
-        Task<List<ArTransD>> GetTransD();
-        Task<bool> AddTransH(ArTransHView transH);
+        Task<ApTransH> GetTrans(int id);
+        Task<List<ApTransH>> GetTransH();
+        Task<List<ApTransH>> Get3TransH();
+        Task<List<ApTransD>> GetTransD();
+        Task<bool> AddTransH(ApTransHView transH);
         Task<bool> DelTransH(int id);
-        List<ArPiutng> GetPiutangSisa(string customer);
+        List<ApHutang> GetHutangSisa(string Supplier);
     }
 
-    public class PaymentArService : IPaymentArService
+    public class PaymentApService : IPaymentApService
     {
         private readonly BmaDbContext _context;
 
-        public PaymentArService(BmaDbContext context)
+        public PaymentApService(BmaDbContext context)
         {
             _context = context;
         }
 
-        #region Transaksi Piutang Pembayaran Class
+        #region Transaksi Hutang Pembayaran Class
 
-        public async Task<ArTransH> GetTrans(int id)
+        public async Task<ApTransH> GetTrans(int id)
         {
-            return await _context.ArTransHs.Include(p => p.ArTransDs).Where(x => x.ArTransHId == id).FirstOrDefaultAsync();
+            return await _context.ApTransHs.Include(p => p.ApTransDs).Where(x => x.ApTransHId == id).FirstOrDefaultAsync();
         }
 
-        public List<ArPiutng> GetPiutangSisa(string customer)
+        public List<ApHutang> GetHutangSisa(string Supplier)
         {
-            return _context.ArPiutngs.Where(x => x.Customer == customer && x.Sisa != 0).ToList();
+            return _context.ApHutangs.Where(x => x.Supplier == Supplier && x.Sisa != 0).ToList();
 
         }
-        public async Task<List<ArTransH>> GetTransH()
+        public async Task<List<ApTransH>> GetTransH()
         {
-            List<ArTransH> arTrans = new List<ArTransH>();
+            List<ApTransH> ApTrans = new List<ApTransH>();
             try
             {
-                arTrans = await _context.ArTransHs.OrderByDescending(x => x.Tanggal).Where(x => x.Kode == "14").ToListAsync();
-                foreach (var item in arTrans)
+                ApTrans = await _context.ApTransHs.OrderByDescending(x => x.Tanggal).Where(x => x.Kode == "24").ToListAsync();
+                foreach (var item in ApTrans)
                 {
-                    item.NamaCust = (from e in _context.ArCusts where e.ArCustId == item.ArCustId select e.NamaCust).FirstOrDefault();
+                    item.NamaSup = (from e in _context.ApSuppls where e.ApSupplId == item.ApSupplId select e.NamaSup).FirstOrDefault();
                 }
             }
             catch (Exception e)
             {
                 throw e;
             }
-            return arTrans;
+            return ApTrans;
             // return  _context.CbTransHs.Include(p =>p.CbTransDs).OrderByDescending(x =>x.Tanggal).ToListAsync();
-            //  return await _context.ArTransHs.OrderByDescending(x => x.Tanggal).ToListAsync();
-            //  return await _context.ArTransHs.ToListAsync();
+            //  return await _context.ApTransHs.OrderByDescending(x => x.Tanggal).ToListAsync();
+            //  return await _context.ApTransHs.ToListAsync();
 
         }
 
-        public async Task<List<ArTransH>> Get3TransH()
+        public async Task<List<ApTransH>> Get3TransH()
         {
-            List<ArTransH> arTrans = new List<ArTransH>();
+            List<ApTransH> ApTrans = new List<ApTransH>();
 
-            arTrans = await _context.ArTransHs.OrderByDescending(x => x.Tanggal).Where(x => x.Tanggal > DateTime.Today.AddMonths(-3) && x.Kode == "14").ToListAsync();
-            foreach (var item in arTrans)
+            ApTrans = await _context.ApTransHs.OrderByDescending(x => x.Tanggal).Where(x => x.Tanggal > DateTime.Today.AddMonths(-3) && x.Kode == "24").ToListAsync();
+            foreach (var item in ApTrans)
             {
-                item.NamaCust = (from e in _context.ArCusts where e.ArCustId == item.ArCustId select e.NamaCust).FirstOrDefault();
+                item.NamaSup = (from e in _context.ApSuppls where e.ApSupplId == item.ApSupplId select e.NamaSup).FirstOrDefault();
             }
 
-            return arTrans;
+            return ApTrans;
 
             // return  _context.CbTransHs.Include(p =>p.CbTransDs).OrderByDescending(x =>x.Tanggal).ToListAsync();
-            //   return _context.ArTransHs.OrderByDescending(x => x.Tanggal).Where(x => x.Tanggal > DateTime.Today.AddMonths(-3)).ToListAsync();
+            //   return _context.ApTransHs.OrderByDescending(x => x.Tanggal).Where(x => x.Tanggal > DateTime.Today.AddMonths(-3)).ToListAsync();
 
         }
 
-        public async Task<List<ArTransD>> GetTransD()
+        public async Task<List<ApTransD>> GetTransD()
         {
-            return await _context.ArTransDs.Where(x =>x.Kode == "14").ToListAsync();
+            return await _context.ApTransDs.Where(x => x.Kode == "24").ToListAsync();
         }
 
-        public async Task<bool> AddTransH(ArTransHView trans)
+        public async Task<bool> AddTransH(ApTransHView trans)
         {
             //string test = codeview.SrcCode.ToUpper();
             //var cekFirst = _context.CbSrcCodes.Where(x => x.SrcCode == test).ToList();
-            string KdSrc = "AR";
+            string KdSrc = "AP";
 
-            ArTransH transH = new ArTransH
+            ApTransH transH = new ApTransH
             {
                 Bukti = GetNumber(),
-                Customer = trans.Customer.ToUpper(),
+                Supplier = trans.Supplier.ToUpper(),
                 Tanggal = trans.Tanggal,
                 Keterangan = trans.Keterangan,
                 Jumlah = trans.JumBayar,
                 Discount = trans.JumDiskon,
                 Unapplied = trans.UpdateUnapplied,
-                Piutang = trans.JumPiutang,
+                Hutang = trans.JumHutang,
                 KdBank = trans.KdBank,
                 PPn = 0,
                 PPh = 0,
@@ -120,21 +120,21 @@ namespace BMASoft.Services
                 Bruto = 0,
                 Netto = 0,
                 Pajak = false,
-                Kode = "14",
-                ArCustId = trans.ArCustId,
+                Kode = "24",
+                ApSupplId = trans.ApSupplId,
 
-                ArTransDs = new List<ArTransD>()
+                ApTransDs = new List<ApTransD>()
             };
 
-            List<ArPiutng> transaksi = new List<ArPiutng>();
-            transaksi = _context.ArPiutngs.Where(x => x.Customer == trans.Customer && x.Sisa != 0).ToList();
+            List<ApHutang> transaksi = new List<ApHutang>();
+            transaksi = _context.ApHutangs.Where(x => x.Supplier == trans.Supplier && x.Sisa != 0).ToList();
 
-            foreach (var item in trans.ArTransDs)
+            foreach (var item in trans.ApTransDs)
             {
-                transH.ArTransDs.Add(new ArTransD()
+                transH.ApTransDs.Add(new ApTransD()
                 {
                     Jumlah = item.Jumlah,
-                    Kode = "14",
+                    Kode = "24",
                     KodeTran = item.KodeTran,
                     Lpb = transH.Bukti,
                     Tanggal = trans.Tanggal,
@@ -153,22 +153,22 @@ namespace BMASoft.Services
                     });
 
             }
-            transH.ArTransDs.RemoveAll(x => x.Bayar == 0 && x.Discount == 0);
+            transH.ApTransDs.RemoveAll(x => x.Bayar == 0 && x.Discount == 0);
             transaksi.RemoveAll(x => x.Bayar == 0 && x.Discount == 0);
 
-            var customer = (from e in _context.ArCusts where e.Customer == trans.Customer select e).FirstOrDefault();
-            customer.Piutang -= trans.Jumlah;
+            var Supplier = (from e in _context.ApSuppls where e.Supplier == trans.Supplier select e).FirstOrDefault();
+            Supplier.Hutang -= trans.Jumlah;
 
-            ArPiutng Newtransaksi = new ArPiutng
+            ApHutang Newtransaksi = new ApHutang
             {
                 Kode = "CA",
                 Dokumen = transH.Bukti,
                 Tanggal = transH.Tanggal,
-                Customer = transH.Customer,
+                Supplier = transH.Supplier,
                 Keterangan = transH.Keterangan,
-                KodeTran = "14",
-                Jumlah = -1 * trans.JumPiutang,
-                SldSisa = -1 * trans.JumPiutang,
+                KodeTran = "24",
+                Jumlah = -1 * trans.JumHutang,
+                SldSisa = -1 * trans.JumHutang,
                 Bayar = -1 * trans.JumBayar,
                 Discount = 0,
                 UnApplied = -1 * trans.UpdateUnapplied,
@@ -182,13 +182,13 @@ namespace BMASoft.Services
                 SldUnpl = 0
             };
 
-            _context.ArCusts.Update(customer);
-            _context.ArTransHs.Add(transH);
-            _context.ArPiutngs.UpdateRange(transaksi);
-            _context.ArPiutngs.Add(Newtransaksi);
+            _context.ApSuppls.Update(Supplier);
+            _context.ApTransHs.Add(transH);
+            _context.ApHutangs.UpdateRange(transaksi);
+            _context.ApHutangs.Add(Newtransaksi);
             await _context.SaveChangesAsync();
 
-           
+
 
             var cekBukti = (from e in _context.CbTransHs where e.DocNo == transH.Bukti select e).FirstOrDefault();
 
@@ -202,27 +202,27 @@ namespace BMASoft.Services
                         KodeBank = trans.KdBank,
                         Tanggal = trans.Tanggal,
                         Keterangan = trans.Keterangan,
-                        Saldo = trans.JumBayar,
+                        Saldo = -1*trans.JumBayar,
 
                         CbTransDs = new List<CbTransD>()
                     };
-                    foreach (var item in trans.ArTransDs)
+                    foreach (var item in trans.ApTransDs)
                     {
                         transBank.CbTransDs.Add(new CbTransD()
                         {
                             SrcCode = KdSrc,
-                            Keterangan = "Pembayaran Piutang" + trans.Customer.ToUpper(),
-                            Terima = item.Bayar,
-                            Jumlah = item.Bayar,
+                            Keterangan = "Pembayaran Hutang" + trans.Supplier.ToUpper(),
+                            Bayar = item.Bayar,
+                            Jumlah = -1*item.Bayar,
 
                         });
                     }
                     var bank = (from e in _context.Banks where e.KodeBank == trans.KdBank select e).FirstOrDefault();
-                    bank.Saldo += trans.JumBayar;
+                    bank.Saldo -= trans.JumBayar;
 
                     _context.Banks.Update(bank);
                     _context.CbTransHs.Add(transBank);
-                   
+
                     await _context.SaveChangesAsync();
 
                 }
@@ -239,18 +239,18 @@ namespace BMASoft.Services
         {
             try
             {
-                var ExistingTrans = _context.ArTransHs.Where(x => x.ArTransHId == id).FirstOrDefault();
+                var ExistingTrans = _context.ApTransHs.Where(x => x.ApTransHId == id).FirstOrDefault();
                 if (ExistingTrans != null)
                 {
-                    var cekFirst = _context.ArPiutngs.Where(x => x.Dokumen == ExistingTrans.Bukti).FirstOrDefault();
-                    var customer = (from e in _context.ArCusts where e.Customer == ExistingTrans.Customer select e).FirstOrDefault();
+                    var cekFirst = _context.ApHutangs.Where(x => x.Dokumen == ExistingTrans.Bukti).FirstOrDefault();
+                    var Supplier = (from e in _context.ApSuppls where e.Supplier == ExistingTrans.Supplier select e).FirstOrDefault();
 
-                    customer.Piutang -= ExistingTrans.Jumlah;
+                    Supplier.Hutang += ExistingTrans.Jumlah;
 
 
-                    _context.ArCusts.Update(customer);
-                    _context.ArTransHs.Remove(ExistingTrans);
-                    _context.ArPiutngs.Remove(cekFirst);
+                    _context.ApSuppls.Update(Supplier);
+                    _context.ApTransHs.Remove(ExistingTrans);
+                    _context.ApHutangs.Remove(cekFirst);
                     await _context.SaveChangesAsync();
                     return true;
                 }
@@ -264,16 +264,16 @@ namespace BMASoft.Services
 
         }
 
-        #endregion Transaksi Piutang Class
+        #endregion Transaksi Hutang Class
 
         public string GetNumber()
         {
-            string kodeno = "BMY";
+            string kodeno = "BKY";
             string kodeurut = kodeno + '-';
             string thnbln = DateTime.Now.ToString("yyMM");
             string xbukti = kodeurut + thnbln.Substring(0, 2) + '3' + thnbln.Substring(2, 2) + '-';
             var maxvalue = "";
-            var maxlist = _context.ArTransHs.Where(x => x.Bukti.Substring(0, 10).Equals(xbukti)).ToList();
+            var maxlist = _context.ApTransHs.Where(x => x.Bukti.Substring(0, 10).Equals(xbukti)).ToList();
             if (maxlist != null)
             {
                 maxvalue = maxlist.Max(x => x.Bukti);

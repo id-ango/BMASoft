@@ -1,7 +1,6 @@
-﻿@page "/TransArCa"
+﻿@page "/TransApIn"
 @inject NavigationManager navigationmanager
-@inject BMASoft.Services.IPaymentArService service
-@inject BMASoft.Services.IReceivableService serviceAR
+@inject BMASoft.Services.IPayableService service
 
 
 <style>
@@ -25,7 +24,7 @@
 
 <div class="row">
     <div class="col-6">
-        <h1>Transaksi Bayar Piutang</h1>
+        <h1>Transaksi Hutang</h1>
     </div>
     <div class="col-6">
         <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
@@ -45,39 +44,34 @@ else
                 <SfGrid SelectedRowIndex="2" Height="300" DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true" Toolbar="@(new List<string>() { "Search" })">
                     <GridGroupSettings Columns="@GroupedColumns"></GridGroupSettings>
                     <GridPageSettings PageCount="5" PageSizes="true"></GridPageSettings>
-                    <GridEvents RowSelected="RowSelecthandler" TValue="ArTransH"></GridEvents>
+                    <GridEvents RowSelected="RowSelecthandler" TValue="ApTransH"></GridEvents>
 
                     <GridColumns>
-                        <GridColumn HeaderText="" Width="60">
+                        <GridColumn HeaderText="" Width="40">
                             <Template>
                                 @{
-                                    var trans2 = (context as ArTransH);
-
-                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ArTransHId))"></SfButton>
+                                    var trans2 = (context as ApTransH);
+                                    <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.ApTransHId,trans2.Bukti))"></SfButton>
+                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ApTransHId,trans2.Bukti))"></SfButton>
                                 }
                             </Template>
                         </GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.Bukti) HeaderText="No Bukti" Width="70"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.Customer) HeaderText="Kode" Width="50"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.NamaCust) HeaderText="Customer" Width="100"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.KdBank) HeaderText="Bank" Width="40"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.Tanggal) HeaderText="Tanggal" Format="d" Type="ColumnType.Date" Width="60"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.Keterangan) HeaderText="Keterangan" Width="170"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.Jumlah) HeaderText="Pembayaran" Format="N2" Width="70"></GridColumn>
-
+                        <GridColumn Field=@nameof(ApTransH.Supplier) HeaderText="Kode" Width="40"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransH.NamaSup) HeaderText="Supplier" Width="100"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransH.Bukti) HeaderText="No Bukti" Width="70"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransH.Tanggal) HeaderText="Tanggal" Format="d" Type="ColumnType.Date" Width="60"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransH.Keterangan) HeaderText="Keterangan" Width="170"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransH.Jumlah) HeaderText="Saldo" Format="N2" Width="70"></GridColumn>
 
                     </GridColumns>
                 </SfGrid>
 
-                <SfGrid DataSource="@toDoDetail" Query="@(new Query().Where("ArTransHId", "equal",RowIndex))">
+                <SfGrid DataSource="@toDoDetail" Query="@(new Query().Where("ApTransHId", "equal",RowIndex))">
 
                     <GridColumns>
-                        <GridColumn Field=@nameof(ArTransD.DistCode) HeaderText="Code" Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransD.Tanggal) HeaderText="Keterangan" Width="110"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransD.Jumlah) HeaderText="Jumlah" Width="90" Format="N2"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransD.Bayar) HeaderText="Bayar" Width="90" Format="N2"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransD.Discount) HeaderText="Discount" Width="90" Format="N2"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransD.Sisa) HeaderText="Sisa" Width="90" Format="N2"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransD.DistCode) HeaderText="Code" Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransD.Keterangan) HeaderText="Keterangan" Width="110"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransD.Jumlah) HeaderText="Jumlah" Width="90" Format="N2"></GridColumn>
                     </GridColumns>
                 </SfGrid>
             </div>
@@ -122,18 +116,18 @@ else
 
     private int id { get; set; }
 
-    private List<ArTransH> toDoList;
-    private List<ArTransD> toDoDetail;
- //   private ArTransH rubah;
+    private List<ApTransH> toDoList;
+    private List<ApTransD> toDoDetail;
+    private ApHutang rubah;
 
-    public string[] GroupedColumns = new string[] { "Customer" };
+    public string[] GroupedColumns = new string[] { "Supplier" };
     public string SelectedDoc { get; set; }
     public int? RowIndex { get; set; } = 1;
 
-    public void RowSelecthandler(RowSelectEventArgs<ArTransH> Args)
+    public void RowSelecthandler(RowSelectEventArgs<ApTransH> Args)
     {
         SelectedDoc = Args.Data.Bukti;
-        RowIndex = Args.Data.ArTransHId;
+        RowIndex = Args.Data.ApTransHId;
     }
 
     private bool IsVisible { get; set; } = false;
@@ -166,22 +160,45 @@ else
 
     private void Tambah()
     {
-        navigationmanager.NavigateTo("AddTransArPy");
+        navigationmanager.NavigateTo("AddTransApIn");
     }
 
 
 
-
-    private void Hapus(int xKdBank)
+    private void Rubah(int xKdBank, string xDoc)
     {
-      
-        this.IsVisible = true;
-        this.id = xKdBank;
+        rubah = service.GetHutang(xDoc);
 
+        if (rubah != null)
+        {
+            if (rubah.Jumlah != rubah.Sisa && rubah != null)
+            {
+                IsDialog = true;
+            }
+            else
+            {
+                navigationmanager.NavigateTo($"EditTransApIn/{xKdBank}");
+            }
+        }
     }
 
+    private void Hapus(int xKdBank, string xDoc)
+    {
+        rubah = service.GetHutang(xDoc);
 
-
+        if (rubah != null)
+        {
+            if (rubah.Jumlah != rubah.Sisa && rubah != null)
+            {
+                IsDialog = true;
+            }
+            else
+            {
+                this.IsVisible = true;
+                this.id = xKdBank;
+            }
+        }
+    }
 
     private async void OkkClick()
     {
@@ -189,8 +206,11 @@ else
         var HapusStatus = await service.DelTransH(this.id);
         this.IsVisible = false;
 
-        navigationmanager.NavigateTo("TransArCa", true);
-  
+        //      StateHasChanged();
+
+        navigationmanager.NavigateTo("TransApIn", true);
+        //  await LoadBank();
+        //  await OnInitializedAsync();
     }
 
     private void CancelClick()
@@ -200,7 +220,7 @@ else
 
         //    StateHasChanged();
 
-        navigationmanager.NavigateTo("TransArCa", false);
+        navigationmanager.NavigateTo("TransApIn", false);
         //    await LoadBank();
         //      await OnInitializedAsync();
     }

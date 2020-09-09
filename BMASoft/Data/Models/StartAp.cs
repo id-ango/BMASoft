@@ -284,7 +284,7 @@ namespace BMASoft.Data.Models
         [Column(TypeName = "decimal(18,4)")]
         public decimal Discount { get; set; }
         [Column(TypeName = "decimal(18,4)")]
-        public decimal Piutang { get; set; }
+        public decimal Hutang { get; set; }
         public bool Pajak { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal Unapplied { get; set; }
@@ -309,7 +309,7 @@ namespace BMASoft.Data.Models
             }
         }
 
-        public decimal JumPiutang
+        public decimal JumHutang
         {
             get
             {

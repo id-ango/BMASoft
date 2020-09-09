@@ -1,7 +1,7 @@
-﻿@page "/TransArCa"
+﻿@page "/TransApDp"
 @inject NavigationManager navigationmanager
-@inject BMASoft.Services.IPaymentArService service
-@inject BMASoft.Services.IReceivableService serviceAR
+@inject BMASoft.Services.IPaymentApDpService service
+@inject BMASoft.Services.IPayableService serviceAP
 
 
 <style>
@@ -25,7 +25,7 @@
 
 <div class="row">
     <div class="col-6">
-        <h1>Transaksi Bayar Piutang</h1>
+        <h1>Transaksi Bayar Uang Muka</h1>
     </div>
     <div class="col-6">
         <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
@@ -45,41 +45,31 @@ else
                 <SfGrid SelectedRowIndex="2" Height="300" DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true" Toolbar="@(new List<string>() { "Search" })">
                     <GridGroupSettings Columns="@GroupedColumns"></GridGroupSettings>
                     <GridPageSettings PageCount="5" PageSizes="true"></GridPageSettings>
-                    <GridEvents RowSelected="RowSelecthandler" TValue="ArTransH"></GridEvents>
+                    <GridEvents RowSelected="RowSelecthandler" TValue="ApTransH"></GridEvents>
 
                     <GridColumns>
                         <GridColumn HeaderText="" Width="60">
                             <Template>
                                 @{
-                                    var trans2 = (context as ArTransH);
+                                    var trans2 = (context as ApTransH);
 
-                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ArTransHId))"></SfButton>
+                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ApTransHId))"></SfButton>
                                 }
                             </Template>
                         </GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.Bukti) HeaderText="No Bukti" Width="70"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.Customer) HeaderText="Kode" Width="50"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.NamaCust) HeaderText="Customer" Width="100"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.KdBank) HeaderText="Bank" Width="40"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.Tanggal) HeaderText="Tanggal" Format="d" Type="ColumnType.Date" Width="60"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.Keterangan) HeaderText="Keterangan" Width="170"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransH.Jumlah) HeaderText="Pembayaran" Format="N2" Width="70"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransH.Bukti) HeaderText="No Bukti" Width="70"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransH.Supplier) HeaderText="Kode" Width="50"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransH.NamaSup) HeaderText="Supplier" Width="100"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransH.KdBank) HeaderText="Bank" Width="40"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransH.Tanggal) HeaderText="Tanggal" Format="d" Type="ColumnType.Date" Width="60"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransH.Keterangan) HeaderText="Keterangan" Width="170"></GridColumn>
+                        <GridColumn Field=@nameof(ApTransH.Jumlah) HeaderText="Pembayaran" Format="N2" Width="70"></GridColumn>
 
 
                     </GridColumns>
                 </SfGrid>
 
-                <SfGrid DataSource="@toDoDetail" Query="@(new Query().Where("ArTransHId", "equal",RowIndex))">
 
-                    <GridColumns>
-                        <GridColumn Field=@nameof(ArTransD.DistCode) HeaderText="Code" Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransD.Tanggal) HeaderText="Keterangan" Width="110"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransD.Jumlah) HeaderText="Jumlah" Width="90" Format="N2"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransD.Bayar) HeaderText="Bayar" Width="90" Format="N2"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransD.Discount) HeaderText="Discount" Width="90" Format="N2"></GridColumn>
-                        <GridColumn Field=@nameof(ArTransD.Sisa) HeaderText="Sisa" Width="90" Format="N2"></GridColumn>
-                    </GridColumns>
-                </SfGrid>
             </div>
 
         </div>
@@ -122,18 +112,18 @@ else
 
     private int id { get; set; }
 
-    private List<ArTransH> toDoList;
-    private List<ArTransD> toDoDetail;
- //   private ArTransH rubah;
+    private List<ApTransH> toDoList;
+    private List<ApTransD> toDoDetail;
+    //   private ApTransH rubah;
 
-    public string[] GroupedColumns = new string[] { "Customer" };
+    public string[] GroupedColumns = new string[] { "Supplier" };
     public string SelectedDoc { get; set; }
     public int? RowIndex { get; set; } = 1;
 
-    public void RowSelecthandler(RowSelectEventArgs<ArTransH> Args)
+    public void RowSelecthandler(RowSelectEventArgs<ApTransH> Args)
     {
         SelectedDoc = Args.Data.Bukti;
-        RowIndex = Args.Data.ArTransHId;
+        RowIndex = Args.Data.ApTransHId;
     }
 
     private bool IsVisible { get; set; } = false;
@@ -166,7 +156,7 @@ else
 
     private void Tambah()
     {
-        navigationmanager.NavigateTo("AddTransArPy");
+        navigationmanager.NavigateTo("AddTransApDp");
     }
 
 
@@ -174,7 +164,7 @@ else
 
     private void Hapus(int xKdBank)
     {
-      
+
         this.IsVisible = true;
         this.id = xKdBank;
 
@@ -189,8 +179,8 @@ else
         var HapusStatus = await service.DelTransH(this.id);
         this.IsVisible = false;
 
-        navigationmanager.NavigateTo("TransArCa", true);
-  
+        navigationmanager.NavigateTo("TransApDp", true);
+
     }
 
     private void CancelClick()
@@ -200,7 +190,7 @@ else
 
         //    StateHasChanged();
 
-        navigationmanager.NavigateTo("TransArCa", false);
+        navigationmanager.NavigateTo("TransApDp", false);
         //    await LoadBank();
         //      await OnInitializedAsync();
     }

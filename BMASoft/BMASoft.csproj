@@ -40,11 +40,9 @@
 
   <ItemGroup>
     <Folder Include="Pages\Beli\" />
-    <Folder Include="Pages\Hutang\TransDP\" />
-    <Folder Include="Pages\Hutang\TransBayar\" />
-    <Folder Include="Pages\Hutang\TransPiutang\" />
     <Folder Include="Pages\Jual\" />
     <Folder Include="Pages\Ledger\" />
+    <Folder Include="Pages\Persediaan\" />
   </ItemGroup>
 
   <ItemGroup>

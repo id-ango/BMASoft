@@ -1,0 +1,262 @@
+﻿@page "/AddTransApDp"
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager navigationmanager
+@inject BMASoft.Services.IPaymentApDpService service
+@inject BMASoft.Services.IPayableService serviceAP
+@inject BMASoft.Services.IKasBankService serviceCB
+
+@using Newtonsoft.Json
+@inject Microsoft.JSInterop.IJSRuntime JS
+@using  System.IO
+
+<style>
+    .e-edit-icon::before {
+        content: '\ea9a';
+    }
+
+    .e-delete-icon::before {
+        content: '\e94a';
+    }
+
+    .e-add-icon::before {
+        content: '\e7f9';
+    }
+
+    .e-save-icon::before {
+        content: '\e735';
+    }
+
+    .form-message {
+        padding: 0.5rem;
+        font-weight: 700;
+    }
+
+    #toast_default .e-meeting::before {
+        content: "\e705";
+        font-size: 17px;
+    }
+
+    .bootstrap4 #toast_default .e-meeting::before {
+        content: "\e763";
+        font-size: 20px;
+    }
+</style>
+
+
+
+<div class="container">
+    <div class="master">
+        <h2>Transaksi Pembayaran</h2>
+
+        <EditForm Model="@Transh" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <div class="float-md-left">
+                <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
+            </div>
+
+
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="ApSuppl" DataSource="Suppliers" Placeholder="Select Supplier" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Supplier">
+                    <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="NamaLengkap" Value="Supplier"></ComboBoxFieldSettings>
+                </SfComboBox>
+                <ValidationMessage For="@(() => Transh.ApSupplId)" />
+            </div>
+
+            <div class="form-group">
+                <SfDatePicker TValue="DateTime" @bind-Value="Transh.Tanggal" Placeholder="Tanggal" FloatLabelType="FloatLabelType.Auto" Format="dd-MMM-yy">
+                </SfDatePicker>
+                <ValidationMessage For="@(() => Transh.Tanggal)" />
+            </div>
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@Transh.Keterangan" Multiline="true" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+                <ValidationMessage For="@(() => Transh.Keterangan)" />
+            </div>
+
+            <div class="form-group">
+                <SfNumericTextBox CssClass="e-outline" @bind-Value="@Transh.JumBayar" Placeholder="Jumlah Bayar" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
+                <ValidationMessage For="@(() => Transh.JumBayar)" />
+            </div>
+
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="CbBank" DataSource="Banks" Placeholder="Select Banks" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.KdBank">
+                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="NmBank" Value="KodeBank"></ComboBoxFieldSettings>
+                </SfComboBox>
+                <ValidationMessage For="@(() => Transh.KdBank)" />
+            </div>
+
+        </EditForm>
+
+        <div class="float-md-left form-message">
+            <span>UnApplied   : @Transh.UpdateUnapplied.ToString("#,##0.##")</span>
+        </div>
+        <div class="float-md-right form-message">
+            <span>Saldo   : @Transh.JumHutang.ToString("#,##0.##")</span>
+        </div>
+
+    </div>
+</div>
+<SfToast ID="toast_default" @ref="ToastObj" Title="Delete Record" Content="@ToastContent" TimeOut="5000" Icon="e-meeting">
+    <ToastPosition X="@ToastPosition"></ToastPosition>
+</SfToast>
+
+@code {
+
+    private ApTransHView Transh = new ApTransHView() { ApTransDs = new List<ApTransDView>() };
+    private List<CbBank> Banks;
+    private List<ApSuppl> Suppliers;
+    //   private List<ArDist> srccode;
+    private ApTransDView Transd = new ApTransDView();
+    private ApTransDView TransK = new ApTransDView();
+    //   private List<TransDView> TransDs = new List<TransDView>();
+    private string enabled { get; set; }
+
+    public int supplierId { get; set; }
+    public string supplier { get; set; }
+
+    private bool IsVisible { get; set; } = false;
+    private bool IsKurs { get; set; } = false;
+    private bool IsEdit { get; set; } = false;
+
+    SfToast ToastObj;
+    private string ToastPosition = "Right";
+    private string ToastContent { get; set; } = " ";
+
+    private void ShowOnClick()
+    {
+        //   this.ToastObj.Show();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Transh.Tanggal = DateTime.Now;
+
+        LoadSuppliers();
+        await LoadBanks();
+    }
+
+    void LoadSuppliers()
+    {
+
+        Suppliers = serviceAP.GetSupplier();
+
+    }
+
+    async Task LoadBanks()
+    {
+
+        Banks = await serviceCB.GetBank();
+
+    }
+
+    public void OnChangeBank(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        var itemData = JsonConvert.DeserializeObject<ApSuppl>(args.ItemData != null ? args.ItemData.ToString() : "");
+        this.supplierId = itemData.ApSupplId;
+        this.supplier = itemData.Supplier;
+        //   var transaksi = service.GetHutangSisa(this.supplier);
+        Transh.ApTransDs.Clear();
+
+
+
+    }
+
+
+    private void OkClick()
+    {
+        this.IsVisible = false;
+        this.IsKurs = false;
+        if (Transd.DistCode != null && !IsEdit)
+        {
+            Transh.ApTransDs.Add(new ApTransDView()
+            {
+                DistCode = Transd.DistCode,
+                Keterangan = Transd.Keterangan,
+                Jumlah = Transd.Jumlah
+
+            });
+        }
+
+        Transd = new ApTransDView();
+    }
+
+
+
+    private void CancelClick()
+    {
+        this.IsVisible = false;
+        this.IsKurs = false;
+        Transd = new ApTransDView();
+        TransK = new ApTransDView();
+    }
+
+    private void OnAddLine()
+    {
+
+        this.IsVisible = true;
+
+        IsEdit = false;
+        ShowOnClick();
+    }
+    private void OnEditLine()
+    {
+
+        this.IsVisible = true;
+        this.IsKurs = false;
+
+        IsEdit = true;
+
+    }
+
+    private void OnBtnSimpan()
+    {
+
+        this.IsVisible = true;
+        this.IsKurs = false;
+    }
+
+
+
+
+
+    //private void Rubah(ApTransDView transd)
+    //{
+    //    Transd = new ApTransDView();
+    //    Transd = transd;
+    //    OnEditLine();
+
+
+
+    //}
+
+    private void Hapus(ApTransDView transd)
+    {
+
+        Transh.ApTransDs.Remove(transd);
+        ShowOnClick();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        Transh.ApSupplId = this.supplierId;
+        var newEdit = await service.AddTransH(Transh);
+        if (newEdit)
+        {
+            //   await ExportToPdf(Transh);
+        }
+
+        navigationmanager.NavigateTo("TransApDp", false);
+        //add = !add;
+        //StateHasChanged();
+
+    }
+
+    //protected async Task ExportToPdf(TranshView trans)
+    //{
+    //    //using (MemoryStream excelStream = service.PdfBuktiBank(trans))
+    //    //{
+    //    //    await JS.SaveAs("Sample.pdf", excelStream.ToArray());
+    //    //}
+    //}
+}
