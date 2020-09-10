@@ -25,6 +25,7 @@ namespace BMASoft.Data
         public DbSet<CbTransfer> CbTransfers { get; set; }
         public DbSet<CbSrcCode> CbSrcCodes { get; set; }
         public DbSet<CbGrp> CbGrps { get; set; }
+
         public DbSet<ArCust> ArCusts { get; set; }
         public DbSet<ArAcct> ArAccts { get; set; }
         public DbSet<ArDist> ArDists { get; set; }
@@ -38,6 +39,15 @@ namespace BMASoft.Data
         public DbSet<ApTransH> ApTransHs { get; set; }
         public DbSet<ApTransD> ApTransDs { get; set; }
         public DbSet<ApHutang> ApHutangs { get; set; }
+
+        public DbSet<IcItem> IcItems { get; set; }
+        public DbSet<IcAltItem> IcAltItems { get; set; }
+        public DbSet<IcLokasi> Iclokasis { get; set; }
+        public DbSet<IcDiv> IcDivs { get; set; }
+        public DbSet<IcCat> IcCats { get; set; }
+        public DbSet<IcAcct> IcAccts { get; set; }
+        public DbSet<IcTransH> IcTransHs { get; set; }
+        public DbSet<IcTransD> IcTransDs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -64,6 +74,7 @@ namespace BMASoft.Data
             builder.Entity<ApSuppl>().Property(p => p.TglPost).HasDefaultValue(null);
             builder.Entity<ApSuppl>().Property(p => p.LstOrder).HasDefaultValue(null);
 
+          
         }
 
     }
