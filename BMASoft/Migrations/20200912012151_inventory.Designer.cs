@@ -4,14 +4,16 @@ using BMASoft.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BMASoft.Migrations
 {
     [DbContext(typeof(BmaDbContext))]
-    partial class BmaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200912012151_inventory")]
+    partial class inventory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -983,203 +985,6 @@ namespace BMASoft.Migrations
                     b.ToTable("CbTransfers");
                 });
 
-            modelBuilder.Entity("BMASoft.Data.Models.GlAccount", b =>
-                {
-                    b.Property<int>("GlAccountId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("GlAcct")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GlDept")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("GlFisc1")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlFisc10")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlFisc11")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlFisc12")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlFisc2")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlFisc3")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlFisc4")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlFisc5")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlFisc6")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlFisc7")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlFisc8")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlFisc9")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<string>("GlKurs")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GlNama")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("GlPost")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("GlPreFisc1")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlPreFisc10")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlPreFisc11")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlPreFisc12")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlPreFisc2")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlPreFisc3")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlPreFisc4")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlPreFisc5")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlPreFisc6")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlPreFisc7")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlPreFisc8")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlPreFisc9")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlSaldo")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GlSldAwal")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<string>("GlStatus")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("GlTipe")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NamaLengkap")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("GlAccountId");
-
-                    b.ToTable("GlAccounts");
-                });
-
-            modelBuilder.Entity("BMASoft.Data.Models.GlCode", b =>
-                {
-                    b.Property<int>("GlCodeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("KodeGl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NamaGl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("GlCodeId");
-
-                    b.ToTable("GlCodes");
-                });
-
-            modelBuilder.Entity("BMASoft.Data.Models.GlTransD", b =>
-                {
-                    b.Property<int>("GlTransDId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("Debet")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<int>("GlTransHId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Jumlah")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<string>("Keterangan")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Kredit")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.HasKey("GlTransDId");
-
-                    b.HasIndex("GlTransHId");
-
-                    b.ToTable("GlTransDs");
-                });
-
-            modelBuilder.Entity("BMASoft.Data.Models.GlTransH", b =>
-                {
-                    b.Property<int>("GlTransHId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("Debet")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<string>("DocNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GlMemo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("KodeGl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Kredit")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<string>("Kurs")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Saldo")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<DateTime>("Tanggal")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("GlTransHId");
-
-                    b.ToTable("GlTransHs");
-                });
-
             modelBuilder.Entity("BMASoft.Data.Models.IcAcct", b =>
                 {
                     b.Property<int>("IcAcctId")
@@ -1397,9 +1202,6 @@ namespace BMASoft.Migrations
                     b.Property<string>("NamaItem")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NamaLengkap")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("Qty")
                         .HasColumnType("decimal(18,4)");
 
@@ -1466,9 +1268,6 @@ namespace BMASoft.Migrations
                     b.Property<decimal>("Harga")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<int>("IcTransHId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ItemCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -1509,8 +1308,6 @@ namespace BMASoft.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("IcTransDId");
-
-                    b.HasIndex("IcTransHId");
 
                     b.ToTable("IcTransDs");
                 });
@@ -1577,24 +1374,6 @@ namespace BMASoft.Migrations
                     b.HasOne("BMASoft.Data.Models.CbTransH", "CbTransH")
                         .WithMany("CbTransDs")
                         .HasForeignKey("CbTransHId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BMASoft.Data.Models.GlTransD", b =>
-                {
-                    b.HasOne("BMASoft.Data.Models.GlTransH", "GlTransH")
-                        .WithMany("GlTransDs")
-                        .HasForeignKey("GlTransHId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BMASoft.Data.Models.IcTransD", b =>
-                {
-                    b.HasOne("BMASoft.Data.Models.IcTransH", "IcTransH")
-                        .WithMany("IcTransDs")
-                        .HasForeignKey("IcTransHId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

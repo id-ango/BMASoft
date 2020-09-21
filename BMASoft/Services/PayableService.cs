@@ -60,7 +60,7 @@ namespace BMASoft.Services
 
         public ApSuppl GetSupplierId(int id)
         {
-            return _context.ApSuppls.Where(x =>x.ApSupplId == id).FirstOrDefault();
+            return _context.ApSuppls.Where(x => x.ApSupplId == id).FirstOrDefault();
         }
 
         public async Task<bool> AddSupplier(SupplierView suppliers)
@@ -160,7 +160,11 @@ namespace BMASoft.Services
                 {
                     AcctSet = codeview.AcctSet.ToUpper(),
                     Description = codeview.Description,
-                    Acct1 = codeview.Acct1
+                    Acct1 = codeview.Acct1,
+                    Acct2 = codeview.Acct2,
+                    Acct3 = codeview.Acct3,
+                    Acct4 = codeview.Acct4,
+                    Acct5 = codeview.Acct5
 
                 };
                 _context.ApAccts.Add(AcctCode);
@@ -185,6 +189,10 @@ namespace BMASoft.Services
                 {
                     ExistingAkunSet.Description = codeview.Description;
                     ExistingAkunSet.Acct1 = codeview.Acct1;
+                    ExistingAkunSet.Acct2 = codeview.Acct2;
+                    ExistingAkunSet.Acct3 = codeview.Acct3;
+                    ExistingAkunSet.Acct4 = codeview.Acct4;
+                    ExistingAkunSet.Acct5 = codeview.Acct5;
 
                     _context.ApAccts.Update(ExistingAkunSet);
                     await _context.SaveChangesAsync();

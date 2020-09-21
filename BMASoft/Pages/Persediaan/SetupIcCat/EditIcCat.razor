@@ -1,23 +1,23 @@
-﻿@page "/EditApAkunSet/{Id:int}"
+﻿@page "/EditIcCat/{Id:int}"
 @using BMASoft.Data.Models
 @using System.ComponentModel.DataAnnotations
-@inject BMASoft.Services.IPayableService service
+@inject BMASoft.Services.IInventoryService service
 @inject BMASoft.Services.ILedgerService serviceGl
 @inject NavigationManager navigationmanager
 @using Newtonsoft.Json
 
 <div class="container">
     <div class="master">
-        <a href="/SetupApAKunSet">Back</a>
+        <a href="/SetupIcCat">Back</a>
 
-        <h2>Edit Akun Set</h2>
+        <h2>Edit Kategori</h2>
 
         <EditForm Model="@supplier" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <br />
             <div class="form-group">
-                <SfTextBox CssClass="e-outline" @bind-Value="@supplier.AcctSet" Placeholder="Akun Set" FloatLabelType="FloatLabelType.Auto" disabled="disabled"></SfTextBox>
+                <SfTextBox CssClass="e-outline" @bind-Value="@supplier.CatCode" Placeholder="Akun Set" FloatLabelType="FloatLabelType.Auto" disabled="disabled"></SfTextBox>
 
             </div>
             <div class="form-group">
@@ -25,41 +25,41 @@
 
             </div>
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Payable Control" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Acct1">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Payable Control" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat1">
                     <DropDownListEvents TValue="string" ValueChange="OnChangeAkun"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
-                <ValidationMessage For="@(() => supplier.Acct1)" />
+                <ValidationMessage For="@(() => supplier.Cat1)" />
             </div>
 
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Payment Disc" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Acct2">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Payment Disc" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat2">
                     <DropDownListEvents TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
-                <ValidationMessage For="@(() => supplier.Acct2)" />
+                <ValidationMessage For="@(() => supplier.Cat2)" />
             </div>
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Tax" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Acct3">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Tax" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat3">
                     <DropDownListEvents TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
-                <ValidationMessage For="@(() => supplier.Acct3)" />
+                <ValidationMessage For="@(() => supplier.Cat3)" />
             </div>
 
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Ongkos Kirim" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Acct4">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Ongkos Kirim" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat4">
                     <DropDownListEvents TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
-                <ValidationMessage For="@(() => supplier.Acct4)" />
+                <ValidationMessage For="@(() => supplier.Cat4)" />
             </div>
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Uang Muka" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Acct5">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Uang Muka" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat5">
                     <DropDownListEvents TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
-                <ValidationMessage For="@(() => supplier.Acct5)" />
+                <ValidationMessage For="@(() => supplier.Cat5)" />
             </div>
 
             <div class="float-md-right">
@@ -76,8 +76,8 @@
 
     [Parameter] public int Id { get; set; }
 
-    ApAcctView supplier = new ApAcctView();
-    ApAcct Supplier = new ApAcct();
+    IcCatView supplier = new IcCatView();
+    IcCat Supplier = new IcCat();
     private List<GlAccount> GlAccounts;
 
     public int GlAccountId { get; set; }
@@ -92,25 +92,27 @@
 
     void LoadApAkunSet()
     {
-        Supplier = service.GetApAkunSetId(Id);
-        supplier.ApAcctId = Supplier.ApAcctId;
-        supplier.AcctSet = Supplier.AcctSet;
+        Supplier = service.GetIcCatId(Id);
+        supplier.IcCatId = Supplier.IcCatId;
+        supplier.CatCode = Supplier.CatCode;
         supplier.Description = Supplier.Description;
-        supplier.Acct1 = Supplier.Acct1;
-        supplier.Acct2 = Supplier.Acct2;
-        supplier.Acct3 = Supplier.Acct3;
+        supplier.Cat1 = Supplier.Cat1;
+        supplier.Cat2 = Supplier.Cat2;
+        supplier.Cat3 = Supplier.Cat3;
+        supplier.Cat4 = Supplier.Cat4;
+        supplier.Cat5 = Supplier.Cat5;
     }
 
     private async Task HandleValidSubmit()
     {
 
-        var newEdit = await service.EditAkunSet(supplier);
+        var newEdit = await service.EditIcCat(supplier);
         if (newEdit)
         {
             //   await ExportToPdf(Transh);
         }
 
-        navigationmanager.NavigateTo("SetupApAkunSet", false);
+        navigationmanager.NavigateTo("SetupIcCat", false);
 
         //add = !add;
         //StateHasChanged();

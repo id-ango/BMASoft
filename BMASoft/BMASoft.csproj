@@ -22,6 +22,12 @@
     <Compile Remove="Migrations\20200810003122_namacust.Designer.cs" />
     <Compile Remove="Migrations\20200827034454_startap.cs" />
     <Compile Remove="Migrations\20200827034454_startap.Designer.cs" />
+    <Compile Remove="Migrations\20200912005930_inventory1.cs" />
+    <Compile Remove="Migrations\20200912005930_inventory1.Designer.cs" />
+    <Compile Remove="Migrations\20200912011422_inventory.cs" />
+    <Compile Remove="Migrations\20200912011422_inventory.Designer.cs" />
+    <Compile Remove="Migrations\20200912012018_inventory.cs" />
+    <Compile Remove="Migrations\20200912012018_inventory.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,8 +47,6 @@
   <ItemGroup>
     <Folder Include="Pages\Beli\" />
     <Folder Include="Pages\Jual\" />
-    <Folder Include="Pages\Ledger\" />
-    <Folder Include="Pages\Persediaan\" />
   </ItemGroup>
 
   <ItemGroup>

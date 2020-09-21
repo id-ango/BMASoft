@@ -55,6 +55,8 @@ namespace BMASoft
             services.AddTransient<IPayableService, PayableService>();
             services.AddTransient<IPaymentApService, PaymentApService>();
             services.AddTransient<IPaymentApDpService, PaymentApDpService>();
+            services.AddTransient<ILedgerService, LedgerService>();
+            services.AddTransient<IInventoryService, InventoryService>();
             services.AddSingleton<ExportService>();
         }
 

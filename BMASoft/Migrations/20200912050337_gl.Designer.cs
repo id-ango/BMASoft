@@ -4,14 +4,16 @@ using BMASoft.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BMASoft.Migrations
 {
     [DbContext(typeof(BmaDbContext))]
-    partial class BmaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200912050337_gl")]
+    partial class gl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1038,7 +1040,7 @@ namespace BMASoft.Migrations
                     b.Property<string>("GlNama")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("GlPost")
+                    b.Property<DateTime>("GlPost")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("GlPreFisc1")
@@ -1088,9 +1090,6 @@ namespace BMASoft.Migrations
 
                     b.Property<int>("GlTipe")
                         .HasColumnType("int");
-
-                    b.Property<string>("NamaLengkap")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("GlAccountId");
 
@@ -1395,9 +1394,6 @@ namespace BMASoft.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NamaItem")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NamaLengkap")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Qty")

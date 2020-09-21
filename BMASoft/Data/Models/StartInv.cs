@@ -18,51 +18,74 @@ namespace BMASoft.Data.Models
         public string NamaItem { get; set; }
         public string Satuan { get; set; }
         public string Divisi { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal Cost { get; set; }
-        public decimal  Harga { get; set; }
-        public decimal Qty { get; set; }
-        public decimal QtyPo { get; set; }
-        public decimal BefNetto { get; set; }
-        public decimal HrgNetto { get; set; }
-        public decimal HrgJual { get; set; }
-        public decimal SaldoAwal { get; set; }
-        public decimal CostAwal { get; set; }       
-        public string AcctSet { get; set; }
-        public string Category { get; set; }
-        public bool SerialNo { get; set; }
-        public int  CostMethod { get; set; }
-        public int JnsBrng { get; set; }
-        public decimal StdPrice { get; set; }
-        [AllowNull]
-        public Nullable<DateTime> TglPost { get; set; }
-        [AllowNull]
-        public Nullable<DateTime> LastNetto { get; set; }
-     
-    }
-
-    public class IcAltItem
-    {
-        [Key]
-        public int IcAltItemId { get; set; }    
-        public string ItemCode { get; set; }
-        public string Lokasi { get; set; }
-        public string NamaItem { get; set; }
-        public string Satuan { get; set; }
-        public string Divisi { get; set; }
-        public decimal Cost { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal Harga { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal Qty { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal QtyPo { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal BefNetto { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal HrgNetto { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        [DisplayFormat(DataFormatString = "#,###.##")]
         public decimal HrgJual { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal SaldoAwal { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal CostAwal { get; set; }
         public string AcctSet { get; set; }
         public string Category { get; set; }
         public bool SerialNo { get; set; }
         public int CostMethod { get; set; }
         public int JnsBrng { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal StdPrice { get; set; }
+        [AllowNull]
+        public Nullable<DateTime> TglPost { get; set; }
+        [AllowNull]
+        public Nullable<DateTime> LastNetto { get; set; }
+        public string NamaLengkap { get; set; }
+
+    }
+
+    public class IcAltItem
+    {
+        [Key]
+        public int IcAltItemId { get; set; }
+        public string ItemCode { get; set; }
+        public string Lokasi { get; set; }
+        public string NamaItem { get; set; }     
+        public string Satuan { get; set; }
+        public string Divisi { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Cost { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Harga { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Qty { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal QtyPo { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal BefNetto { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal HrgNetto { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        [DisplayFormat(DataFormatString = "#,###.##")]
+        public decimal HrgJual { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal SaldoAwal { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal CostAwal { get; set; }
+        public string AcctSet { get; set; }
+        public string Category { get; set; }
+        public bool SerialNo { get; set; }
+        public int CostMethod { get; set; }
+        public int JnsBrng { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal StdPrice { get; set; }
         [AllowNull]
         public Nullable<DateTime> TglPost { get; set; }
@@ -73,6 +96,7 @@ namespace BMASoft.Data.Models
 
     public class IcLokasi
     {
+        [Key]
         public int IcLokasiId { get; set; }
         public string Lokasi { get; set; }
         public string NamaLokasi { get; set; }
@@ -84,6 +108,7 @@ namespace BMASoft.Data.Models
 
     public class IcDept
     {
+        [Key]
         public int IcDeptId { get; set; }
         public string DeptCode { get; set; }
         public string NamaDept { get; set; }
@@ -91,6 +116,7 @@ namespace BMASoft.Data.Models
 
     public class IcDiv
     {
+        [Key]
         public int IcDivId { get; set; }
         public string Divisi { get; set; }
         public string NamaDiv { get; set; }
@@ -98,6 +124,7 @@ namespace BMASoft.Data.Models
 
     public class IcTransH
     {
+        [Key]
         public int IcTransHId { get; set; }
         public string Kode { get; set; }
         public string NoOrder { get; set; }
@@ -108,10 +135,12 @@ namespace BMASoft.Data.Models
         public string Lokasi2 { get; set; }
         public string Keterangan { get; set; }
         public string AcctSet { get; set; }
+        public List<IcTransD> IcTransDs { get; set; }
     }
 
     public class IcTransD
     {
+        [Key]
         public int IcTransDId { get; set; }
         public string Kode { get; set; }
         public string NoOrder { get; set; }
@@ -123,15 +152,22 @@ namespace BMASoft.Data.Models
         public string ItemCode { get; set; }
         public string NamaItem { get; set; }
         public string Satuan { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal Harga { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal QtyBo { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal QtyShp { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal Jumlah { get; set; }
         public string AcctSet { get; set; }
+        public int IcTransHId { get; set; }
+        public IcTransH IcTransH { get; set; }
     }
 
     public class IcAcct
     {
+        [Key]
         public int IcAcctId { get; set; }
         public string AcctSet { get; set; }
         public string Description { get; set; }
@@ -145,7 +181,8 @@ namespace BMASoft.Data.Models
 
     public class IcCat
     {
-        public int IcCatID { get; set; }
+        [Key]
+        public int IcCatId { get; set; }
         public string CatCode { get; set; }
         public string Description { get; set; }
         public string Cat1 { get; set; }
@@ -154,5 +191,141 @@ namespace BMASoft.Data.Models
         public string Cat4 { get; set; }
         public string Cat5 { get; set; }
         public string Cat6 { get; set; }
+    }
+
+    public class IcItemView
+    {
+        [Key]
+        public int IcItemId { get; set; }
+        [Required]
+        public string ItemCode { get; set; }
+        [Required]
+        public string NamaItem { get; set; }
+        [StringLength(5, ErrorMessage = "Satuan terlalu panjang (5 character limit).")]
+        public string Satuan { get; set; }
+        public string Divisi { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Cost { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Harga { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "#,###.##")]
+        public decimal Qty { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal QtyPo { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal BefNetto { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal HrgNetto { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal HrgJual { get; set; }
+        [DisplayFormat(DataFormatString = "#,###.##")]
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal SaldoAwal { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString ="#,###.##")]
+        public decimal CostAwal { get; set; }
+        public string AcctSet { get; set; }
+        public string Category { get; set; }
+        public bool SerialNo { get; set; }
+        public int CostMethod { get; set; }
+        public int JnsBrng { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal StdPrice { get; set; }
+        [AllowNull]
+        public Nullable<DateTime> TglPost { get; set; }
+        [AllowNull]
+        public Nullable<DateTime> LastNetto { get; set; }
+        public string NamaLengkap
+        {
+            get
+            {
+                return NamaItem + " [" + ItemCode + "]" + " (" + Satuan + ")";
+            }
+        }
+    }
+
+    public class IcDivView
+    {
+        [Key]
+        public int IcDivId { get; set; }
+        [Required]
+        [StringLength(2, ErrorMessage = "Satuan terlalu panjang (2 character limit).")]
+        public string Divisi { get; set; }
+        [Required]
+        public string NamaDiv { get; set; }
+    }
+
+    public class IcAcctView
+    {
+        [Key]
+        public int IcAcctId { get; set; }
+        [Required]
+        public string AcctSet { get; set; }
+        public string Description { get; set; }
+        public string Acct1 { get; set; }
+        public string Acct2 { get; set; }
+        public string Acct3 { get; set; }
+        public string Acct4 { get; set; }
+        public string Acct5 { get; set; }
+        public string Acct6 { get; set; }
+    }
+
+    public class IcCatView
+    {
+        [Key]
+        public int IcCatId { get; set; }
+        [Required]
+        public string CatCode { get; set; }
+        public string Description { get; set; }
+        public string Cat1 { get; set; }
+        public string Cat2 { get; set; }
+        public string Cat3 { get; set; }
+        public string Cat4 { get; set; }
+        public string Cat5 { get; set; }
+        public string Cat6 { get; set; }
+    }
+
+    public class IcTransHView
+    {
+        [Key]
+        public int IcTransHId { get; set; }
+        public string Kode { get; set; }
+        public string NoOrder { get; set; }
+        public string NoFaktur { get; set; }
+        public string NoSj { get; set; }
+        public DateTime Tanggal { get; set; }
+        public string Lokasi { get; set; }
+        public string Lokasi2 { get; set; }
+        public string Keterangan { get; set; }
+        public string AcctSet { get; set; }
+        public List<IcTransDView> IcTransDs { get; set; }
+    }
+
+    public class IcTransDView
+    {
+        [Key]
+        public int IcTransDId { get; set; }
+        public string Kode { get; set; }
+        public string NoOrder { get; set; }
+        public string NoFaktur { get; set; }
+        public string NoSj { get; set; }
+        public DateTime Tanggal { get; set; }
+        public string Lokasi { get; set; }
+        public string Lokasi2 { get; set; }
+        public string ItemCode { get; set; }
+        public string NamaItem { get; set; }
+        public string Satuan { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Harga { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal QtyBo { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal QtyShp { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Jumlah { get; set; }
+        public string AcctSet { get; set; }
+        public int IcTransHId { get; set; }
+        public IcTransHView IcTransH { get; set; }
     }
 }
