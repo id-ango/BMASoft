@@ -1,0 +1,229 @@
+﻿@page "/TransIcMutasi"
+@inject NavigationManager navigationmanager
+@inject BMASoft.Services.IInventoryService service
+
+
+<style>
+    .e-edit-icon::before {
+        content: '\ea9a';
+    }
+
+    .e-delete-icon::before {
+        content: '\e94a';
+    }
+
+    .e-print-icon::before {
+        content: '\e34b';
+    }
+
+    .e-search:before {
+        content: '\e993';
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-6">
+        <h1>Transaksi Mutasi Persediaan</h1>
+    </div>
+    <div class="col-6">
+        <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
+    </div>
+</div>
+
+@if (toDoList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="col-lg-12 control-section">
+        <div class="content-wrapper">
+            <div class="row">
+
+                <SfGrid SelectedRowIndex="2" Height="300" DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true" Toolbar="@(new List<string>() { "Search" })">
+                    <GridGroupSettings Columns="@GroupedColumns"></GridGroupSettings>
+                    <GridPageSettings PageCount="5" PageSizes="true"></GridPageSettings>
+                    <GridEvents RowSelected="RowSelecthandler" TValue="IcTransH"></GridEvents>
+
+                    <GridColumns>
+                        <GridColumn HeaderText="" Width="40">
+                            <Template>
+                                @{
+                                    var trans2 = (context as IcTransH);
+                                    <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.IcTransHId,trans2.NoFaktur))"></SfButton>
+                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.IcTransHId,trans2.NoFaktur))"></SfButton>
+                                }
+                            </Template>
+                        </GridColumn>
+                   
+                        <GridColumn Field=@nameof(IcTransH.NoFaktur) HeaderText="No Bukti" Width="70"></GridColumn>
+                        <GridColumn Field=@nameof(IcTransH.Tanggal) HeaderText="Tanggal" Format="d" Type="ColumnType.Date" Width="60"></GridColumn>
+                        <GridColumn Field=@nameof(IcTransH.Keterangan) HeaderText="Keterangan" Width="170"></GridColumn>
+                        <GridColumn Field=@nameof(IcTransH.Lokasi2) HeaderText="Lokasi Pindah" Width="70"></GridColumn>
+
+                    </GridColumns>
+                </SfGrid>
+
+                <SfGrid DataSource="@toDoDetail" Query="@(new Query().Where("IcTransHId", "equal",RowIndex))">
+
+                    <GridColumns>
+                        <GridColumn Field=@nameof(IcTransD.ItemCode) HeaderText="Code" Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(IcTransD.NamaItem) HeaderText="Nama Item" Width="110"></GridColumn>
+                        <GridColumn Field=@nameof(IcTransD.QtyShp) HeaderText="Quantity" Width="90" Format="N2"></GridColumn>
+                        <GridColumn Field=@nameof(IcTransD.Lokasi) HeaderText="Lokasi Awal" ></GridColumn>
+                    </GridColumns>
+                </SfGrid>
+            </div>
+
+        </div>
+    </div>
+
+    <SfDialog @bind-Visible="@IsVisible" Width="400px" ShowCloseIcon="true" IsModal="true">
+        <DialogTemplates>
+            <Header>
+                Delete Items
+            </Header>
+            <Content>
+                Are you sure you want to permanently delete these items ?
+            </Content>
+        </DialogTemplates>
+
+        <DialogButtons>
+            <DialogButton OnClick="@OkkClick" Content="OK" IsPrimary="true" />
+            <DialogButton OnClick="@CancelClick" Content="Cancel" />
+        </DialogButtons>
+    </SfDialog>
+
+    <SfDialog @bind-Visible="@IsDialog" Width="400px" ShowCloseIcon="true" IsModal="true">
+        <DialogTemplates>
+            <Header>
+                INFORMATION
+            </Header>
+            <Content>
+                Piutang ini sudah ada pembayaran
+            </Content>
+        </DialogTemplates>
+        <DialogEvents Closed="@DialogClose"></DialogEvents>
+        <DialogButtons>
+            <DialogButton IsPrimary="true" Content="OK" OnClick="@OnBtnClick" />
+        </DialogButtons>
+    </SfDialog>
+}
+
+
+@code {
+
+    private int id { get; set; }
+
+    private List<IcTransH> toDoList;
+    private List<IcTransD> toDoDetail;
+    private ApHutang rubah;
+
+    public string[] GroupedColumns = new string[] { "NoFaktur" };
+    public string SelectedDoc { get; set; }
+    public int? RowIndex { get; set; } = 1;
+
+    public void RowSelecthandler(RowSelectEventArgs<IcTransH> Args)
+    {
+        SelectedDoc = Args.Data.NoFaktur;
+        RowIndex = Args.Data.IcTransHId;
+    }
+
+    private bool IsVisible { get; set; } = false;
+    private bool IsDialog { get; set; } = false;
+
+    private void DialogClose(Object args)
+    {
+        this.IsVisible = false;
+    }
+
+    private void OnBtnClick()
+    {
+        this.IsDialog = false;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await LoadTransAr();
+
+    }
+
+    async Task LoadTransAr()
+    {
+
+        toDoList = await service.Get3TransH();
+
+        toDoDetail = await service.GetTransD();
+    }
+
+    private void Tambah()
+    {
+        navigationmanager.NavigateTo("AddTransIcMutasi");
+    }
+
+
+
+    private void Rubah(int xKdBank, string xDoc)
+    {
+        rubah = service.GetHutang(xDoc);
+
+        if (rubah != null)
+        {
+            if (rubah.Jumlah != rubah.Sisa && rubah != null)
+            {
+                IsDialog = true;
+            }
+            else
+            {
+                navigationmanager.NavigateTo($"EditTransIcMutasi/{xKdBank}");
+            }
+        }
+    }
+
+    private void Hapus(int xKdBank, string xDoc)
+    {
+        rubah = service.GetHutang(xDoc);
+
+        if (rubah != null)
+        {
+            if (rubah.Jumlah != rubah.Sisa && rubah != null)
+            {
+                IsDialog = true;
+            }
+            else
+            {
+                this.IsVisible = true;
+                this.id = xKdBank;
+            }
+        }
+    }
+
+    private async void OkkClick()
+    {
+
+        var HapusStatus = await service.DelTransH(this.id);
+        this.IsVisible = false;
+
+        //      StateHasChanged();
+
+        navigationmanager.NavigateTo("TransIcMutasi", true);
+        //  await LoadBank();
+        //  await OnInitializedAsync();
+    }
+
+    private void CancelClick()
+    {
+
+        this.IsVisible = false;
+
+        //    StateHasChanged();
+
+        navigationmanager.NavigateTo("TransIcMutasi", false);
+        //    await LoadBank();
+        //      await OnInitializedAsync();
+    }
+
+
+}

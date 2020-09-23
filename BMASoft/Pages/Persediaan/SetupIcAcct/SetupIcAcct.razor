@@ -1,4 +1,4 @@
-﻿@page "/SetupIcCat"
+﻿@page "/SetupIcAcct"
 @using BMASoft.Data.Models
 @using System.ComponentModel.DataAnnotations
 @inject BMASoft.Services.IInventoryService service
@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-md-6">
 
-                <h1>Setup Kategory Produk</h1>
+                <h1>Setup Akun Set</h1>
                 <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
 
                 <br />
@@ -50,10 +50,10 @@
                     <GridColumn HeaderText="" Width="50">
                         <Template>
                             @{
-                                var trans2 = (context as IcCat);
+                                var trans2 = (context as  IcAcct);
 
-                                <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.IcCatId))"></SfButton>
-                                <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.IcCatId))"></SfButton>
+                                <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.IcAcctId))"></SfButton>
+                                <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.IcAcctId))"></SfButton>
 
                             }
 
@@ -61,11 +61,11 @@
 
                     </GridColumn>
 
-                    <GridColumn Field=@nameof(IcCat.CatCode) HeaderText="Kode" Width="50"></GridColumn>
-                    <GridColumn Field=@nameof(IcCat.Description) HeaderText="Nama" Width="100"></GridColumn>                  
-                    <GridColumn Field=@nameof(IcCat.Cat1) HeaderText="Akun 1" Width="80"></GridColumn>
-                    <GridColumn Field=@nameof(IcCat.Cat2) HeaderText="Akun 2" Width="80"></GridColumn>
-                    <GridColumn Field=@nameof(IcCat.Cat3) HeaderText="Akun 3" Width="60"></GridColumn>
+                    <GridColumn Field=@nameof(IcAcct.AcctSet) HeaderText="Kode" Width="50"></GridColumn>
+                    <GridColumn Field=@nameof(IcAcct.Description) HeaderText="Nama" Width="70"></GridColumn>
+                    <GridColumn Field=@nameof(IcAcct.Acct1) HeaderText="Akun 1" Width="80"></GridColumn>
+                    <GridColumn Field=@nameof(IcAcct.Acct2) HeaderText="Akun 2" Width="80"></GridColumn>
+                    <GridColumn Field=@nameof(IcAcct.Acct3) HeaderText="Akun 3" Width="60"></GridColumn>
 
                 </GridColumns>
             </SfGrid>
@@ -98,7 +98,7 @@
 
 @code {
 
-    private List<IcCat> toDoList;
+    private List<IcAcct> toDoList;
     private bool TblButton { get; set; } = true;
     private bool IsAdd { get; set; } = false;
     private bool IsRubah { get; set; } = false;
@@ -106,7 +106,7 @@
 
     private int status { get; set; }
 
-    IcCatView supplier = new IcCatView();
+    IcAcctView supplier = new IcAcctView();
 
 
 
@@ -120,7 +120,7 @@
 
     async Task LoadApAkunSet()
     {
-        toDoList = await service.GetIcCat();
+        toDoList = await service.GetIcAcct();
     }
 
     private void simpan(bool jadisimpan)
@@ -132,12 +132,12 @@
 
     private void Tambah()
     {
-        navigationmanager.NavigateTo("AddIcCat");
+        navigationmanager.NavigateTo("AddIcAcct");
     }
 
     private void Rubah(int xSupplier)
     {
-        navigationmanager.NavigateTo($"EditIcCat/{xSupplier}");
+        navigationmanager.NavigateTo($"EditIcAcct/{xSupplier}");
     }
 
     private void Hapus(int xSupplier)
@@ -151,12 +151,12 @@
     private async void OkkClick()
     {
 
-        var HapusStatus = await service.DelIcCat(this.status);
+        var HapusStatus = await service.DelIcAcct(this.status);
         this.IsHapus = false;
 
         //      StateHasChanged();
 
-        navigationmanager.NavigateTo("SetupIcCat", true);
+        navigationmanager.NavigateTo("SetupIcAcct", true);
         //  await LoadBank();
         //  await OnInitializedAsync();
     }
@@ -168,7 +168,7 @@
 
         //    StateHasChanged();
 
-        navigationmanager.NavigateTo("SetupIcCat", false);
+        navigationmanager.NavigateTo("SetupIcAcct", false);
         //    await LoadBank();
         //      await OnInitializedAsync();
     }

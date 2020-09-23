@@ -34,6 +34,11 @@ namespace BMASoft.Services
         Task<bool> AddIcCat(IcCatView codeview);
         Task<bool> EditIcCat(IcCatView codeview);
         Task<bool> DelIcCat(int codeview);
+        Task<List<IcAcct>> GetIcAcct();
+        IcAcct GetIcAcctId(int id);
+        Task<bool> AddIcAcct(IcAcctView codeview);
+        Task<bool> EditIcAcct(IcAcctView codeview);
+        Task<bool> DelIcAcct(int codeview);
     }
 
     public class InventoryService : IInventoryService
@@ -294,5 +299,96 @@ namespace BMASoft.Services
 
         }
         #endregion IcCat Class
+
+        #region IcAcct Class
+
+        public async Task<List<IcAcct>> GetIcAcct()
+        {
+            return await _context.IcAccts.ToListAsync();
+        }
+
+        public IcAcct GetIcAcctId(int id)
+        {
+            return _context.IcAccts.Where(x => x.IcAcctId == id).FirstOrDefault();
+        }
+
+        public async Task<bool> AddIcAcct(IcAcctView codeview)
+        {
+            string test = codeview.AcctSet.ToUpper();
+            var cekFirst = _context.IcAccts.Where(x => x.AcctSet == test).ToList();
+            if (cekFirst.Count == 0)
+            {
+                IcAcct AcctCode = new IcAcct()
+                {
+                    AcctSet = codeview.AcctSet.ToUpper(),
+                    Description = codeview.Description,
+                    Acct1 = codeview.Acct1,
+                    Acct2 = codeview.Acct2,
+                    Acct3 = codeview.Acct3,
+                    Acct4 = codeview.Acct4
+
+                };
+                _context.IcAccts.Add(AcctCode);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+
+                return false;
+            }
+
+
+        }
+
+        public async Task<bool> EditIcAcct(IcAcctView codeview)
+        {
+            try
+            {
+                var ExistingIcAcct = _context.IcAccts.Where(x => x.IcAcctId == codeview.IcAcctId).FirstOrDefault();
+                if (ExistingIcAcct != null)
+                {
+                    ExistingIcAcct.Description = codeview.Description;
+                    ExistingIcAcct.Acct1 = codeview.Acct1;
+                    ExistingIcAcct.Acct2 = codeview.Acct2;
+                    ExistingIcAcct.Acct3 = codeview.Acct3;
+                    ExistingIcAcct.Acct4 = codeview.Acct4;
+                    ExistingIcAcct.Acct5 = codeview.Acct5;
+
+                    _context.IcAccts.Update(ExistingIcAcct);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return false;
+
+        }
+
+        public async Task<bool> DelIcAcct(int codeview)
+        {
+            try
+            {
+                var ExistingIcAcct = _context.IcAccts.Where(x => x.IcAcctId == codeview).FirstOrDefault();
+                if (ExistingIcAcct != null)
+                {
+                    _context.IcAccts.Remove(ExistingIcAcct);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return false;
+
+        }
+        #endregion IcAcct Class
     }
 }
