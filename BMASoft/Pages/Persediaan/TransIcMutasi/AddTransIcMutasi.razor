@@ -1,7 +1,7 @@
-﻿@page "/AddTransApIn"
+﻿@page "/AddTransIcMutasi"
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager navigationmanager
-@inject BMASoft.Services.IPayableService service
+@inject BMASoft.Services.IInventoryService service
 @using Newtonsoft.Json
 @inject Microsoft.JSInterop.IJSRuntime JS
 @using  System.IO
@@ -43,21 +43,14 @@
 
 <div class="container">
     <div class="master">
-        <h2>Transaksi Hutang</h2>
+        <a href="/TransIcMutasi">Back</a>
+
+        <h2>Transaksi Mutasi Persediaan</h2>
 
         <EditForm Model="@Transh" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
             <div class="float-md-right">
                 <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
-            </div>
-
-
-            <div class="form-group">
-                <SfComboBox TValue="string" TItem="ApSuppl" DataSource="suppliers" Placeholder="Select Supplier" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Supplier">
-                    <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
-                    <ComboBoxFieldSettings Text="NamaLengkap" Value="Supplier"></ComboBoxFieldSettings>
-                </SfComboBox>
-                <ValidationMessage For="@(() => Transh.ApSupplId)" />
             </div>
 
             <div class="form-group">
@@ -70,7 +63,21 @@
                 <ValidationMessage For="@(() => Transh.Keterangan)" />
             </div>
 
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="IcLokasi" DataSource="suppliers" Placeholder="Dari Lokasi" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Lokasi">
+                    <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="NamaLokasi" Value="Lokasi"></ComboBoxFieldSettings>
+                </SfComboBox>
+                <ValidationMessage For="@(() => Transh.Lokasi)" />
+            </div>
 
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="IcLokasi" DataSource="suppliers" Placeholder="Pindah Ke Lokasi" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Lokasi2">
+                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="NamaLokasi" Value="Lokasi"></ComboBoxFieldSettings>
+                </SfComboBox>
+                <ValidationMessage For="@(() => Transh.Lokasi2)" />
+            </div>
 
         </EditForm>
         <div class="details">
@@ -78,21 +85,21 @@
             <table class="table table-responsive">
                 <thead>
                     <tr>
-                        <td>Source</td>
-                        <td>Keterangan</td>
+                        <td>Item</td>
+                        <td>Nama Item</td>
                         <td>Jumlah</td>
                         <td>&nbsp;</td>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Transh.ApTransDs != null)
+                    @if (Transh.IcTransDs != null)
                     {
-                        @foreach (var detail in Transh.ApTransDs)
+                        @foreach (var detail in Transh.IcTransDs)
                         {
                             <tr>
-                                <td>@detail.DistCode</td>
-                                <td>@detail.Keterangan</td>
-                                <td>@detail.Jumlah.ToString("#,##0.##")</td>
+                                <td>@detail.ItemCode</td>
+                                <td>@detail.NamaItem</td>
+                                <td>@detail.QtyShp.ToString("#,##0.##")</td>
                                 <td>
                                     <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(detail))"></SfButton>
                                     <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(detail))"></SfButton>
@@ -116,9 +123,7 @@
 
 
         </div>
-        <div class="float-md-right form-message">
-            <span>Saldo   : @Transh.Jumlah.ToString("#,##0.##")</span>
-        </div>
+
 
     </div>
 </div>
@@ -126,20 +131,17 @@
     <DialogTemplates>
         <Content>
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="ApDist" DataSource="srccode" Placeholder="Select Code" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transd.DistCode">
-                    <ComboBoxFieldSettings Text="Description" Value="DistCode"></ComboBoxFieldSettings>
+                <SfComboBox TValue="string" TItem="IcItem" DataSource="srccode" Placeholder="Select Item" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transd.ItemCode">
+                    <DropDownListEvents TValue="string" ValueChange="OnChangeItem"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="NamaLengkap" Value="ItemCode"></ComboBoxFieldSettings>
                 </SfComboBox>
-
-            </div>
-            <div class="form-group">
-                <SfTextBox CssClass="e-outline" @bind-Value="@Transd.Keterangan" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
 
             </div>
 
             <div class="container">
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <SfNumericTextBox CssClass="e-outline" @bind-Value="@Transd.Jumlah" Placeholder="Jumlah" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
+                        <SfNumericTextBox CssClass="e-outline" @bind-Value="@Transd.QtyShp" Placeholder="Jumlah" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
 
                     </div>
                 </div>
@@ -161,16 +163,17 @@
 
 @code {
 
-    private ApTransHView Transh = new ApTransHView() { ApTransDs = new List<ApTransDView>() };
+    private IcTransHView Transh = new IcTransHView() { IcTransDs = new List<IcTransDView>() };
 
-    private List<ApSuppl> suppliers;
-    private List<ApDist> srccode;
-    private ApTransDView Transd = new ApTransDView();
-    private ApTransDView TransK = new ApTransDView();
+    private List<IcLokasi> suppliers;
+    private List<IcItem> srccode;
+    private IcTransDView Transd = new IcTransDView();
+    private IcTransDView TransK = new IcTransDView();
     //   private List<TransDView> TransDs = new List<TransDView>();
     private string enabled { get; set; }
 
     public int SupplierId { get; set; }
+    public string namaItem { get; set; }
 
     private bool IsVisible { get; set; } = false;
     private bool IsKurs { get; set; } = false;
@@ -189,28 +192,37 @@
     {
         Transh.Tanggal = DateTime.Now;
 
-        Loadsuppliers();
-        await LoadSrcCode();
+        await Loadsuppliers();
+        await  LoadSrcCode();
     }
 
-    void Loadsuppliers()
+    async Task Loadsuppliers()
     {
 
-        suppliers = service.GetSupplier();
+        suppliers = await service.GetIcLokasi();
 
     }
 
     async Task LoadSrcCode()
     {
 
-        srccode = await service.GetDist();
+        srccode = await service.GetIcItem();
 
     }
 
     public void OnChangeBank(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
     {
-        var itemData = JsonConvert.DeserializeObject<ApSuppl>(args.ItemData != null ? args.ItemData.ToString() : "");
-        this.SupplierId = itemData.ApSupplId;
+        var lokasiData = JsonConvert.DeserializeObject<IcLokasi>(args.ItemData != null ? args.ItemData.ToString() : "");
+        this.SupplierId = lokasiData.IcLokasiId;
+    }
+
+    public void OnChangeItem(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        var itemData = JsonConvert.DeserializeObject<IcItem>(args.ItemData != null ? args.ItemData.ToString() : "");
+
+        //   Transd.NamaItem = itemData.NamaItem;
+
+
 
     }
 
@@ -218,17 +230,20 @@
     {
         this.IsVisible = false;
         this.IsKurs = false;
-        if (Transd.DistCode != null && !IsEdit)
+        if (Transd.ItemCode != null && !IsEdit)
         {
-            Transh.ApTransDs.Add(new ApTransDView()
+            Transh.IcTransDs.Add(new IcTransDView()
             {
-                DistCode = Transd.DistCode,
-                Keterangan = Transd.Keterangan,
-                Jumlah = Transd.Jumlah
+                ItemCode = Transd.ItemCode,
+                NamaItem = service.GetIcItemProduk(Transd.ItemCode).NamaItem,
+                Satuan = service.GetIcItemProduk(Transd.ItemCode).Satuan,
+                QtyShp = Transd.QtyShp,
+                Lokasi = Transh.Lokasi,
+                Lokasi2 = Transh.Lokasi2
             });
         }
 
-        Transd = new ApTransDView();
+        Transd = new IcTransDView();
     }
 
 
@@ -237,8 +252,8 @@
     {
         this.IsVisible = false;
         this.IsKurs = false;
-        Transd = new ApTransDView();
-        TransK = new ApTransDView();
+        Transd = new IcTransDView();
+        TransK = new IcTransDView();
     }
 
     private void OnAddLine()
@@ -270,30 +285,30 @@
 
 
 
-    private void Rubah(ApTransDView transd)
+    private void Rubah(IcTransDView transd)
     {
-        Transd = new ApTransDView();
+        Transd = new IcTransDView();
         Transd = transd;
         OnEditLine();
     }
 
-    private void Hapus(ApTransDView transd)
+    private void Hapus(IcTransDView transd)
     {
 
-        Transh.ApTransDs.Remove(transd);
+        Transh.IcTransDs.Remove(transd);
         ShowOnClick();
     }
 
     private async Task HandleValidSubmit()
     {
-        Transh.ApSupplId = this.SupplierId;
+        // Transh.ApSupplId = this.SupplierId;
         var newEdit = await service.AddTransH(Transh);
         if (newEdit)
         {
             //   await ExportToPdf(Transh);
         }
 
-        navigationmanager.NavigateTo("TransApIn", false);
+        navigationmanager.NavigateTo("TransIcMutasi", false);
         //add = !add;
         //StateHasChanged();
 

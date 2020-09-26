@@ -21,6 +21,7 @@ namespace BMASoft.Services
     public interface IInventoryService
     {
         Task<List<IcItem>> GetIcItem();
+        IcItem GetIcItemProduk(string produk);
         Task<bool> DelIcItem(int codeview);
         Task<bool> AddIcItem(IcItemView produk);
         Task<bool> EditIcItem(IcItemView produk);
@@ -29,6 +30,11 @@ namespace BMASoft.Services
         Task<bool> AddIcDiv(IcDivView codeview);
         Task<bool> EditIcDiv(IcDivView codeview);
         Task<bool> DelIcDiv(int codeview);
+        Task<List<IcLokasi>> GetIcLokasi();
+        IcLokasi GetIcLokasiId(int id);
+        Task<bool> AddIcLokasi(IcLokasiView codeview);
+        Task<bool> EditIcLokasi(IcLokasiView codeview);
+        Task<bool> DelIcLokasi(int codeview);
         Task<List<IcCat>> GetIcCat();
         IcCat GetIcCatId(int id);
         Task<bool> AddIcCat(IcCatView codeview);
@@ -39,6 +45,13 @@ namespace BMASoft.Services
         Task<bool> AddIcAcct(IcAcctView codeview);
         Task<bool> EditIcAcct(IcAcctView codeview);
         Task<bool> DelIcAcct(int codeview);
+        IcTransH GetIcTrans(int id);
+        Task<List<IcTransH>> GetTransH();
+        Task<List<IcTransH>> Get3TransH();
+        Task<List<IcTransD>> GetTransD();
+        Task<bool> AddTransH(IcTransHView codeview);
+        Task<bool> EditTransH(IcTransHView codeview);
+        Task<bool> DelTransH(int codeview);
     }
 
     public class InventoryService : IInventoryService
@@ -50,9 +63,16 @@ namespace BMASoft.Services
             _context = context;
         }
 
+        #region icItem class
+
         public async Task<List<IcItem>> GetIcItem()
         {
             return await _context.IcItems.OrderBy(x => x.NamaItem).ToListAsync();
+        }
+        
+        public IcItem GetIcItemProduk(string itemKode)
+        {
+            return _context.IcItems.Where(x => x.ItemCode == itemKode).FirstOrDefault();
         }
 
         public async Task<bool> DelIcItem(int codeview)
@@ -125,6 +145,7 @@ namespace BMASoft.Services
             return false;
 
         }
+        #endregion icitem class
 
         #region IcDiv Class
 
@@ -170,7 +191,7 @@ namespace BMASoft.Services
                 if (ExistingDiv != null)
                 {
                     ExistingDiv.NamaDiv = codeview.NamaDiv;
-                  
+
 
                     _context.IcDivs.Update(ExistingDiv);
                     await _context.SaveChangesAsync();
@@ -208,6 +229,89 @@ namespace BMASoft.Services
         }
 
         #endregion IcDiv Class
+
+        #region IcLokasi Class
+
+        public async Task<List<IcLokasi>> GetIcLokasi()
+        {
+            return await _context.Iclokasis.OrderBy(x => x.Lokasi).ToListAsync();
+        }
+
+        public IcLokasi GetIcLokasiId(int id)
+        {
+            return _context.Iclokasis.Where(x => x.IcLokasiId == id).FirstOrDefault();
+        }
+
+        public async Task<bool> AddIcLokasi(IcLokasiView codeview)
+        {
+            string test = codeview.Lokasi.ToUpper();
+            var cekFirst = _context.Iclokasis.Where(x => x.Lokasi == test).ToList();
+            if (cekFirst.Count == 0)
+            {
+                IcLokasi Location = new IcLokasi()
+                {
+                    Lokasi = codeview.Lokasi.ToUpper(),
+                    NamaLokasi = codeview.NamaLokasi
+
+                };
+                _context.Iclokasis.Add(Location);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+
+                return false;
+            }
+
+        }
+
+        public async Task<bool> EditIcLokasi(IcLokasiView codeview)
+        {
+            try
+            {
+                var ExistingDiv = _context.Iclokasis.Where(x => x.IcLokasiId == codeview.IcLokasiId).FirstOrDefault();
+                if (ExistingDiv != null)
+                {
+                    ExistingDiv.NamaLokasi = codeview.NamaLokasi;
+
+
+                    _context.Iclokasis.Update(ExistingDiv);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return false;
+
+        }
+
+        public async Task<bool> DelIcLokasi(int codeview)
+        {
+            try
+            {
+                var ExistingDiv = _context.Iclokasis.Where(x => x.IcLokasiId == codeview).FirstOrDefault();
+                if (ExistingDiv != null)
+                {
+                    _context.Iclokasis.Remove(ExistingDiv);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return false;
+
+        }
+
+        #endregion IcLokasi Class
 
         #region IcCat Class
 
@@ -390,5 +494,326 @@ namespace BMASoft.Services
 
         }
         #endregion IcAcct Class
+
+        #region Transaksi Mutasi Class
+
+       
+
+        public IcTransH GetIcTrans(int id)
+        {
+            return _context.IcTransHs.Include(p => p.IcTransDs).Where(x => x.IcTransHId == id).FirstOrDefault();
+        }
+
+
+        public async Task<List<IcTransH>> GetTransH()
+        {
+            List<IcTransH> IcTrans = new List<IcTransH>();
+            try
+            {
+                IcTrans = await _context.IcTransHs.OrderByDescending(x => x.Tanggal).Where(x => x.Kode == "90").ToListAsync();
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return IcTrans;
+            // return  _context.CbTransHs.Include(p =>p.CbTransDs).OrderByDescending(x =>x.Tanggal).ToListAsync();
+            //  return await _context.ApTransHs.OrderByDescending(x => x.Tanggal).ToListAsync();
+            //  return await _context.ApTransHs.ToListAsync();
+
+        }
+
+        public async Task<List<IcTransH>> Get3TransH()
+        {
+            List<IcTransH> IcTrans = new List<IcTransH>();
+
+            IcTrans = await _context.IcTransHs.OrderByDescending(x => x.Tanggal).Where(x => x.Tanggal > DateTime.Today.AddMonths(-3) && x.Kode == "90").ToListAsync();
+
+
+            return IcTrans;
+
+            // return  _context.CbTransHs.Include(p =>p.CbTransDs).OrderByDescending(x =>x.Tanggal).ToListAsync();
+            //   return _context.ApTransHs.OrderByDescending(x => x.Tanggal).Where(x => x.Tanggal > DateTime.Today.AddMonths(-3)).ToListAsync();
+
+        }
+
+        public async Task<List<IcTransD>> GetTransD()
+        {
+            return await _context.IcTransDs.ToListAsync();
+        }
+
+        public async Task<bool> AddTransH(IcTransHView trans)
+        {
+            //string test = codeview.SrcCode.ToUpper();
+            //var cekFirst = _context.CbSrcCodes.Where(x => x.SrcCode == test).ToList();
+
+            IcTransH transH = new IcTransH
+            {
+                NoFaktur = GetNumber(),
+                Tanggal = trans.Tanggal,
+                Keterangan = trans.Keterangan,
+                Lokasi = trans.Lokasi,
+                Lokasi2 = trans.Lokasi2,
+                Kode = "90",
+                IcTransDs = new List<IcTransD>()
+            };
+            foreach (var item in trans.IcTransDs)
+            {
+                transH.IcTransDs.Add(new IcTransD()
+                {
+                    ItemCode = item.ItemCode,
+                    NamaItem = item.NamaItem,
+                    QtyShp = item.QtyShp,
+                    Kode = "90",
+                    Lokasi = item.Lokasi,
+                    Lokasi2 = item.Lokasi2,
+                    NoFaktur = transH.NoFaktur,
+                    Tanggal = trans.Tanggal
+                });
+
+                IcItem cekItem = _context.IcItems.Where(x => x.ItemCode == item.ItemCode).FirstOrDefault();
+                if (cekItem != null)
+                {
+                    IcAltItem cekLokasi1 = _context.IcAltItems.Where(x => x.ItemCode == item.ItemCode && x.Lokasi == item.Lokasi).FirstOrDefault();
+                    if (cekLokasi1 == null)
+                    {
+                        IcAltItem Produk = new IcAltItem()
+                        {
+                            ItemCode = cekItem.ItemCode.ToUpper(),
+                            NamaItem = cekItem.NamaItem,
+                            Satuan = cekItem.Satuan,
+                            Lokasi = item.Lokasi,
+                            Qty = -1 * item.QtyShp
+                        };
+                        _context.IcAltItems.Add(Produk);
+
+                    }
+                    else
+                    {
+                        cekLokasi1.Qty -= item.QtyShp;
+                        _context.IcAltItems.Update(cekLokasi1);
+                    }
+
+                    /** lokasi 2 **/
+                    IcAltItem cekLokasi2 = _context.IcAltItems.Where(x => x.ItemCode == item.ItemCode && x.Lokasi == item.Lokasi2).FirstOrDefault();
+                    if (cekLokasi2 == null)
+                    {
+                        IcAltItem Produk = new IcAltItem()
+                        {
+                            ItemCode = cekItem.ItemCode.ToUpper(),
+                            NamaItem = cekItem.NamaItem,
+                            Satuan = cekItem.Satuan,
+                            Lokasi = item.Lokasi2,
+                            Qty = item.QtyShp
+                        };
+                        _context.IcAltItems.Add(Produk);
+
+                    }
+                    else
+                    {
+                        cekLokasi2.Qty += item.QtyShp;
+                        _context.IcAltItems.Update(cekLokasi2);
+                    }
+
+                }
+
+            }
+
+            _context.IcTransHs.Add(transH);
+
+            await _context.SaveChangesAsync();
+            return true;
+
+
+        }
+
+        public async Task<bool> EditTransH(IcTransHView trans)
+        {
+          
+            var ExistingTrans = _context.IcTransHs.Where(x => x.IcTransHId == trans.IcTransHId).FirstOrDefault();
+
+            /* transaksi lama dikurangi */
+
+            if (ExistingTrans != null)
+            {
+                foreach (var item in ExistingTrans.IcTransDs)
+                {
+                    IcItem cekItem = _context.IcItems.Where(x => x.ItemCode == item.ItemCode).FirstOrDefault();
+                    if (cekItem != null)
+                    {
+                        IcAltItem itemlokasi1 = _context.IcAltItems.Where(x => x.ItemCode == item.ItemCode && x.Lokasi == item.Lokasi).FirstOrDefault();
+                        if (itemlokasi1 != null)
+                        {
+                            itemlokasi1.Qty += item.QtyShp;
+                            _context.IcAltItems.Update(itemlokasi1);
+                        }
+
+
+                        IcAltItem itemlokasi2 = _context.IcAltItems.Where(x => x.ItemCode == item.ItemCode && x.Lokasi == item.Lokasi2).FirstOrDefault();
+                        if (itemlokasi2 != null)
+                        {
+                            itemlokasi2.Qty -= item.QtyShp;
+                            _context.IcAltItems.Update(itemlokasi2);
+                        }
+
+
+
+                    }
+                    _context.IcTransHs.Remove(ExistingTrans);
+                }
+            }
+
+            /* transaksi update */
+
+            IcTransH transH = new IcTransH
+            {
+                NoFaktur = ExistingTrans.NoFaktur,
+                Tanggal = trans.Tanggal,
+                Keterangan = trans.Keterangan,
+                Lokasi = trans.Lokasi,
+                Lokasi2 = trans.Lokasi2,
+                Kode = "90",
+                IcTransDs = new List<IcTransD>()
+            };
+            foreach (var item in trans.IcTransDs)
+            {
+                transH.IcTransDs.Add(new IcTransD()
+                {
+                    ItemCode = item.ItemCode,
+                    NamaItem = item.NamaItem,
+                    QtyShp = item.QtyShp,
+                    Kode = "90",
+                    Lokasi = transH.Lokasi,
+                    Lokasi2 = transH.Lokasi2,
+                    NoFaktur = transH.NoFaktur,
+                    Tanggal = trans.Tanggal
+                });
+
+                IcItem cekItem = _context.IcItems.Where(x => x.ItemCode == item.ItemCode).FirstOrDefault();
+                if (cekItem != null)
+                {
+                    IcAltItem cekLokasi1 = _context.IcAltItems.Where(x => x.ItemCode == item.ItemCode && x.Lokasi == transH.Lokasi).FirstOrDefault();
+                    if (cekLokasi1 == null)
+                    {
+                        IcAltItem Produk = new IcAltItem()
+                        {
+                            ItemCode = cekItem.ItemCode.ToUpper(),
+                            NamaItem = cekItem.NamaItem,
+                            Satuan = cekItem.Satuan,
+                            Lokasi = transH.Lokasi,
+                            Qty = -1 * item.QtyShp
+                        };
+                        _context.IcAltItems.Add(Produk);
+
+                    }
+                    else
+                    {
+                        cekLokasi1.Qty -= item.QtyShp;
+                        _context.IcAltItems.Update(cekLokasi1);
+                    }
+
+                    /** lokasi 2 **/
+                    IcAltItem cekLokasi2 = _context.IcAltItems.Where(x => x.ItemCode == item.ItemCode && x.Lokasi == transH.Lokasi2).FirstOrDefault();
+                    if (cekLokasi2 == null)
+                    {
+                        IcAltItem Produk = new IcAltItem()
+                        {
+                            ItemCode = cekItem.ItemCode.ToUpper(),
+                            NamaItem = cekItem.NamaItem,
+                            Satuan = cekItem.Satuan,
+                            Lokasi = transH.Lokasi2,
+                            Qty = item.QtyShp
+                        };
+                        _context.IcAltItems.Add(Produk);
+
+                    }
+                    else
+                    {
+                        cekLokasi2.Qty += item.QtyShp;
+                        _context.IcAltItems.Update(cekLokasi2);
+                    }
+
+                }
+
+            }
+
+            _context.IcTransHs.Add(transH);
+
+            await _context.SaveChangesAsync();
+
+            return true;
+
+
+        }
+
+        public async Task<bool> DelTransH(int id)
+        {
+            try
+            {
+                var ExistingTrans = _context.IcTransHs.Where(x => x.IcTransHId == id).FirstOrDefault();
+
+                if (ExistingTrans != null)
+                {
+                    foreach (var item in ExistingTrans.IcTransDs)
+                    {
+                        IcAltItem itemlokasi1 = _context.IcAltItems.Where(x => x.ItemCode == item.ItemCode && x.Lokasi == item.Lokasi).FirstOrDefault();
+                        itemlokasi1.Qty += item.QtyShp;
+
+                        IcAltItem itemlokasi2 = _context.IcAltItems.Where(x => x.ItemCode == item.ItemCode && x.Lokasi == item.Lokasi2).FirstOrDefault();
+                        itemlokasi2.Qty -= item.QtyShp;
+
+                        _context.IcAltItems.Update(itemlokasi1);
+                    }
+                    _context.IcTransHs.Remove(ExistingTrans);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return false;
+
+        }
+
+        #endregion Transaksi Mutasi Class
+
+
+
+        public string GetNumber()
+        {
+            string kodeno = "MUT";
+            string kodeurut = kodeno + '-';
+            string thnbln = DateTime.Now.ToString("yyMM");
+            string xbukti = kodeurut + thnbln.Substring(0, 2) + '2' + thnbln.Substring(2, 2) + '-';
+            var maxvalue = "";
+            var maxlist = _context.IcTransHs.Where(x => x.NoFaktur.Substring(0, 10).Equals(xbukti)).ToList();
+            if (maxlist != null)
+            {
+                maxvalue = maxlist.Max(x => x.NoFaktur);
+
+            }
+
+            //            var maxvalue = (from e in db.CbTransHs where  e.Docno.Substring(0, 7) == kodeno + thnbln select e).Max();
+            string nourut = "00000";
+            if (maxvalue == null)
+            {
+                nourut = "00000";
+            }
+            else
+            {
+                nourut = maxvalue.Substring(10, 5);
+            }
+
+            //  nourut =Convert.ToString(Int32.Parse(nourut) + 1);
+
+
+            string cAngNo = xbukti + (Int32.Parse(nourut) + 1).ToString("00000");
+            // var maxvalue = (from e in db.AptTranss where e.NoRef.Substring(0, 7) == "ANG" + cAngNo select e.NoRef.Max()).FirstOrDefault();
+            return cAngNo;
+
+        }
     }
 }

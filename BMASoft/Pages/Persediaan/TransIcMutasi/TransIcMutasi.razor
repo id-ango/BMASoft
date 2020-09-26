@@ -23,7 +23,9 @@
 
 
 <div class="row">
+
     <div class="col-6">
+
         <h1>Transaksi Mutasi Persediaan</h1>
     </div>
     <div class="col-6">
@@ -56,11 +58,12 @@ else
                                 }
                             </Template>
                         </GridColumn>
-                   
+
                         <GridColumn Field=@nameof(IcTransH.NoFaktur) HeaderText="No Bukti" Width="70"></GridColumn>
                         <GridColumn Field=@nameof(IcTransH.Tanggal) HeaderText="Tanggal" Format="d" Type="ColumnType.Date" Width="60"></GridColumn>
-                        <GridColumn Field=@nameof(IcTransH.Keterangan) HeaderText="Keterangan" Width="170"></GridColumn>
-                        <GridColumn Field=@nameof(IcTransH.Lokasi2) HeaderText="Lokasi Pindah" Width="70"></GridColumn>
+                        <GridColumn Field=@nameof(IcTransH.Keterangan) HeaderText="Keterangan" Width="100"></GridColumn>
+                        <GridColumn Field=@nameof(IcTransH.Lokasi) HeaderText="Dari" Width="70"></GridColumn>
+                        <GridColumn Field=@nameof(IcTransH.Lokasi2) HeaderText="Pindah" Width="70"></GridColumn>
 
                     </GridColumns>
                 </SfGrid>
@@ -71,7 +74,8 @@ else
                         <GridColumn Field=@nameof(IcTransD.ItemCode) HeaderText="Code" Width="30"></GridColumn>
                         <GridColumn Field=@nameof(IcTransD.NamaItem) HeaderText="Nama Item" Width="110"></GridColumn>
                         <GridColumn Field=@nameof(IcTransD.QtyShp) HeaderText="Quantity" Width="90" Format="N2"></GridColumn>
-                        <GridColumn Field=@nameof(IcTransD.Lokasi) HeaderText="Lokasi Awal" ></GridColumn>
+                        <GridColumn Field=@nameof(IcTransD.Lokasi) HeaderText="Lokasi Awal"></GridColumn>
+                        <GridColumn Field=@nameof(IcTransD.Lokasi2) HeaderText="Lokasi Tujuan"></GridColumn>
                     </GridColumns>
                 </SfGrid>
             </div>
@@ -118,7 +122,7 @@ else
 
     private List<IcTransH> toDoList;
     private List<IcTransD> toDoDetail;
-    private ApHutang rubah;
+    private IcTransH rubah;
 
     public string[] GroupedColumns = new string[] { "NoFaktur" };
     public string SelectedDoc { get; set; }
@@ -167,36 +171,26 @@ else
 
     private void Rubah(int xKdBank, string xDoc)
     {
-        rubah = service.GetHutang(xDoc);
+         rubah = service.GetIcTrans(xKdBank);
 
         if (rubah != null)
         {
-            if (rubah.Jumlah != rubah.Sisa && rubah != null)
-            {
-                IsDialog = true;
-            }
-            else
-            {
-                navigationmanager.NavigateTo($"EditTransIcMutasi/{xKdBank}");
-            }
+
+            navigationmanager.NavigateTo($"EditTransIcMutasi/{xKdBank}");
+
         }
     }
 
     private void Hapus(int xKdBank, string xDoc)
     {
-        rubah = service.GetHutang(xDoc);
+        rubah = service.GetIcTrans(xKdBank);
 
         if (rubah != null)
         {
-            if (rubah.Jumlah != rubah.Sisa && rubah != null)
-            {
-                IsDialog = true;
-            }
-            else
-            {
+            
                 this.IsVisible = true;
                 this.id = xKdBank;
-            }
+            
         }
     }
 

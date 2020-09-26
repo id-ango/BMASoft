@@ -286,6 +286,19 @@ namespace BMASoft.Data.Models
         public string Cat6 { get; set; }
     }
 
+    public class IcLokasiView
+    {
+        [Key]
+        public int IcLokasiId { get; set; }
+        [Required]
+        public string Lokasi { get; set; }
+        public string NamaLokasi { get; set; }
+        public string Alamat { get; set; }
+        public string Kota { get; set; }
+        public string Telpon { get; set; }
+
+    }
+
     public class IcTransHView
     {
         [Key]
