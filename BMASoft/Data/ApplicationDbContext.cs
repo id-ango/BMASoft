@@ -49,6 +49,9 @@ namespace BMASoft.Data
         public DbSet<IcTransH> IcTransHs { get; set; }
         public DbSet<IcTransD> IcTransDs { get; set; }
 
+        public DbSet<IrTransH> IrTransHs { get; set; }
+        public DbSet<IrTransD> IrTransDs { get; set; }
+
         public DbSet<GlAccount> GlAccounts { get; set; }
         public DbSet<GlCode> GlCodes { get; set; }
         public DbSet<GlTransH> GlTransHs { get; set; }

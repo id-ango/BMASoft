@@ -21,6 +21,7 @@ namespace BMASoft.Services
     public interface IInventoryService
     {
         Task<List<IcItem>> GetIcItem();
+        IcItem GetIcItemId(int itemKode);
         IcItem GetIcItemProduk(string produk);
         Task<bool> DelIcItem(int codeview);
         Task<bool> AddIcItem(IcItemView produk);
@@ -70,6 +71,11 @@ namespace BMASoft.Services
             return await _context.IcItems.OrderBy(x => x.NamaItem).ToListAsync();
         }
         
+        public IcItem GetIcItemId(int itemKode)
+        {
+            return _context.IcItems.Where(x => x.IcItemId == itemKode).FirstOrDefault();
+        }
+
         public IcItem GetIcItemProduk(string itemKode)
         {
             return _context.IcItems.Where(x => x.ItemCode == itemKode).FirstOrDefault();
@@ -107,6 +113,7 @@ namespace BMASoft.Services
                     ItemCode = produk.ItemCode.ToUpper(),
                     NamaItem = produk.NamaItem,
                     Satuan = produk.Satuan,
+                    JnsBrng = produk.JnsBrng,
                     NamaLengkap = produk.NamaLengkap
 
                 };
@@ -131,6 +138,7 @@ namespace BMASoft.Services
                 {
                     ExistingItem.NamaItem = produk.NamaItem;
                     ExistingItem.Satuan = produk.Satuan;
+                    ExistingItem.JnsBrng = produk.JnsBrng;
                     ExistingItem.NamaLengkap = produk.NamaLengkap;
                     _context.IcItems.Update(ExistingItem);
                     await _context.SaveChangesAsync();

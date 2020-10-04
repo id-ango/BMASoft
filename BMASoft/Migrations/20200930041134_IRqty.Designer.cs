@@ -4,14 +4,16 @@ using BMASoft.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BMASoft.Migrations
 {
     [DbContext(typeof(BmaDbContext))]
-    partial class BmaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200930041134_IRqty")]
+    partial class IRqty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,9 +121,6 @@ namespace BMASoft.Migrations
                     b.Property<decimal>("PPn")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<bool>("Pajak")
-                        .HasColumnType("bit");
-
                     b.Property<decimal>("Sisa")
                         .HasColumnType("decimal(18,4)");
 
@@ -157,9 +156,6 @@ namespace BMASoft.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AcctPjk")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AcctSet")
                         .HasColumnType("nvarchar(max)");
@@ -413,9 +409,6 @@ namespace BMASoft.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AcctPjk")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("AcctSet")
                         .HasColumnType("nvarchar(max)");
 
@@ -470,9 +463,6 @@ namespace BMASoft.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("NonPPN")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Pajak")
                         .HasColumnType("bit");
 
                     b.Property<decimal>("Piutang")
@@ -578,9 +568,6 @@ namespace BMASoft.Migrations
 
                     b.Property<decimal>("PPn")
                         .HasColumnType("decimal(18,4)");
-
-                    b.Property<bool>("Pajak")
-                        .HasColumnType("bit");
 
                     b.Property<decimal>("Sisa")
                         .HasColumnType("decimal(18,4)");
@@ -773,9 +760,6 @@ namespace BMASoft.Migrations
                     b.Property<bool>("NonPpn")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("Pajak")
-                        .HasColumnType("bit");
-
                     b.Property<decimal>("Saldo")
                         .HasColumnType("decimal(18,4)");
 
@@ -929,9 +913,6 @@ namespace BMASoft.Migrations
                     b.Property<bool>("NonPPN")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("Pajak")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Refno")
                         .HasColumnType("nvarchar(max)");
 
@@ -988,9 +969,6 @@ namespace BMASoft.Migrations
                         .HasMaxLength(3);
 
                     b.Property<bool>("NonPPN")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Pajak")
                         .HasColumnType("bit");
 
                     b.Property<string>("Refno")
@@ -1192,9 +1170,6 @@ namespace BMASoft.Migrations
 
                     b.Property<string>("Kurs")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Pajak")
-                        .HasColumnType("bit");
 
                     b.Property<decimal>("Saldo")
                         .HasColumnType("decimal(18,4)");
@@ -1415,8 +1390,8 @@ namespace BMASoft.Migrations
                     b.Property<string>("ItemCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("JnsBrng")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("JnsBrng")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("LastNetto")
                         .HasColumnType("datetime2");
@@ -1447,6 +1422,9 @@ namespace BMASoft.Migrations
 
                     b.Property<DateTime?>("TglPost")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("TipeBarang")
+                        .HasColumnType("int");
 
                     b.HasKey("IcItemId");
 
@@ -1573,9 +1551,6 @@ namespace BMASoft.Migrations
                     b.Property<string>("NoSj")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Pajak")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("Tanggal")
                         .HasColumnType("datetime2");
 
@@ -1691,9 +1666,6 @@ namespace BMASoft.Migrations
                     b.Property<decimal>("Ongkos")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<bool>("Pajak")
-                        .HasColumnType("bit");
-
                     b.Property<decimal>("Ppn")
                         .HasColumnType("decimal(18,4)");
 
@@ -1703,16 +1675,16 @@ namespace BMASoft.Migrations
                     b.Property<string>("Supplier")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Tagihan")
-                        .HasColumnType("decimal(18,4)");
-
                     b.Property<DateTime>("Tanggal")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("TotalMtr")
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<decimal>("TotalQty")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<decimal>("TtlJumlah")
+                    b.Property<decimal>("TtlJual")
                         .HasColumnType("decimal(18,4)");
 
                     b.HasKey("IrTransHId");

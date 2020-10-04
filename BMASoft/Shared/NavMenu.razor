@@ -18,9 +18,36 @@
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
+            <NavLink class="nav-link" href="fetchdata" @onclick="()=>expandIrMenu = !expandIrMenu">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Pembelian
             </NavLink>
+            @if (expandIrMenu)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="TransIrLpb">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Pembelian
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="TransIcAdjust">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Transaksi Adjustment
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="TransIcMutasi">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Transaksi Mutasi
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="SetupIcItem">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Item
+                        </NavLink>
+                    </li>
+                    
+                </ul>
+
+            }
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="fetchdata" @onclick="()=>expandIcMenu = !expandIcMenu">
@@ -199,6 +226,7 @@
     private bool expandPiutangMenu;
     private bool expandHutangMenu;
     private bool expandIcMenu;
+    private bool expandIrMenu;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 

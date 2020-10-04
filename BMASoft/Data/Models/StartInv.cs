@@ -10,6 +10,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace BMASoft.Data.Models
 {
+
+   
+
     public class IcItem
     {
         [Key]
@@ -41,7 +44,7 @@ namespace BMASoft.Data.Models
         public string Category { get; set; }
         public bool SerialNo { get; set; }
         public int CostMethod { get; set; }
-        public int JnsBrng { get; set; }
+        public string JnsBrng { get; set; }     
         [Column(TypeName = "decimal(18,4)")]
         public decimal StdPrice { get; set; }
         [AllowNull]
@@ -135,6 +138,7 @@ namespace BMASoft.Data.Models
         public string Lokasi2 { get; set; }
         public string Keterangan { get; set; }
         public string AcctSet { get; set; }
+        public bool Pajak { get; set; }
         public List<IcTransD> IcTransDs { get; set; }
     }
 
@@ -193,6 +197,8 @@ namespace BMASoft.Data.Models
         public string Cat6 { get; set; }
     }
 
+  
+
     public class IcItemView
     {
         [Key]
@@ -229,7 +235,7 @@ namespace BMASoft.Data.Models
         public string Category { get; set; }
         public bool SerialNo { get; set; }
         public int CostMethod { get; set; }
-        public int JnsBrng { get; set; }
+        public string JnsBrng { get; set; }     
         [Column(TypeName = "decimal(18,2)")]
         public decimal StdPrice { get; set; }
         [AllowNull]

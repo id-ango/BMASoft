@@ -28,6 +28,8 @@
     <Compile Remove="Migrations\20200912011422_inventory.Designer.cs" />
     <Compile Remove="Migrations\20200912012018_inventory.cs" />
     <Compile Remove="Migrations\20200912012018_inventory.Designer.cs" />
+    <Compile Remove="Migrations\20201004045829_pajak.cs" />
+    <Compile Remove="Migrations\20201004045829_pajak.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,7 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Beli\" />
     <Folder Include="Pages\Jual\" />
   </ItemGroup>
 

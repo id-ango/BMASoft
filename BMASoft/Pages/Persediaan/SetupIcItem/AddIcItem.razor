@@ -3,10 +3,14 @@
 @using System.ComponentModel.DataAnnotations
 @inject BMASoft.Services.IInventoryService service
 @inject NavigationManager navigationmanager
+@inject SeedDataService seedDataService
+@using BMASoft.Data
 
 <div class="container">
     <div class="master">
         <h2>Add Produk</h2>
+
+
 
         <EditForm Model="@produk" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
@@ -21,10 +25,19 @@
 
             </div>
             <div class="form-group">
-                <SfTextBox CssClass="e-outline" @bind-Value="@produk.Satuan" Placeholder="Satuan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+                <SfComboBox TValue="string" TItem="SatuanBarang" DataSource="satuan" Placeholder="Tipe Produk" FloatLabelType="FloatLabelType.Auto" @bind-Value="@produk.Satuan">
+                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="NamaSatuan" Value="NamaSatuan"></ComboBoxFieldSettings>
+                </SfComboBox>
 
             </div>
-            
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="JnsBrng" DataSource="tipebarang" Placeholder="Tipe Produk" FloatLabelType="FloatLabelType.Auto" @bind-Value="@produk.JnsBrng">
+                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="NamaJenis" Value="NamaJenis"></ComboBoxFieldSettings>
+                </SfComboBox>
+
+            </div>
 
             <div class="float-md-right">
                 <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
@@ -40,8 +53,19 @@
 
     IcItemView produk = new IcItemView();
 
+
+    private SatuanBarang[] satuan;
+    private JnsBrng[] tipebarang;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tipebarang = await seedDataService.GetTipeProduk();
+        satuan = await seedDataService.GetSatuan();
+    }
+
     private async Task HandleValidSubmit()
     {
+
 
         var newEdit = await service.AddIcItem(produk);
         if (newEdit)

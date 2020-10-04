@@ -47,6 +47,7 @@ namespace BMASoft
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<SeedDataService>();
             services.AddSyncfusionBlazor();
             services.AddTransient<IKasBankService, KasBankService>();
             services.AddTransient<IReceivableService, ReceivableService>();
@@ -57,6 +58,7 @@ namespace BMASoft
             services.AddTransient<IPaymentApDpService, PaymentApDpService>();
             services.AddTransient<ILedgerService, LedgerService>();
             services.AddTransient<IInventoryService, InventoryService>();
+            services.AddTransient<IPurchaseService, PurchaseService>();
             services.AddSingleton<ExportService>();
         }
 

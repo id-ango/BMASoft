@@ -29,6 +29,7 @@ namespace BMASoft.Data.Models
         [Column(TypeName = "decimal(18,4)")]
         public decimal KSaldo { get; set; }
         public bool NonPpn { get; set; }
+        public bool Pajak { get; set; }
         public string GrpBank { get; set; }
     }
 
@@ -48,6 +49,7 @@ namespace BMASoft.Data.Models
         [StringLength(3)]
         public string Kurs { get; set; }     
         public bool NonPPN { get; set; }
+        public bool Pajak { get; set; }
         public bool Cek { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal Saldo { get; set; }
@@ -111,6 +113,7 @@ namespace BMASoft.Data.Models
         [Column(TypeName = "decimal(18,4)")]
         public decimal KSaldo { get; set; }
         public bool NonPPN { get; set; }
+        public bool Pajak { get; set; }
         public bool Cek { get; set; }
     }
 
@@ -159,7 +162,8 @@ namespace BMASoft.Data.Models
         public decimal Saldo { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal KSaldo { get; set; }
-        public bool NonPpn { get; set; } 
+        public bool NonPpn { get; set; }
+        public bool Pajak { get; set; }
     }
 
     public class SrcCodeView
@@ -210,6 +214,7 @@ namespace BMASoft.Data.Models
         }
 
         public bool NonPPN { get; set; }
+        public bool Pajak { get; set; }
         public bool Cek { get; set; }
 
 

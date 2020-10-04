@@ -100,6 +100,7 @@ namespace BMASoft.Data.Models
         [Column(TypeName = "decimal(18,4)")]
         public decimal Saldo { get; set; }
         public string Kurs { get; set; }
+        public bool Pajak { get; set; }
         public List<GlTransD> GlTransDs { get; set; }
     }
 

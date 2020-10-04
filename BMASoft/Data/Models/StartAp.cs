@@ -34,6 +34,7 @@ namespace BMASoft.Data.Models
         public decimal SldAwal { get; set; }
         public bool Pajak { get; set; }
         public string AcctSet { get; set; }
+        public string AcctPjk { get; set; }
         [AllowNull]
         public Nullable<DateTime> TglPost { get; set; }
         [AllowNull]
@@ -125,6 +126,7 @@ namespace BMASoft.Data.Models
         public string LPB { get; set; }
         public string Keterangan { get; set; }
         public string Supplier { get; set; }
+        public bool Pajak { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal Jumlah { get; set; }
         [Column(TypeName = "decimal(18,4)")]
@@ -210,6 +212,7 @@ namespace BMASoft.Data.Models
         public decimal SldAwal { get; set; }
         public bool Pajak { get; set; }
         public string AcctSet { get; set; }
+        public string AcctPjk { get; set; }
         public DateTime TglPost { get; set; }
         public DateTime TglMasuk { get; set; }
         public DateTime LstOrder { get; set; }

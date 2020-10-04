@@ -1,0 +1,238 @@
+﻿@page "/TransIrLpb"
+@using BMASoft.Data.Models
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager navigationmanager
+@inject BMASoft.Services.IPurchaseService service
+@inject BMASoft.Services.IPayableService serviceAP
+
+
+<style>
+    .e-edit-icon::before {
+        content: '\ea9a';
+    }
+
+    .e-delete-icon::before {
+        content: '\e94a';
+    }
+
+    .e-print-icon::before {
+        content: '\e34b';
+    }
+
+    .e-search:before {
+        content: '\e993';
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-6">
+        <h1>Transaksi Pembelian Barang</h1>
+    </div>
+    <div class="col-6">
+        <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
+    </div>
+</div>
+
+@if (toDoList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="col-lg-12 control-section">
+        <div class="content-wrapper">
+            <div class="row">
+
+                <SfGrid SelectedRowIndex="2" Height="300" DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true" Toolbar="@(new List<string>() { "Search" })">
+                    <GridGroupSettings Columns="@GroupedColumns"></GridGroupSettings>
+                    <GridPageSettings PageCount="5" PageSizes="true"></GridPageSettings>
+                    <GridEvents RowSelected="RowSelecthandler" TValue="IrTransH"></GridEvents>
+
+                    <GridColumns>
+                        <GridColumn HeaderText="" Width="60">
+                            <Template>
+                                @{
+                                    var trans2 = (context as IrTransH);
+                                    <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.IrTransHId,trans2.NoLpb))"></SfButton>
+                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.IrTransHId,trans2.NoLpb))"></SfButton>
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field=@nameof(IrTransH.NoLpb) HeaderText="No Bukti" Width="70"></GridColumn>
+                        <GridColumn Field=@nameof(IrTransH.Supplier) HeaderText="Kode" Width="50"></GridColumn>
+                        <GridColumn Field=@nameof(IrTransH.NamaSup) HeaderText="Supplier" Width="100"></GridColumn>
+                        <GridColumn Field=@nameof(IrTransH.Tanggal) HeaderText="Tanggal" Format="d" Type="ColumnType.Date" Width="60"></GridColumn>
+                        <GridColumn Field=@nameof(IrTransH.Keterangan) HeaderText="Keterangan" Width="170"></GridColumn>
+                        <GridColumn Field=@nameof(IrTransH.Jumlah) HeaderText="Jumlah" Format="N2" Width="70"></GridColumn>
+
+
+                    </GridColumns>
+                </SfGrid>
+
+                <SfGrid DataSource="@toDoDetail" Query="@(new Query().Where("IrTransHId", "equal",RowIndex))">
+                    <GridColumns>
+                        <GridColumn Field=@nameof(IrTransD.ItemCode) HeaderText="Item" Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(IrTransD.NamaItem) HeaderText="Nama" Width="110"></GridColumn>
+                        <GridColumn Field=@nameof(IrTransD.Satuan) HeaderText="Satuan" Width="90" Format="N2"></GridColumn>
+                        <GridColumn Field=@nameof(IrTransD.Harga) HeaderText="Harga" Width="90" Format="N2"></GridColumn>
+                        <GridColumn Field=@nameof(IrTransD.Discount) HeaderText="Discount" Width="90" Format="N2"></GridColumn>
+                        <GridColumn Field=@nameof(IrTransD.Jumlah) HeaderText="Jumlah" Width="90" Format="N2"></GridColumn>
+                    </GridColumns>
+                </SfGrid>
+            </div>
+
+        </div>
+    </div>
+
+    <SfDialog @bind-Visible="@IsVisible" Width="400px" ShowCloseIcon="true" IsModal="true">
+        <DialogTemplates>
+            <Header>
+                Delete Items
+            </Header>
+            <Content>
+                Are you sure you want to permanently delete these items ?
+            </Content>
+        </DialogTemplates>
+
+        <DialogButtons>
+            <DialogButton OnClick="@OkkClick" Content="OK" IsPrimary="true" />
+            <DialogButton OnClick="@CancelClick" Content="Cancel" />
+        </DialogButtons>
+    </SfDialog>
+
+    <SfDialog @bind-Visible="@IsDialog" Width="400px" ShowCloseIcon="true" IsModal="true">
+        <DialogTemplates>
+            <Header>
+                INFORMATION
+            </Header>
+            <Content>
+                Penerimaan ini sudah ada Diposting
+            </Content>
+        </DialogTemplates>
+        <DialogEvents Closed="@DialogClose"></DialogEvents>
+        <DialogButtons>
+            <DialogButton IsPrimary="true" Content="OK" OnClick="@OnBtnClick" />
+        </DialogButtons>
+    </SfDialog>
+}
+
+
+@code {
+
+    private int id { get; set; }
+
+    private List<IrTransH> toDoList;
+    private List<IrTransD> toDoDetail;
+    private IrTransH rubah;
+
+    public string[] GroupedColumns = new string[] { "Supplier" };
+    public string SelectedDoc { get; set; }
+    public int? RowIndex { get; set; } = 1;
+
+    public void RowSelecthandler(RowSelectEventArgs<IrTransH> Args)
+    {
+        SelectedDoc = Args.Data.NoLpb;
+        RowIndex = Args.Data.IrTransHId;
+    }
+
+    private bool IsVisible { get; set; } = false;
+    private bool IsDialog { get; set; } = false;
+
+    private void DialogClose(Object args)
+    {
+        this.IsVisible = false;
+    }
+
+    private void OnBtnClick()
+    {
+        this.IsDialog = false;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await LoadTransAr();
+
+    }
+
+    async Task LoadTransAr()
+    {
+
+        toDoList = await service.Get3TransH();
+
+        toDoDetail = await service.GetTransD();
+    }
+
+    private void Tambah()
+    {
+        navigationmanager.NavigateTo("AddTransIrLpb");
+    }
+
+
+
+
+    private void Rubah(int xKdBank, string xDoc)
+    {
+        rubah = service.GetIrTrans(xKdBank);
+
+        if (rubah != null)
+        {
+            if (rubah.Cek != "3" && rubah != null)
+            {
+                IsDialog = true;
+            }
+            else
+            {
+                navigationmanager.NavigateTo($"EditTransIrLpb/{xKdBank}");
+            }
+        }
+    }
+
+    private void Hapus(int xKdBank, string xDoc)
+    {
+        rubah = service.GetIrTrans(xKdBank);
+
+        if (rubah != null)
+        {
+            if (rubah.Cek != "3" && rubah != null)
+
+            {
+                IsDialog = true;
+            }
+        }
+        else
+        {
+            this.IsVisible = true;
+            this.id = xKdBank;
+        }
+    }
+
+
+
+
+
+    private async void OkkClick()
+    {
+
+        var HapusStatus = await service.DelTransH(this.id);
+        this.IsVisible = false;
+
+        navigationmanager.NavigateTo("TransIrLpb", true);
+
+    }
+
+    private void CancelClick()
+    {
+
+        this.IsVisible = false;
+
+        //    StateHasChanged();
+
+        navigationmanager.NavigateTo("TransIrLpb", false);
+        //    await LoadBank();
+        //      await OnInitializedAsync();
+    }
+
+
+}
