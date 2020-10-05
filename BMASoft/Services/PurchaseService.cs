@@ -101,6 +101,7 @@ namespace BMASoft.Services
         {
             //string test = codeview.SrcCode.ToUpper();
             //var cekFirst = _context.CbSrcCodes.Where(x => x.SrcCode == test).ToList();
+            decimal mQty5 = 0;
 
             IrTransH transH = new IrTransH
             {
@@ -116,6 +117,7 @@ namespace BMASoft.Services
                 TtlJumlah = trans.TtlJumlah,
                 DPayment = trans.DPayment,
                 Tagihan = trans.Tagihan,
+                TotalQty = trans.TotalQty,
                 Kode = "82",
                 Cek = "1",
 
@@ -126,6 +128,10 @@ namespace BMASoft.Services
             {
                 if (item.Qty != 0)
                 {
+                    if (transH.TotalQty != 0)
+                    {
+                        mQty5 = (item.Jumlah - item.Discount) - (item.Qty / transH.TotalQty * transH.Ppn) + (item.Qty / transH.TotalQty * transH.Ongkos);
+                    }
 
                     transH.IrTransDs.Add(new IrTransD()
                     {
@@ -140,10 +146,12 @@ namespace BMASoft.Services
                         Jumlah = item.Jumlah,
                         Kode = "82",
                         NoLpb = transH.NoLpb,
-                        Tanggal = trans.Tanggal
+                        Tanggal = trans.Tanggal,
+                        JumDpp = mQty5
                     });
 
                     IcItem cekItem = _context.IcItems.Where(x => x.ItemCode == item.ItemCode).FirstOrDefault();
+
                     if (cekItem != null)
                     {
                         IcAltItem cekLokasi1 = _context.IcAltItems.Where(x => x.ItemCode == item.ItemCode && x.Lokasi == trans.Lokasi).FirstOrDefault();
@@ -166,7 +174,10 @@ namespace BMASoft.Services
                             _context.IcAltItems.Update(cekLokasi1);
                         }
                         cekItem.Qty += item.Qty;
+                        cekItem.Harga = item.Harga;
+                        cekItem.Cost += mQty5;
 
+                        _context.IcItems.Update(cekItem);
 
                     }
                 }
@@ -234,7 +245,9 @@ namespace BMASoft.Services
                                     _context.IcAltItems.Update(cekLokasi1);
                                 }
                                 cekItem.Qty -= item.Qty;
+                                cekItem.Cost -= item.JumDpp;
 
+                                _context.IcItems.Update(cekItem);
 
                             }
                         }
@@ -262,6 +275,8 @@ namespace BMASoft.Services
 
         public async Task<bool> EditTransH(IrTransHView trans)
         {
+            decimal mQty5 = 0;
+
             var cekFirst = _context.ApHutangs.Where(x => x.Dokumen == trans.NoLpb).FirstOrDefault();
 
             if(cekFirst != null)
@@ -300,7 +315,9 @@ namespace BMASoft.Services
                                         _context.IcAltItems.Update(cekLokasi1);
                                     }
                                     cekItem.Qty -= item.Qty;
+                                    cekItem.Cost -= item.JumDpp;
 
+                                    _context.IcItems.Update(cekItem);
 
                                 }
                             }
@@ -339,6 +356,10 @@ namespace BMASoft.Services
                         {
                             if (item.Qty != 0)
                             {
+                                if (transH.TotalQty != 0)
+                                {
+                                    mQty5 = (item.Jumlah - item.Discount) - (item.Qty / transH.TotalQty * transH.Ppn) + (item.Qty / transH.TotalQty * transH.Ongkos);
+                                }
 
                                 transH.IrTransDs.Add(new IrTransD()
                                 {
@@ -353,8 +374,10 @@ namespace BMASoft.Services
                                     Jumlah = item.Jumlah,
                                     Kode = "82",
                                     NoLpb = transH.NoLpb,
-                                    Tanggal = trans.Tanggal
+                                    Tanggal = trans.Tanggal,
+                                    JumDpp = mQty5
                                 });
+                                
 
                                 IcItem cekItem = _context.IcItems.Where(x => x.ItemCode == item.ItemCode).FirstOrDefault();
                                 if (cekItem != null)
@@ -379,7 +402,9 @@ namespace BMASoft.Services
                                         _context.IcAltItems.Update(cekLokasi1);
                                     }
                                     cekItem.Qty += item.Qty;
+                                    cekItem.Cost += item.JumDpp;
 
+                                    _context.IcItems.Update(cekItem);
 
                                 }
                             }

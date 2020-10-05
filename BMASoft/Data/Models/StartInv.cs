@@ -22,6 +22,8 @@ namespace BMASoft.Data.Models
         public string Satuan { get; set; }
         public string Divisi { get; set; }
         [Column(TypeName = "decimal(18,4)")]
+        public decimal HrgUsd { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
         public decimal Cost { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal Harga { get; set; }
@@ -43,7 +45,7 @@ namespace BMASoft.Data.Models
         public string AcctSet { get; set; }
         public string Category { get; set; }
         public bool SerialNo { get; set; }
-        public int CostMethod { get; set; }
+        public string CostMethod { get; set; }
         public string JnsBrng { get; set; }     
         [Column(TypeName = "decimal(18,4)")]
         public decimal StdPrice { get; set; }
@@ -234,7 +236,7 @@ namespace BMASoft.Data.Models
         public string AcctSet { get; set; }
         public string Category { get; set; }
         public bool SerialNo { get; set; }
-        public int CostMethod { get; set; }
+        public string CostMethod { get; set; }
         public string JnsBrng { get; set; }     
         [Column(TypeName = "decimal(18,2)")]
         public decimal StdPrice { get; set; }
@@ -246,7 +248,7 @@ namespace BMASoft.Data.Models
         {
             get
             {
-                return NamaItem + " [" + ItemCode + "]" + " (" + Satuan + ")";
+                return NamaItem + " [" + ItemCode.ToUpper() + "]" + " (" + Satuan + ")";
             }
         }
     }

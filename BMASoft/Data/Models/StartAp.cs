@@ -222,7 +222,7 @@ namespace BMASoft.Data.Models
         {
             get
             {
-                return NamaSup + " [" + Supplier + "]" + " (" + Alamat + ")";
+                return NamaSup + " [" + Supplier.ToUpper() + "]" + " (" + Alamat + ")";
             }
         }
     }

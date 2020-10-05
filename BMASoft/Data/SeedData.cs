@@ -17,6 +17,11 @@ namespace BMASoft.Data
         public string NamaSatuan { get; set; }
     }
 
+    public class CostingMethod
+    {
+        public string NamaMethod { get; set; }
+    }
+
     public class SeedDataService
     {
                       
@@ -70,6 +75,26 @@ namespace BMASoft.Data
                 },
             };
             return Task.FromResult(satuans);
+        }
+
+        public Task<CostingMethod[]> GetCosting()
+        {
+            CostingMethod[] jnsMethod = new CostingMethod[]
+            {
+                new CostingMethod()
+                {
+
+                    NamaMethod = "Moving Avarage"
+                },
+                new CostingMethod()               
+                {
+
+                    NamaMethod = "Standard Cost"
+                },
+               
+            };
+
+            return Task.FromResult(jnsMethod);
         }
     }
 

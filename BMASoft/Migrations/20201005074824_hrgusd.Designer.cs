@@ -4,14 +4,16 @@ using BMASoft.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BMASoft.Migrations
 {
     [DbContext(typeof(BmaDbContext))]
-    partial class BmaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201005074824_hrgusd")]
+    partial class hrgusd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1397,8 +1399,8 @@ namespace BMASoft.Migrations
                     b.Property<decimal>("CostAwal")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<string>("CostMethod")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CostMethod")
+                        .HasColumnType("int");
 
                     b.Property<string>("Divisi")
                         .HasColumnType("nvarchar(max)");
