@@ -46,7 +46,8 @@ namespace BMASoft.Data.Models
         public string Category { get; set; }
         public bool SerialNo { get; set; }
         public string CostMethod { get; set; }
-        public string JnsBrng { get; set; }     
+        public string JnsBrng { get; set; }
+        public string Foto { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal StdPrice { get; set; }
         [AllowNull]

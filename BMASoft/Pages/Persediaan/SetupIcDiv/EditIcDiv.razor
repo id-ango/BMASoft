@@ -6,6 +6,7 @@
 
 <div class="container">
     <div class="master">
+        <a href="/SetupIcDiv">Back</a>
         <h2>Edit Divisi</h2>
 
         <EditForm Model="@supplier" OnValidSubmit="HandleValidSubmit">
@@ -20,7 +21,7 @@
                 <SfTextBox CssClass="e-outline" @bind-Value="@supplier.NamaDiv" Placeholder="Nama Supplier" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
 
             </div>
-            
+
 
             <div class="float-md-right">
                 <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>

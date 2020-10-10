@@ -26,6 +26,7 @@ namespace BMASoft.Services
         Task<List<IrTransD>> GetTransD();
         Task<bool> AddTransH(IrTransHView trans);
         Task<bool> DelTransH(int id);
+        Task<bool> EditTransH(IrTransHView trans);
     }
 
     public class PurchaseService : IPurchaseService
@@ -107,6 +108,7 @@ namespace BMASoft.Services
             {
                 NoLpb = GetNumber(),
                 Supplier = trans.Supplier.ToUpper(),
+                NamaSup = trans.NamaSup,
                 Lokasi = trans.Lokasi.ToUpper(),
                 Tanggal = trans.Tanggal,
                 Keterangan = trans.Keterangan,

@@ -113,7 +113,11 @@ namespace BMASoft.Services
                     ItemCode = produk.ItemCode.ToUpper(),
                     NamaItem = produk.NamaItem,
                     Satuan = produk.Satuan,
+                    Divisi = produk.Divisi,
                     JnsBrng = produk.JnsBrng,
+                    CostMethod = produk.CostMethod,
+                    AcctSet = produk.AcctSet,
+                    Category = produk.Category,
                     NamaLengkap = produk.NamaLengkap
 
                 };
@@ -138,8 +142,13 @@ namespace BMASoft.Services
                 {
                     ExistingItem.NamaItem = produk.NamaItem;
                     ExistingItem.Satuan = produk.Satuan;
+                    ExistingItem.Divisi = produk.Divisi;
                     ExistingItem.JnsBrng = produk.JnsBrng;
+                    ExistingItem.CostMethod = produk.CostMethod;
+                    ExistingItem.AcctSet = produk.AcctSet;
+                    ExistingItem.Category = produk.Category;
                     ExistingItem.NamaLengkap = produk.NamaLengkap;
+
                     _context.IcItems.Update(ExistingItem);
                     await _context.SaveChangesAsync();
                     return true;

@@ -8,14 +8,16 @@
 
 <div class="container">
     <div class="master">
+        <a href="/SetupIcItem">Back</a>
+
         <h2>Add Produk</h2>
-
-
 
         <EditForm Model="@produk" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <br />
+           
+
             <div class="form-group">
                 <SfTextBox CssClass="e-outline" @bind-Value="@produk.ItemCode" Placeholder="Kode Item" FloatLabelType="FloatLabelType.Auto" style="text-transform:uppercase"></SfTextBox>
 

@@ -13,9 +13,21 @@
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
+            <NavLink class="nav-link" href="fetchdata" @onclick="()=>expandOeMenu = !expandOeMenu">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Penjualan
             </NavLink>
+            @if (expandOeMenu)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="TransIrLpb">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Penjualan
+                        </NavLink>
+                    </li>
+
+                </ul>
+
+            }
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="fetchdata" @onclick="()=>expandIrMenu = !expandIrMenu">
@@ -29,22 +41,7 @@
                             <span class="oi oi-list-rich" aria-hidden="true"></span> Pembelian
                         </NavLink>
                     </li>
-                    <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="TransIcAdjust">
-                            <span class="oi oi-list-rich" aria-hidden="true"></span> Transaksi Adjustment
-                        </NavLink>
-                    </li>
-                    <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="TransIcMutasi">
-                            <span class="oi oi-list-rich" aria-hidden="true"></span> Transaksi Mutasi
-                        </NavLink>
-                    </li>
-                    <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="SetupIcItem">
-                            <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Item
-                        </NavLink>
-                    </li>
-                    
+
                 </ul>
 
             }
@@ -55,48 +52,48 @@
             </NavLink>
             @if (expandIcMenu)
             {
-        <ul class="nav flex-column">
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="TransApCa">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Pembayaran
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="TransIcAdjust">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Transaksi Adjustment
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="TransIcMutasi">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Transaksi Mutasi
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="SetupIcItem">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Item
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="SetupIcDiv">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Divisi
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="SetupIcCat">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Kategori
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="SetupIcAcct">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Akun Set
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="SetupIcLokasi">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Lokasi
-                </NavLink>
-            </li>
-        </ul>
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="TransApCa">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Pembayaran
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="TransIcAdjust">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Adjustment
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="TransIcMutasi">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Mutasi
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="SetupIcItem">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Item
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="SetupIcDiv">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Divisi
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="SetupIcCat">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Kategori
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="SetupIcAcct">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Akun Set
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="SetupIcLokasi">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Setup Lokasi
+                        </NavLink>
+                    </li>
+                </ul>
 
             }
         </li>
@@ -115,7 +112,7 @@
                     </li>
                     <li class="nav-item px-3">
                         <NavLink class="nav-link" href="TransApDp">
-                            <span class="oi oi-list-rich" aria-hidden="true"></span> Pembayaran Uang Muka
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Down Payment
                         </NavLink>
                     </li>
                     <li class="nav-item px-3">
@@ -157,7 +154,7 @@
                     </li>
                     <li class="nav-item px-3">
                         <NavLink class="nav-link" href="TransArDp">
-                            <span class="oi oi-list-rich" aria-hidden="true"></span> Pembayaran Uang Muka
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Down Payment
                         </NavLink>
                     </li>
                     <li class="nav-item px-3">
@@ -227,6 +224,7 @@
     private bool expandHutangMenu;
     private bool expandIcMenu;
     private bool expandIrMenu;
+    private bool expandOeMenu;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 

@@ -6,6 +6,8 @@
 
 <div class="container">
     <div class="master">
+        <a href="/SetupIcLokasi">Back</a>
+
         <h2>Add Lokasi</h2>
 
         <EditForm Model="@supplier" OnValidSubmit="HandleValidSubmit">
@@ -20,7 +22,7 @@
                 <SfTextBox CssClass="e-outline" @bind-Value="@supplier.NamaLokasi" Placeholder="Nama Divisi" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
 
             </div>
-          
+
 
             <div class="float-md-right">
                 <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
