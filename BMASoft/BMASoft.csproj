@@ -47,10 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Jual\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Pages\Hutang\SetupSupplier\AddSupplier.razor" />
     <None Include="Pages\Hutang\SetupSupplier\SetupSupplier.razor" />
     <None Include="Pages\Piutang\AddTransArIn.razor" />

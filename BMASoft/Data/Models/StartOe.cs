@@ -16,6 +16,7 @@ namespace BMASoft.Data.Models
         [StringLength(2)]
         public string Kode { get; set; }
         public string NoLpb { get; set; }
+        public string NoSJ { get; set; }
         public string NoPrj { get; set; }
         public string Lokasi { get; set; }
         public DateTime Tanggal { get; set; }
@@ -52,6 +53,7 @@ namespace BMASoft.Data.Models
         [StringLength(2)]
         public string Kode { get; set; }
         public string NoLpb { get; set; }
+        public string NoSJ { get; set; }
         public DateTime Tanggal { get; set; }
         public string ItemCode { get; set; }
         public string NamaItem { get; set; }
