@@ -20,9 +20,10 @@ namespace BMASoft.Services
     public interface IReceivableService
     {
         List<ArCust> GetCustomer();
+        ArCust GetCustomerId(int id);
         Task<bool> AddCustomer(CustomerView customers);
         Task<bool> EditCustomer(CustomerView customers);
-        Task<bool> DelCustomer(CustomerView customers);
+        Task<bool> DelCustomer(int customers);
         Task<List<ArAcct>> GetArAkunSet();
         Task<bool> AddAkunSet(ArAcctView codeview);
         Task<bool> EditAkunSet(ArAcctView codeview);
@@ -55,6 +56,11 @@ namespace BMASoft.Services
             return  _context.ArCusts.OrderBy(x=>x.NamaCust).ToList();
         }
 
+        public ArCust GetCustomerId(int id)
+        {
+            return _context.ArCusts.Where(x => x.ArCustId == id).FirstOrDefault();
+        }
+
         public async Task<bool> AddCustomer(CustomerView customers)
         {
             string test = customers.Customer.ToUpper();
@@ -67,7 +73,9 @@ namespace BMASoft.Services
                     NamaCust = customers.NamaCust,
                     Alamat = customers.Alamat,
                     Kota = customers.Kota,
-                    Telpon = customers.Telpon
+                    Telpon = customers.Telpon,
+                    NamaLengkap = customers.NamaLengkap
+
 
                 };
                 _context.ArCusts.Add(Customer);
@@ -93,8 +101,8 @@ namespace BMASoft.Services
                     ExistingCustomer.Alamat = customers.Alamat;
                     ExistingCustomer.Kota = customers.Kota;
                     ExistingCustomer.Telpon = customers.Telpon;
-                    
-
+                    ExistingCustomer.NamaLengkap = customers.NamaLengkap;
+                    _context.ArCusts.Update(ExistingCustomer);
                     await _context.SaveChangesAsync();
                     return true;
                 }
@@ -108,11 +116,11 @@ namespace BMASoft.Services
 
         }
 
-        public async Task<bool> DelCustomer(CustomerView customers)
+        public async Task<bool> DelCustomer(int customers)
         {
             try
             {
-                var ExistingCustomer = _context.ArCusts.Where(x => x.ArCustId == customers.ArCustId).FirstOrDefault();
+                var ExistingCustomer = _context.ArCusts.Where(x => x.ArCustId == customers).FirstOrDefault();
                 if (ExistingCustomer != null)
                 {
                     _context.ArCusts.Remove(ExistingCustomer);

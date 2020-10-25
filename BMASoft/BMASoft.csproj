@@ -54,16 +54,19 @@
   <ItemGroup>
     <None Include="Pages\Hutang\SetupSupplier\AddSupplier.razor" />
     <None Include="Pages\Hutang\SetupSupplier\SetupSupplier.razor" />
-    <None Include="Pages\Piutang\AddTransArIn.razor" />
+    <None Include="Pages\Piutang\TransPiutang\AddTransArIn.razor" />
     <None Include="Pages\Piutang\FieldArAkunSet.razor" />
     <None Include="Pages\Piutang\FieldArDist.razor" />
-    <None Include="Pages\Piutang\FieldCustomer.razor" />
     <None Include="Pages\Piutang\SetupArAkunSet.razor" />
     <None Include="Pages\Piutang\SetupArDist.razor" />
-    <None Include="Pages\Piutang\SetupCustomer.razor" />
     <None Include="Pages\Piutang\SetupCustomer\AddCustomer.razor" />
     <None Include="Pages\Piutang\SetupCustomer\SetupCustomer.razor" />
-    <None Include="Pages\Piutang\TransArIn.razor" />
+    <None Include="Pages\Piutang\TransPiutang\TransArIn.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Piutang\SetupAkunSet\" />
+    <Folder Include="Pages\Piutang\SetupDistCode\" />
   </ItemGroup>
 
 </Project>
