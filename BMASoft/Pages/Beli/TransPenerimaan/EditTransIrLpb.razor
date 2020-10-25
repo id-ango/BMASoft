@@ -119,7 +119,7 @@
                                 <td>@detail.Qty.ToString("#,##0.##")</td>
                                 <td>@detail.Harga.ToString("#,##0.##")</td>
                                 <td>@detail.Discount.ToString("#,##0.##")</td>
-                                <td>@detail.Jumlah.ToString("#,##0.##")</td>
+                                <td>@detail.UpdateJumlah.ToString("#,##0.##")</td>
                                 <td>
                                     <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(detail))"></SfButton>
                                     <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(detail))"></SfButton>
@@ -320,7 +320,7 @@
         Transh.Ongkos = TransAll.Ongkos;
         Transh.DPayment = TransAll.DPayment;
         Transh.Keterangan = TransAll.Keterangan;
-       
+
         foreach (var item in TransAll.IrTransDs)
         {
             Transh.IrTransDs.Add(new IrTransDView
@@ -370,7 +370,7 @@
 
             Transd.NamaItem = itemData.NamaItem;
             Transd.Satuan = itemData.Satuan;
-
+            Transd.Harga = itemData.Harga;
             //this.ItemId = itemData.IcItemId;
             //Transd.NamaItem = serviceInv.GetIcItemId(this.ItemId).NamaItem;
         }

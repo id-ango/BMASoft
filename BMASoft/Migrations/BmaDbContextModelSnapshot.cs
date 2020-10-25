@@ -1726,6 +1726,154 @@ namespace BMASoft.Migrations
                     b.ToTable("IrTransHs");
                 });
 
+            modelBuilder.Entity("BMASoft.Data.Models.OeTransD", b =>
+                {
+                    b.Property<int>("OeTransDId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AcctSet")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("Customer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("Harga")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("HrgCost")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("ItemCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("JumDpp")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("Jumlah")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("Kode")
+                        .HasColumnType("nvarchar(2)")
+                        .HasMaxLength(2);
+
+                    b.Property<string>("Lokasi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NamaItem")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NoLpb")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NoSJ")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OeTransHId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Persen")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("Qty")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("QtyBo")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("Satuan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Tanggal")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("OeTransDId");
+
+                    b.HasIndex("OeTransHId");
+
+                    b.ToTable("OeTransDs");
+                });
+
+            modelBuilder.Entity("BMASoft.Data.Models.OeTransH", b =>
+                {
+                    b.Property<int>("OeTransHId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Cek")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Customer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DPayment")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<DateTime>("JthTempo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Jumlah")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("Keterangan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Kode")
+                        .HasColumnType("nvarchar(2)")
+                        .HasMaxLength(2);
+
+                    b.Property<string>("Lokasi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NamaCust")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NoLpb")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NoPrj")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NoSJ")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Ongkos")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<bool>("Pajak")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Ppn")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("PpnPersen")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("Tagihan")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<DateTime>("Tanggal")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("TotalQty")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("TtlJumlah")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.HasKey("OeTransHId");
+
+                    b.ToTable("OeTransHs");
+                });
+
             modelBuilder.Entity("BMASoft.Data.Models.ApTransD", b =>
                 {
                     b.HasOne("BMASoft.Data.Models.ApTransH", "ApTransH")
@@ -1776,6 +1924,15 @@ namespace BMASoft.Migrations
                     b.HasOne("BMASoft.Data.Models.IrTransH", "IrTransH")
                         .WithMany("IrTransDs")
                         .HasForeignKey("IrTransHId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BMASoft.Data.Models.OeTransD", b =>
+                {
+                    b.HasOne("BMASoft.Data.Models.OeTransH", "OeTransH")
+                        .WithMany("OeTransDs")
+                        .HasForeignKey("OeTransHId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -237,7 +237,9 @@ namespace BMASoft.Data.Models
         public string AcctSet { get; set; }
         public string Category { get; set; }
         public bool SerialNo { get; set; }
+        [Required]
         public string CostMethod { get; set; }
+        [Required]
         public string JnsBrng { get; set; }     
         [Column(TypeName = "decimal(18,2)")]
         public decimal StdPrice { get; set; }

@@ -30,7 +30,7 @@ namespace BMASoft.Data.Models
         [Column(TypeName = "decimal(18,4)")]
         public decimal PpnPersen { get; set; }
         [Column(TypeName = "decimal(18,4)")]
-        public decimal Ppn { get; set; }      
+        public decimal Ppn { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal Jumlah { get; set; }
         [Column(TypeName = "decimal(18,4)")]
@@ -85,6 +85,8 @@ namespace BMASoft.Data.Models
 
     public class OeTransHView
     {
+        private decimal ppn;
+
         [Key]
         public int OeTransHId { get; set; }
         [StringLength(2)]
@@ -109,7 +111,26 @@ namespace BMASoft.Data.Models
         [Column(TypeName = "decimal(18,4)")]
         public decimal PpnPersen { get; set; }
         [Column(TypeName = "decimal(18,4)")]
-        public decimal Ppn { get; set; }
+        public decimal Ppn
+        {
+            get
+            {
+               if (PpnPersen != 0)
+                {
+                    return TtlJumlah * PpnPersen / 100;
+                }
+                else
+                {
+                    return ppn;
+                }
+                   
+               
+            }
+            set
+            {
+                ppn = value;
+            }
+        }
 
         [Column(TypeName = "decimal(18,4)")]
         public decimal Jumlah
@@ -146,6 +167,9 @@ namespace BMASoft.Data.Models
 
     public class OeTransDView
     {
+        private decimal jumlah;
+        private decimal discount;
+
         [Key]
         public int OeTransDId { get; set; }
         [StringLength(2)]
@@ -161,7 +185,28 @@ namespace BMASoft.Data.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Persen { get; set; }
         [Column(TypeName = "decimal(18,4)")]
-        public decimal Discount { get; set; }
+        public decimal Discount
+        {
+            get
+            {
+                var price = Qty * Harga;
+
+                if (Persen != 0)
+                {
+                    return price * Persen / 100;
+                }
+                else
+                {
+                    return discount;
+                }
+
+
+            }
+            set
+            {
+                discount = value;
+            }
+        }
         [Column(TypeName = "decimal(18,4)")]
         public decimal Qty { get; set; }
         [Column(TypeName = "decimal(18,4)")]
@@ -173,13 +218,33 @@ namespace BMASoft.Data.Models
         [Column(TypeName = "decimal(18,4)")]
         public decimal JumDpp { get; set; }
         [Column(TypeName = "decimal(18,4)")]
-        public decimal Jumlah { get; set; }
+        public decimal Jumlah
+        {
+            get
+            {
+                if(jumlah != UpdateJumlah && jumlah != 0)
+                {
+                    return jumlah;
+                }
+                else
+                {
+                    return UpdateJumlah;
+                }
+                
+            }
+
+            set
+            {
+                jumlah = value;
+            }
+        }
 
         public decimal UpdateJumlah
         {
             get
             {
                 var price = Qty * Harga;
+                jumlah = price - Discount;
                 return price - Discount;
             }
         }

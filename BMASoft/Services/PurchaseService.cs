@@ -156,6 +156,8 @@ namespace BMASoft.Services
 
                     if (cekItem != null)
                     {
+                        #region altitem
+
                         IcAltItem cekLokasi1 = _context.IcAltItems.Where(x => x.ItemCode == item.ItemCode && x.Lokasi == trans.Lokasi).FirstOrDefault();
                         if (cekLokasi1 == null)
                         {
@@ -175,9 +177,22 @@ namespace BMASoft.Services
                             cekLokasi1.Qty += item.Qty;
                             _context.IcAltItems.Update(cekLokasi1);
                         }
-                        cekItem.Qty += item.Qty;
-                        cekItem.Harga = item.Harga;
-                        cekItem.Cost += mQty5;
+
+                        #endregion altitem
+
+                        cekItem.Harga = item.Harga;  // harga beli barang
+                       
+                        if (cekItem.JnsBrng.Equals("Stock"))   // jika stock
+                        {
+                            cekItem.Qty += item.Qty;
+                        }
+
+                        if (cekItem.CostMethod.Equals("Moving Avarage"))  // jika moving avarage
+                        {
+                           
+                            cekItem.Cost += mQty5;
+                        }
+                        
 
                         _context.IcItems.Update(cekItem);
 
@@ -316,9 +331,18 @@ namespace BMASoft.Services
                                         cekLokasi1.Qty -= item.Qty;
                                         _context.IcAltItems.Update(cekLokasi1);
                                     }
-                                    cekItem.Qty -= item.Qty;
-                                    cekItem.Cost -= item.JumDpp;
+                                    if (cekItem.JnsBrng.Equals("Stock"))   // jika stock
+                                    {
+                                        cekItem.Qty -= item.Qty;
+                                    }
 
+                                    if (cekItem.CostMethod.Equals("Moving Avarage"))  // jika moving avarage
+                                    {
+
+                                        cekItem.Cost -= item.JumDpp;
+                                    }
+
+                                 
                                     _context.IcItems.Update(cekItem);
 
                                 }
@@ -403,8 +427,19 @@ namespace BMASoft.Services
                                         cekLokasi1.Qty += item.Qty;
                                         _context.IcAltItems.Update(cekLokasi1);
                                     }
-                                    cekItem.Qty += item.Qty;
-                                    cekItem.Cost += item.JumDpp;
+
+                                    if (cekItem.JnsBrng.Equals("Stock"))   // jika stock
+                                    {
+                                        cekItem.Qty += item.Qty;
+                                    }
+
+                                    if (cekItem.CostMethod.Equals("Moving Avarage"))  // jika moving avarage
+                                    {
+
+                                        cekItem.Cost += mQty5;
+                                    }
+
+                                   
 
                                     _context.IcItems.Update(cekItem);
 
