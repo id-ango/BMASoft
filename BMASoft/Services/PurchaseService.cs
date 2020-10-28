@@ -193,6 +193,14 @@ namespace BMASoft.Services
                             cekItem.Cost += mQty5;
                         }
                         
+                        if(cekItem.Qty != 0 )
+                        {
+                            cekItem.HrgNetto = cekItem.Cost / cekItem.Qty;
+                        }
+                        else
+                        {
+                            cekItem.HrgNetto = cekItem.Harga;
+                        }
 
                         _context.IcItems.Update(cekItem);
 
@@ -261,8 +269,26 @@ namespace BMASoft.Services
                                     cekLokasi1.Qty -= item.Qty;
                                     _context.IcAltItems.Update(cekLokasi1);
                                 }
-                                cekItem.Qty -= item.Qty;
-                                cekItem.Cost -= item.JumDpp;
+                             //   cekItem.Qty -= item.Qty;
+                             //   cekItem.Cost -= item.JumDpp;
+                                if (cekItem.JnsBrng.Equals("Stock"))   // jika stock
+                                {
+                                    cekItem.Qty -= item.Qty;
+                                }
+
+                                if (cekItem.CostMethod.Equals("Moving Avarage"))  // jika moving avarage
+                                {
+
+                                    cekItem.Cost -= item.JumDpp;
+                                }
+                                if (cekItem.Qty != 0)
+                                {
+                                    cekItem.HrgNetto = cekItem.Cost / cekItem.Qty;
+                                }
+                                else
+                                {
+                                    cekItem.HrgNetto = cekItem.Harga;
+                                }
 
                                 _context.IcItems.Update(cekItem);
 
@@ -342,7 +368,15 @@ namespace BMASoft.Services
                                         cekItem.Cost -= item.JumDpp;
                                     }
 
-                                 
+                                    if (cekItem.Qty != 0)
+                                    {
+                                        cekItem.HrgNetto = cekItem.Cost / cekItem.Qty;
+                                    }
+                                    else
+                                    {
+                                        cekItem.HrgNetto = cekItem.Harga;
+                                    }
+
                                     _context.IcItems.Update(cekItem);
 
                                 }
@@ -362,6 +396,7 @@ namespace BMASoft.Services
                         {
                             NoLpb = trans.NoLpb,
                             Supplier = trans.Supplier.ToUpper(),
+                            NamaSup = trans.NamaSup,                       
                             Lokasi = trans.Lokasi.ToUpper(),
                             Tanggal = trans.Tanggal,
                             Keterangan = trans.Keterangan,
@@ -372,6 +407,7 @@ namespace BMASoft.Services
                             TtlJumlah = trans.TtlJumlah,
                             DPayment = trans.DPayment,
                             Tagihan = trans.Tagihan,
+                            TotalQty = trans.TotalQty,
                             Kode = "82",
                             Cek = "1",
 
@@ -439,7 +475,14 @@ namespace BMASoft.Services
                                         cekItem.Cost += mQty5;
                                     }
 
-                                   
+                                    if (cekItem.Qty != 0)
+                                    {
+                                        cekItem.HrgNetto = cekItem.Cost / cekItem.Qty;
+                                    }
+                                    else
+                                    {
+                                        cekItem.HrgNetto = cekItem.Harga;
+                                    }
 
                                     _context.IcItems.Update(cekItem);
 

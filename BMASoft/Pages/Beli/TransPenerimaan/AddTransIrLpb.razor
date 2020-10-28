@@ -62,7 +62,7 @@
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="ApSuppl" DataSource="supplier" Placeholder="Supplier" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Supplier">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TValue="string" ValueChange="OnChangeSupplier"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="Supplier"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.Supplier)" />
@@ -75,7 +75,7 @@
 
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="IcLokasi" DataSource="lokasi" Placeholder="Masuk Lokasi" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Lokasi">
-                    <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
+                    <DropDownListEvents TValue="string" ></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLokasi" Value="Lokasi"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.Lokasi)" />
@@ -247,6 +247,7 @@
 
     public int SupplierId { get; set; }
     public string namaItem { get; set; }
+    public string namasupplier { get; set; }
     public int ItemId { get; set; }
 
     private bool IsVisible { get; set; } = false;
@@ -306,12 +307,19 @@
         var Discount = price * Transd.Persen / 100;
         Transd.Discount = Discount;
     }
-
-    public void OnChangeBank(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    public void OnChangeSupplier(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
     {
-        var lokasiData = JsonConvert.DeserializeObject<IcLokasi>(args.ItemData != null ? args.ItemData.ToString() : "");
-        this.SupplierId = lokasiData.IcLokasiId;
+        var supplier = JsonConvert.DeserializeObject<ApSuppl>(args.ItemData != null ? args.ItemData.ToString() : "");
+        this.namasupplier = supplier.NamaSup;
+
     }
+
+    //public void OnChangeBank(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    //{
+    //    var lokasiData = JsonConvert.DeserializeObject<IcLokasi>(args.ItemData != null ? args.ItemData.ToString() : "");
+    //    this.SupplierId = lokasiData.IcLokasiId;
+
+    //}
 
     public void OnChangeItem(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
     {
@@ -321,6 +329,7 @@
 
             Transd.NamaItem = itemData.NamaItem;
             Transd.Satuan = itemData.Satuan;
+            Transd.Harga = itemData.Harga;
 
             //this.ItemId = itemData.IcItemId;
             //Transd.NamaItem = serviceInv.GetIcItemId(this.ItemId).NamaItem;
@@ -408,7 +417,7 @@
 
     private async Task HandleValidSubmit()
     {
-        // Transh.ApSupplId = this.SupplierId;
+        Transh.NamaSup = this.namasupplier;
         var newEdit = await service.AddTransH(Transh);
         if (newEdit)
         {

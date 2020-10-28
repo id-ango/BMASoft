@@ -54,13 +54,13 @@
 
                                 <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.ArCustId))"></SfButton>
                                 <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ArCustId))"></SfButton>
-                                
+
                             }
 
                         </Template>
 
                     </GridColumn>
-                  
+
                     <GridColumn Field=@nameof(ArCust.Customer) HeaderText="Kode" Width="50"></GridColumn>
                     <GridColumn Field=@nameof(ArCust.NamaCust) HeaderText="Nama" Width="70"></GridColumn>
                     <GridColumn Field=@nameof(ArCust.Alamat) HeaderText=" Alamat" Width="170"></GridColumn>

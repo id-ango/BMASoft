@@ -97,7 +97,7 @@ namespace BMASoft.Services
                 var ExistingCustomer = _context.ArCusts.Where(x => x.ArCustId == customers.ArCustId).FirstOrDefault();
                 if (ExistingCustomer != null)
                 {
-                    ExistingCustomer.NamaCust = customers.Customer;
+                    ExistingCustomer.NamaCust = customers.NamaCust;
                     ExistingCustomer.Alamat = customers.Alamat;
                     ExistingCustomer.Kota = customers.Kota;
                     ExistingCustomer.Telpon = customers.Telpon;

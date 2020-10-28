@@ -172,7 +172,7 @@ namespace BMASoft.Services
                         if (cekItem.CostMethod.Equals("Moving Avarage"))  // jika moving avarage
                         {
 
-                            cekItem.Cost -= cekItem.HrgNetto * item.Qty;
+                            cekItem.Cost -= item.Cost;
                         }
 
                         transH.OeTransDs.Add(new OeTransD()
@@ -189,8 +189,8 @@ namespace BMASoft.Services
                             Kode = "94",
                             NoLpb = transH.NoLpb,
                             Tanggal = trans.Tanggal,
-                            HrgCost = cekItem.HrgNetto,
-                            Cost = cekItem.HrgNetto * item.Qty,
+                            HrgCost = item.HrgCost,
+                            Cost = item.Cost,
                             JumDpp = mQty5
                         });
 
@@ -264,8 +264,7 @@ namespace BMASoft.Services
                                     cekLokasi1.Qty += item.Qty;
                                     _context.IcAltItems.Update(cekLokasi1);
                                 }
-                                cekItem.Qty += item.Qty;
-                                cekItem.Cost += item.JumDpp;
+                             
 
                                 if (cekItem.JnsBrng.Equals("Stock"))   // jika stock
                                 {
@@ -307,7 +306,7 @@ namespace BMASoft.Services
         {
             decimal mQty5 = 0;
 
-            var cekFirst = _context.ArPiutngs.Where(x => x.Dokumen == trans.NoLpb).FirstOrDefault();
+            var cekFirst = _context.ArPiutngs.Where(x => x.Dokumen.Equals(trans.NoLpb)).FirstOrDefault();
 
             if (cekFirst != null)
             {
@@ -372,11 +371,14 @@ namespace BMASoft.Services
                         _context.ArPiutngs.Remove(cekFirst);
                         _context.OeTransHs.Remove(ExistingTrans);
 
+                        await _context.SaveChangesAsync();
+
                         /* update nya */
                         OeTransH transH = new OeTransH
                         {
                             NoLpb = trans.NoLpb,
                             Customer = trans.Customer.ToUpper(),
+                            NamaCust = trans.NamaCust,
                             Lokasi = trans.Lokasi.ToUpper(),
                             Tanggal = trans.Tanggal,
                             Keterangan = trans.Keterangan,
@@ -387,8 +389,11 @@ namespace BMASoft.Services
                             TtlJumlah = trans.TtlJumlah,
                             DPayment = trans.DPayment,
                             Tagihan = trans.Tagihan,
+                            TotalQty = trans.TotalQty,
                             Kode = "94",
                             Cek = "1",
+
+                           
 
                             OeTransDs = new List<OeTransD>()
                         };
@@ -442,7 +447,8 @@ namespace BMASoft.Services
                                         Kode = "94",
                                         NoLpb = transH.NoLpb,
                                         Tanggal = trans.Tanggal,
-                                        Cost = cekItem.HrgNetto * item.Qty,
+                                        HrgCost = item.HrgCost,
+                                        Cost = item.Cost,
                                         JumDpp = mQty5
                                     });
 
@@ -454,7 +460,7 @@ namespace BMASoft.Services
                                     if (cekItem.CostMethod.Equals("Moving Avarage"))  // jika moving avarage
                                     {
 
-                                        cekItem.Cost -= cekItem.HrgNetto * item.Qty;
+                                        cekItem.Cost -= item.Cost;
                                     }
                                     _context.IcItems.Update(cekItem);
 

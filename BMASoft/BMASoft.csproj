@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <Content Remove="Pages\Piutang\SetupCustomer\AddCustomer.razor" />
-    <Content Remove="Pages\Piutang\SetupCustomer\SetupCustomer.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,7 +59,6 @@
     <None Include="Pages\Piutang\SetupArAkunSet.razor" />
     <None Include="Pages\Piutang\SetupArDist.razor" />
     <None Include="Pages\Piutang\SetupCustomer\AddCustomer.razor" />
-    <None Include="Pages\Piutang\SetupCustomer\SetupCustomer.razor" />
     <None Include="Pages\Piutang\TransPiutang\TransArIn.razor" />
   </ItemGroup>
 
