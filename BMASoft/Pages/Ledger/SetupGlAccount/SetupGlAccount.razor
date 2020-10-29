@@ -61,11 +61,10 @@
 
                     </GridColumn>
 
-                    <GridColumn Field=@nameof(GlAccount.GlAcct) HeaderText="Kode" Width="50"></GridColumn>
-                    <GridColumn Field=@nameof(GlAccount.GlNama) HeaderText="Nama" Width="70"></GridColumn>
-                    <GridColumn Field=@nameof(GlAccount.GlTipe) HeaderText="Akun 1" Width="170"></GridColumn>
-                    <GridColumn Field=@nameof(GlAccount.Acct2) HeaderText="Akun 2" Width="80"></GridColumn>
-                    <GridColumn Field=@nameof(GlAccount.Acct3) HeaderText="Akun 3" Width="60"></GridColumn>
+                    <GridColumn Field=@nameof(GlAccount.GlAcct) HeaderText="Kode" Width="70"></GridColumn>
+                    <GridColumn Field=@nameof(GlAccount.GlNama) HeaderText="Nama" Width="170"></GridColumn>
+                    <GridColumn Field=@nameof(GlAccount.GlTipe) HeaderText="Tipe Akun" Width="100"></GridColumn>
+                   
 
                 </GridColumns>
             </SfGrid>
@@ -98,7 +97,7 @@
 
 @code {
 
-    private List<ApAcct> toDoList;
+    private List<GlAccount> toDoList;
     private bool TblButton { get; set; } = true;
     private bool IsAdd { get; set; } = false;
     private bool IsRubah { get; set; } = false;
@@ -106,7 +105,7 @@
 
     private int status { get; set; }
 
-    ApAcctView supplier = new ApAcctView();
+    GlAccountView supplier = new GlAccountView();
 
 
 
@@ -114,13 +113,13 @@
     protected override async Task OnInitializedAsync()
     {
 
-        await LoadApAkunSet();
+        await LoadGlAccount();
 
     }
 
-    async Task LoadApAkunSet()
+    async Task LoadGlAccount()
     {
-        toDoList = await service.GetApAkunSet();
+        toDoList = await service.GetGlAccount();
     }
 
     private void simpan(bool jadisimpan)
@@ -132,18 +131,18 @@
 
     private void Tambah()
     {
-        navigationmanager.NavigateTo("AddApAkunSet");
+        navigationmanager.NavigateTo("AddGlAccount");
     }
 
-    private void Rubah(int xSupplier)
+    private void Rubah(int xGlAkun)
     {
-        navigationmanager.NavigateTo($"EditApAkunSet/{xSupplier}");
+        navigationmanager.NavigateTo($"EditGlAccount/{xGlAkun}");
     }
 
-    private void Hapus(int xSupplier)
+    private void Hapus(int xGlAkun)
     {
         this.IsHapus = true;
-        this.status = xSupplier;
+        this.status = xGlAkun;
 
 
     }
@@ -151,12 +150,12 @@
     private async void OkkClick()
     {
 
-        var HapusStatus = await service.DelAkunSet(this.status);
+        var HapusStatus = await service.DelGlAccount(this.status);
         this.IsHapus = false;
 
         //      StateHasChanged();
 
-        navigationmanager.NavigateTo("SetupApAkunSet", true);
+        navigationmanager.NavigateTo("SetupGlAccount", true);
         //  await LoadBank();
         //  await OnInitializedAsync();
     }
@@ -168,7 +167,7 @@
 
         //    StateHasChanged();
 
-        navigationmanager.NavigateTo("SetupApAkunSet", false);
+        navigationmanager.NavigateTo("SetupGlAccount", false);
         //    await LoadBank();
         //      await OnInitializedAsync();
     }

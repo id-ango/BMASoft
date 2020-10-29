@@ -104,6 +104,7 @@ namespace BMASoft.Services
                     ExistingBank.Saldo = banks.SldAWal;
                     ExistingBank.KSaldo = banks.KSldAwal;
 
+                    _context.Banks.Update(ExistingBank);
                     await _context.SaveChangesAsync();
                     return true;
                 }
@@ -186,6 +187,8 @@ namespace BMASoft.Services
                 {
                     ExistingSrcCode.NamaSrc = codeview.NamaSrc;
                     ExistingSrcCode.GlAcct = codeview.GlAcct;
+
+                    _context.CbSrcCodes.Update(ExistingSrcCode);
                     await _context.SaveChangesAsync();
                     return true;
                 }
