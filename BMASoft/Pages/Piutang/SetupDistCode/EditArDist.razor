@@ -1,0 +1,80 @@
+﻿@page "/EditArDist/{Id:int}"
+@using BMASoft.Data.Models
+@using System.ComponentModel.DataAnnotations
+@inject BMASoft.Services.IReceivableService service
+@inject NavigationManager navigationmanager
+
+<div class="container">
+    <div class="master">
+        <a href="/SetupArDist">Back</a>
+        <h2>Edit Distribution Code</h2>
+
+        <EditForm Model="@customer" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <br />
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@customer.DistCode" Placeholder="Akun Set" FloatLabelType="FloatLabelType.Auto" disabled="disabled"></SfTextBox>
+
+            </div>
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@customer.Description" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+
+            </div>
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@customer.Dist1" Placeholder="Akun 1" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+
+            </div>
+
+
+            <div class="float-md-right">
+                <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
+            </div>
+
+
+        </EditForm>
+
+    </div>
+</div>
+
+@code{
+
+    [Parameter] public int Id { get; set; }
+
+    ArDistView customer = new ArDistView();
+    ArDist Customer = new ArDist();
+
+    protected override void OnInitialized()
+    {
+        // Transh.Tanggal = DateTime.Now;
+
+        LoadArAkunSet();
+
+    }
+
+    void LoadArAkunSet()
+    {
+        Customer = service.GetDistId(Id);
+        customer.ArDistId = Customer.ArDistId;
+        customer.DistCode = Customer.DistCode;
+        customer.Description = Customer.Description;
+        customer.Dist1 = Customer.Dist1;
+
+    }
+
+    private async Task HandleValidSubmit()
+    {
+
+        var newEdit = await service.EditDist(customer);
+        if (newEdit)
+        {
+            //   await ExportToPdf(Transh);
+        }
+
+        navigationmanager.NavigateTo("SetupArDist", false);
+
+        //add = !add;
+        //StateHasChanged();
+
+    }
+}

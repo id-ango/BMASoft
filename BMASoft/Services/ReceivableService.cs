@@ -25,13 +25,16 @@ namespace BMASoft.Services
         Task<bool> EditCustomer(CustomerView customers);
         Task<bool> DelCustomer(int customers);
         Task<List<ArAcct>> GetArAkunSet();
+        ArAcct GetArAkunSetId(int id);
         Task<bool> AddAkunSet(ArAcctView codeview);
         Task<bool> EditAkunSet(ArAcctView codeview);
-        Task<bool> DelAkunSet(ArAcctView codeview);
+        Task<bool> DelAkunSet(int codeview);
         Task<List<ArDist>> GetDist();
+        ArDist GetDistId(int id);
         Task<bool> AddDist(ArDistView codeview);
         Task<bool> EditDist(ArDistView codeview);
         Task<bool> DelDist(int codeview);
+      
         Task<ArTransH> GetTrans(int id);
         Task<List<ArTransH>> GetTransH();
         Task<List<ArTransH>> Get3TransH();
@@ -144,7 +147,10 @@ namespace BMASoft.Services
             return await _context.ArAccts.ToListAsync();
         }
 
-       
+        public ArAcct GetArAkunSetId(int id)
+        {
+            return _context.ArAccts.Where(x => x.ArAcctId == id).FirstOrDefault();
+        }
 
         public async Task<bool> AddAkunSet(ArAcctView codeview)
         {
@@ -194,11 +200,11 @@ namespace BMASoft.Services
 
         }
 
-        public async Task<bool> DelAkunSet(ArAcctView codeview)
+        public async Task<bool> DelAkunSet(int codeview)
         {
             try
             {
-                var ExistingAkunSet = _context.ArAccts.Where(x => x.ArAcctId == codeview.ArAcctId).FirstOrDefault();
+                var ExistingAkunSet = _context.ArAccts.Where(x => x.ArAcctId == codeview).FirstOrDefault();
                 if (ExistingAkunSet != null)
                 {
                     _context.ArAccts.Remove(ExistingAkunSet);
@@ -223,7 +229,10 @@ namespace BMASoft.Services
             return await _context.ArDists.ToListAsync();
         }
 
-
+        public ArDist GetDistId(int id)
+        {
+            return _context.ArDists.Where(x => x.ArDistId == id).FirstOrDefault();
+        }
 
         public async Task<bool> AddDist(ArDistView codeview)
         {

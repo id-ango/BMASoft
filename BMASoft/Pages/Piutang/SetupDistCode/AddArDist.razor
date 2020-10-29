@@ -1,0 +1,61 @@
+﻿@page "/AddArDist"
+@using BMASoft.Data.Models
+@using System.ComponentModel.DataAnnotations
+@inject BMASoft.Services.IReceivableService service
+@inject NavigationManager navigationmanager
+
+<div class="container">
+    <div class="master">
+        <a href="/SetupArDist">Back</a>
+        <h2>Edit Akun Set</h2>
+
+        <EditForm Model="@customer" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <br />
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@customer.DistCode" Placeholder="Akun Set" FloatLabelType="FloatLabelType.Auto" style="text-transform:uppercase"></SfTextBox>
+
+            </div>
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@customer.Description" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+
+            </div>
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@customer.Dist1" Placeholder="Akun 1" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+
+            </div>
+
+
+            <div class="float-md-right">
+                <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
+            </div>
+
+
+        </EditForm>
+
+    </div>
+</div>
+
+@code{
+
+
+    ArDistView customer = new ArDistView();
+
+
+    private async Task HandleValidSubmit()
+    {
+
+        var newEdit = await service.AddDist(customer);
+        if (newEdit)
+        {
+            //   await ExportToPdf(Transh);
+        }
+
+        navigationmanager.NavigateTo("SetupArDist", false);
+
+        //add = !add;
+        //StateHasChanged();
+
+    }
+}
