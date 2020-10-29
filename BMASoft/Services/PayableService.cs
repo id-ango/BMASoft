@@ -33,7 +33,7 @@ namespace BMASoft.Services
         ApDist GetDistId(int id);
         Task<bool> AddDist(ApDistView codeview);
         Task<bool> EditDist(ApDistView codeview);
-        Task<bool> DelDist(ApDistView codeview);
+        Task<bool> DelDist(int codeview);
         Task<ApTransH> GetTrans(int id);
         Task<List<ApTransH>> GetTransH();
         Task<List<ApTransH>> Get3TransH();
@@ -292,11 +292,11 @@ namespace BMASoft.Services
 
         }
 
-        public async Task<bool> DelDist(ApDistView codeview)
+        public async Task<bool> DelDist(int codeview)
         {
             try
             {
-                var ExistingDist = _context.ApDists.Where(x => x.ApDistId == codeview.ApDistId).FirstOrDefault();
+                var ExistingDist = _context.ApDists.Where(x => x.ApDistId == codeview).FirstOrDefault();
                 if (ExistingDist != null)
                 {
                     _context.ApDists.Remove(ExistingDist);

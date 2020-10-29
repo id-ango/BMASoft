@@ -156,6 +156,7 @@ namespace BMASoft.Data.Models
                 return Jumlah - DPayment;
             }
         }
+        [Required]
         public string Customer { get; set; }
         public string NamaCust { get; set; }
         public string Keterangan { get; set; }

@@ -100,132 +100,135 @@ namespace BMASoft.Services
 
         public async Task<bool> AddTransH(OeTransHView trans)
         {
-            //string test = codeview.SrcCode.ToUpper();
-            //var cekFirst = _context.CbSrcCodes.Where(x => x.SrcCode == test).ToList();
-            decimal mQty5 = 0;
+            
+                //string test = codeview.SrcCode.ToUpper();
+                //var cekFirst = _context.CbSrcCodes.Where(x => x.SrcCode == test).ToList();
+                decimal mQty5 = 0;
 
-            OeTransH transH = new OeTransH
-            {
-                NoLpb = GetNumber(),
-                Customer = trans.Customer.ToUpper(),
-                NamaCust = trans.NamaCust,
-                Lokasi = trans.Lokasi.ToUpper(),
-                Tanggal = trans.Tanggal,
-                Keterangan = trans.Keterangan,
-                Jumlah = trans.Jumlah,
-                Ongkos = trans.Ongkos,
-                Ppn = trans.Ppn,
-                PpnPersen = trans.PpnPersen,
-                TtlJumlah = trans.TtlJumlah,
-                DPayment = trans.DPayment,
-                Tagihan = trans.Tagihan,
-                TotalQty = trans.TotalQty,
-                Kode = "94",
-                Cek = "1",
-
-                OeTransDs = new List<OeTransD>()
-            };
-
-            foreach (var item in trans.OeTransDs)
-            {
-                if (item.Qty != 0)
+                OeTransH transH = new OeTransH
                 {
-                    if (transH.TotalQty != 0)
+                    NoLpb = GetNumber(),
+                    Customer = trans.Customer.ToUpper(),
+                    NamaCust = trans.NamaCust,
+                    Lokasi = trans.Lokasi.ToUpper(),
+                    Tanggal = trans.Tanggal,
+                    Keterangan = trans.Keterangan,
+                    Jumlah = trans.Jumlah,
+                    Ongkos = trans.Ongkos,
+                    Ppn = trans.Ppn,
+                    PpnPersen = trans.PpnPersen,
+                    TtlJumlah = trans.TtlJumlah,
+                    DPayment = trans.DPayment,
+                    Tagihan = trans.Tagihan,
+                    TotalQty = trans.TotalQty,
+                    Kode = "94",
+                    Cek = "1",
+
+                    OeTransDs = new List<OeTransD>()
+                };
+
+                foreach (var item in trans.OeTransDs)
+                {
+                    if (item.Qty != 0)
                     {
-                        mQty5 = (item.Jumlah - item.Discount) - (item.Qty / transH.TotalQty * transH.Ppn) + (item.Qty / transH.TotalQty * transH.Ongkos);
-                    }
-
-                   
-
-                    IcItem cekItem = _context.IcItems.Where(x => x.ItemCode == item.ItemCode).FirstOrDefault();
-
-                    if (cekItem != null)
-                    {
-                        IcAltItem cekLokasi1 = _context.IcAltItems.Where(x => x.ItemCode == item.ItemCode && x.Lokasi == trans.Lokasi).FirstOrDefault();
-                        if (cekLokasi1 == null)
+                        if (transH.TotalQty != 0)
                         {
-                            IcAltItem Produk = new IcAltItem()
+                            mQty5 = (item.Jumlah - item.Discount) - (item.Qty / transH.TotalQty * transH.Ppn) + (item.Qty / transH.TotalQty * transH.Ongkos);
+                        }
+
+
+
+                        IcItem cekItem = _context.IcItems.Where(x => x.ItemCode == item.ItemCode).FirstOrDefault();
+
+                        if (cekItem != null)
+                        {
+                            IcAltItem cekLokasi1 = _context.IcAltItems.Where(x => x.ItemCode == item.ItemCode && x.Lokasi == trans.Lokasi).FirstOrDefault();
+                            if (cekLokasi1 == null)
                             {
-                                ItemCode = cekItem.ItemCode.ToUpper(),
-                                NamaItem = cekItem.NamaItem,
-                                Satuan = cekItem.Satuan,
-                                Lokasi = trans.Lokasi,
-                                Qty = -1*item.Qty
-                            };
-                            _context.IcAltItems.Add(Produk);
+                                IcAltItem Produk = new IcAltItem()
+                                {
+                                    ItemCode = cekItem.ItemCode.ToUpper(),
+                                    NamaItem = cekItem.NamaItem,
+                                    Satuan = cekItem.Satuan,
+                                    Lokasi = trans.Lokasi,
+                                    Qty = -1 * item.Qty
+                                };
+                                _context.IcAltItems.Add(Produk);
+
+                            }
+                            else
+                            {
+                                cekLokasi1.Qty -= item.Qty;
+                                _context.IcAltItems.Update(cekLokasi1);
+                            }
+
+                            cekItem.HrgJual = item.Harga;
+
+
+                            if (cekItem.JnsBrng.Equals("Stock"))   // jika stock
+                            {
+                                cekItem.Qty -= item.Qty;
+                            }
+
+                            if (cekItem.CostMethod.Equals("Moving Avarage"))  // jika moving avarage
+                            {
+
+                                cekItem.Cost -= item.Cost;
+                            }
+
+                            transH.OeTransDs.Add(new OeTransD()
+                            {
+                                ItemCode = item.ItemCode.ToUpper(),
+                                NamaItem = item.NamaItem,
+                                Satuan = item.Satuan,
+                                Lokasi = transH.Lokasi,
+                                Harga = item.Harga,
+                                Qty = item.Qty,
+                                Persen = item.Persen,
+                                Discount = item.Discount,
+                                Jumlah = item.Jumlah,
+                                Kode = "94",
+                                NoLpb = transH.NoLpb,
+                                Tanggal = trans.Tanggal,
+                                HrgCost = item.HrgCost,
+                                Cost = item.Cost,
+                                JumDpp = mQty5
+                            });
+
+                            _context.IcItems.Update(cekItem);
 
                         }
-                        else
-                        {
-                            cekLokasi1.Qty -= item.Qty;
-                            _context.IcAltItems.Update(cekLokasi1);
-                        }
-                      
-                        cekItem.HrgJual = item.Harga;
-                      
-
-                        if (cekItem.JnsBrng.Equals("Stock"))   // jika stock
-                        {
-                            cekItem.Qty -= item.Qty;
-                        }
-
-                        if (cekItem.CostMethod.Equals("Moving Avarage"))  // jika moving avarage
-                        {
-
-                            cekItem.Cost -= item.Cost;
-                        }
-
-                        transH.OeTransDs.Add(new OeTransD()
-                        {
-                            ItemCode = item.ItemCode.ToUpper(),
-                            NamaItem = item.NamaItem,
-                            Satuan = item.Satuan,
-                            Lokasi = transH.Lokasi,
-                            Harga = item.Harga,
-                            Qty = item.Qty,
-                            Persen = item.Persen,
-                            Discount = item.Discount,
-                            Jumlah = item.Jumlah,
-                            Kode = "94",
-                            NoLpb = transH.NoLpb,
-                            Tanggal = trans.Tanggal,
-                            HrgCost = item.HrgCost,
-                            Cost = item.Cost,
-                            JumDpp = mQty5
-                        });
-
-                        _context.IcItems.Update(cekItem);
-
                     }
+                    _context.OeTransHs.Add(transH);
                 }
-                _context.OeTransHs.Add(transH);
-            }
 
-           
 
-            var customer = GetCustomerId(transH.Customer);
 
-            ArPiutng piutang = new ArPiutng
-            {
-                Kode = "OE",
-                Dokumen = transH.NoLpb,
-                Tanggal = transH.Tanggal,
-                DueDate = transH.Tanggal.AddDays(customer.Termin),
-                Customer = transH.Customer,
-                Keterangan = transH.Keterangan,
-                Jumlah = transH.Jumlah,
-                Sisa = transH.Jumlah,
-                SldSisa = transH.Jumlah,
-                KodeTran = transH.Kode
-            };
-            _context.ArPiutngs.Add(piutang);
+                var customer = GetCustomerId(transH.Customer);
 
-            customer.Piutang += transH.Jumlah;
+                ArPiutng piutang = new ArPiutng
+                {
+                    Kode = "OE",
+                    Dokumen = transH.NoLpb,
+                    Tanggal = transH.Tanggal,
+                    DueDate = transH.Tanggal.AddDays(customer.Termin),
+                    Customer = transH.Customer,
+                    Keterangan = transH.Keterangan,
+                    Jumlah = transH.Jumlah,
+                    Sisa = transH.Jumlah,
+                    SldSisa = transH.Jumlah,
+                    KodeTran = transH.Kode
+                };
+                _context.ArPiutngs.Add(piutang);
 
-            _context.ArCusts.Update(customer);
+                customer.Piutang += transH.Jumlah;
 
-            await _context.SaveChangesAsync();
-            return true;
+                _context.ArCusts.Update(customer);
+
+                await _context.SaveChangesAsync();
+
+                return true;
+                 
         }
 
 

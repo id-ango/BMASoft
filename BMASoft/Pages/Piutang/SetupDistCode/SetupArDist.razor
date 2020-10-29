@@ -1,4 +1,4 @@
-﻿@page "/SetupCustomer"
+﻿@page "/SetupArDist"
 @using BMASoft.Data.Models
 @using System.ComponentModel.DataAnnotations
 @inject BMASoft.Services.IReceivableService service
@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-md-6">
 
-                <h1>Setup Customer</h1>
+                <h1>Setup Distribution Code</h1>
                 <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
 
                 <br />
@@ -50,10 +50,10 @@
                     <GridColumn HeaderText="" Width="50">
                         <Template>
                             @{
-                                var trans2 = (context as ArCust);
+                                var trans2 = (context as ArDist);
 
-                                <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.ArCustId))"></SfButton>
-                                <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ArCustId))"></SfButton>
+                                <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.ArDistId))"></SfButton>
+                                <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.ArDistId))"></SfButton>
 
                             }
 
@@ -61,11 +61,9 @@
 
                     </GridColumn>
 
-                    <GridColumn Field=@nameof(ArCust.Customer) HeaderText="Kode" Width="50"></GridColumn>
-                    <GridColumn Field=@nameof(ArCust.NamaCust) HeaderText="Nama" Width="70"></GridColumn>
-                    <GridColumn Field=@nameof(ArCust.Alamat) HeaderText=" Alamat" Width="170"></GridColumn>
-                    <GridColumn Field=@nameof(ArCust.Kota) HeaderText="Kota" Width="80"></GridColumn>
-                    <GridColumn Field=@nameof(ArCust.Telpon) HeaderText="Telpon" Width="60"></GridColumn>
+                    <GridColumn Field=@nameof(ArDist.DistCode) HeaderText="Kode" Width="50"></GridColumn>
+                    <GridColumn Field=@nameof(ArDist.Description) HeaderText="Nama" Width="70"></GridColumn>
+                    <GridColumn Field=@nameof(ArDist.Dist1) HeaderText="Akun 1" Width="170"></GridColumn>
 
                 </GridColumns>
             </SfGrid>
@@ -98,7 +96,7 @@
 
 @code {
 
-    private List<ArCust> toDoList;
+    private List<ArDist> toDoList;
     private bool TblButton { get; set; } = true;
     private bool IsAdd { get; set; } = false;
     private bool IsRubah { get; set; } = false;
@@ -106,21 +104,21 @@
 
     private int status { get; set; }
 
-    CustomerView customer = new CustomerView();
-    CustomerView RubahCustomer = new CustomerView();
+    ArDistView customer = new ArDistView();
 
 
 
-    protected override void OnInitialized()
+
+    protected override async Task OnInitializedAsync()
     {
 
-        LoadCustomer();
+        await LoadDist();
 
     }
 
-    void LoadCustomer()
+    async Task LoadDist()
     {
-        toDoList = service.GetCustomer();
+        toDoList = await service.GetDist();
     }
 
     private void simpan(bool jadisimpan)
@@ -132,12 +130,12 @@
 
     private void Tambah()
     {
-        navigationmanager.NavigateTo("Add2Customer");
+        navigationmanager.NavigateTo("AddArDist");
     }
 
     private void Rubah(int xCustomer)
     {
-        navigationmanager.NavigateTo($"EditCustomer/{xCustomer}");
+        navigationmanager.NavigateTo($"EditArDist/{xCustomer}");
     }
 
     private void Hapus(int xCustomer)
@@ -151,12 +149,12 @@
     private async void OkkClick()
     {
 
-        var HapusStatus = await service.DelCustomer(this.status);
+        var HapusStatus = await service.DelAkunSet(this.status);
         this.IsHapus = false;
 
         //      StateHasChanged();
 
-        navigationmanager.NavigateTo("SetupCustomer", true);
+        navigationmanager.NavigateTo("SetupArDist", true);
         //  await LoadBank();
         //  await OnInitializedAsync();
     }
@@ -168,7 +166,7 @@
 
         //    StateHasChanged();
 
-        navigationmanager.NavigateTo("SetupCustomer", false);
+        navigationmanager.NavigateTo("SetupArDist", false);
         //    await LoadBank();
         //      await OnInitializedAsync();
     }

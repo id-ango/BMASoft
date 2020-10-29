@@ -33,10 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\Piutang\SetupCustomer\AddCustomer.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.6" />
@@ -57,14 +53,12 @@
     <None Include="Pages\Piutang\FieldArAkunSet.razor" />
     <None Include="Pages\Piutang\FieldArDist.razor" />
     <None Include="Pages\Piutang\SetupArAkunSet.razor" />
-    <None Include="Pages\Piutang\SetupArDist.razor" />
-    <None Include="Pages\Piutang\SetupCustomer\AddCustomer.razor" />
+    <None Include="Pages\Piutang\SetupAr2Dist.razor" />
     <None Include="Pages\Piutang\TransPiutang\TransArIn.razor" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Pages\Piutang\SetupAkunSet\" />
-    <Folder Include="Pages\Piutang\SetupDistCode\" />
   </ItemGroup>
 
 </Project>

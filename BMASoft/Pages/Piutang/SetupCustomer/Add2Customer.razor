@@ -1,8 +1,9 @@
-﻿@page "/AddCustomer"
+﻿@page "/Add2Customer"
 @using BMASoft.Data.Models
 @using System.ComponentModel.DataAnnotations
 @inject BMASoft.Services.IReceivableService service
 @inject NavigationManager navigationmanager
+
 
 <div class="container">
     <div class="master">
@@ -45,9 +46,9 @@
 
 @code{
 
-  CustomerView customer = new CustomerView();
+    CustomerView customer = new CustomerView();
 
- private async Task HandleValidSubmit()
+    private async Task HandleValidSubmit()
     {
 
         var newEdit = await service.AddCustomer(customer);
