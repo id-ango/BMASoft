@@ -383,7 +383,7 @@ namespace BMASoft.Services
                     ExistingIcCat.Cat2 = codeview.Cat2;
                     ExistingIcCat.Cat3 = codeview.Cat3;
                     ExistingIcCat.Cat4 = codeview.Cat4;
-                    ExistingIcCat.Cat5 = codeview.Cat5;
+                   
 
                     _context.IcCats.Update(ExistingIcCat);
                     await _context.SaveChangesAsync();

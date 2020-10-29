@@ -1,0 +1,78 @@
+﻿@page "/AddGlAccount"
+@using BMASoft.Data.Models
+@using System.ComponentModel.DataAnnotations
+@inject BMASoft.Services.ILedgerService service
+@inject NavigationManager navigationmanager
+@inject SeedDataService seedDataService
+@using BMASoft.Data
+
+<div class="container">
+    <div class="master">
+        <a href="/SetupGlAccount">Back</a>
+
+        <h2>Add GL Akun</h2>
+
+        <EditForm Model="@produk" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <br />
+
+
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@produk.GlAcct" Placeholder="GL Akun" FloatLabelType="FloatLabelType.Auto" style="text-transform:uppercase"></SfTextBox>
+
+            </div>
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@produk.GlNama" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+
+            </div>
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="TipeGl" DataSource="satuan" Placeholder="Tipe GL" FloatLabelType="FloatLabelType.Auto" @bind-Value="@produk.TipeGL">
+                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="NamaTipe" Value="NamaTipe"></ComboBoxFieldSettings>
+                </SfComboBox>
+
+            </div>
+            
+            <div class="float-md-right">
+                <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
+            </div>
+
+
+        </EditForm>
+
+    </div>
+</div>
+
+@code{
+
+    GlAccountView produk = new GlAccountView();
+
+
+    private TipeGl[] satuan;
+   
+ 
+    protected override async Task OnInitializedAsync()
+    {
+       
+        satuan = await seedDataService.GetTipeGl();
+       
+    }
+
+    private async Task HandleValidSubmit()
+    {
+
+
+        var newEdit = await service.AddGlAccount(produk);
+        if (newEdit)
+        {
+            //   await ExportToPdf(Transh);
+        }
+
+        navigationmanager.NavigateTo("SetupGlAccount", false);
+
+        //add = !add;
+        //StateHasChanged();
+
+    }
+}

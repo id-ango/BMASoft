@@ -17,7 +17,7 @@
             <ValidationSummary />
             <br />
             <div class="form-group">
-                <SfTextBox CssClass="e-outline" @bind-Value="@supplier.CatCode" Placeholder="Akun Set" FloatLabelType="FloatLabelType.Auto" disabled="disabled"></SfTextBox>
+                <SfTextBox CssClass="e-outline" @bind-Value="@supplier.CatCode" Placeholder="Kategori" FloatLabelType="FloatLabelType.Auto" disabled="disabled"></SfTextBox>
 
             </div>
             <div class="form-group">
@@ -25,7 +25,7 @@
 
             </div>
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Payable Control" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat1">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="COGS" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat1">
                     <DropDownListEvents TValue="string" ValueChange="OnChangeAkun"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
@@ -33,33 +33,25 @@
             </div>
 
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Payment Disc" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat2">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Sales Revenue" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat2">
                     <DropDownListEvents TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => supplier.Cat2)" />
             </div>
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Tax" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat3">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Sales Return" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat3">
                     <DropDownListEvents TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => supplier.Cat3)" />
             </div>
-
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Ongkos Kirim" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat4">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Cost Variance" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat4">
                     <DropDownListEvents TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => supplier.Cat4)" />
-            </div>
-            <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Uang Muka" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Cat5">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
-                    <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
-                </SfComboBox>
-                <ValidationMessage For="@(() => supplier.Cat5)" />
             </div>
 
             <div class="float-md-right">
@@ -100,7 +92,7 @@
         supplier.Cat2 = Supplier.Cat2;
         supplier.Cat3 = Supplier.Cat3;
         supplier.Cat4 = Supplier.Cat4;
-        supplier.Cat5 = Supplier.Cat5;
+       
     }
 
     private async Task HandleValidSubmit()

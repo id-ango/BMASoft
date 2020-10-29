@@ -42,7 +42,7 @@ namespace BMASoft.Services
 
         public GlAccount GetGlAccountId(int id)
         {
-            return  _context.GlAccounts.OrderBy(x => x.GlAccountId == id).FirstOrDefault();
+            return  _context.GlAccounts.Where(x => x.GlAccountId == id).FirstOrDefault();
         }
 
         public async Task<bool> AddGlAccount(GlAccountView glakun)
@@ -55,7 +55,7 @@ namespace BMASoft.Services
                 {
                     GlAcct = glakun.GlAcct.ToUpper(),
                     GlNama = glakun.GlNama,
-                    GlTipe = glakun.GlTipe,
+                    TipeGl = glakun.TipeGL,
                     NamaLengkap = glakun.NamaLengkap
                    
 
@@ -80,7 +80,7 @@ namespace BMASoft.Services
                 if (ExistingBank != null)
                 {
                     ExistingBank.GlNama = glakun.GlNama;
-                    ExistingBank.GlTipe = glakun.GlTipe;
+                    ExistingBank.TipeGl = glakun.TipeGL;
                     ExistingBank.NamaLengkap = glakun.NamaLengkap;
                    
                     _context.GlAccounts.Update(ExistingBank);

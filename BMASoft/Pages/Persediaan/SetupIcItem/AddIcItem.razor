@@ -19,11 +19,11 @@
            
 
             <div class="form-group">
-                <SfTextBox CssClass="e-outline" @bind-Value="@produk.ItemCode" Placeholder="Kode Item" FloatLabelType="FloatLabelType.Auto" style="text-transform:uppercase"></SfTextBox>
+                <SfTextBox CssClass="e-outline" @bind-Value="@produk.ItemCode" Placeholder="Kode Produk" FloatLabelType="FloatLabelType.Auto" style="text-transform:uppercase"></SfTextBox>
 
             </div>
             <div class="form-group">
-                <SfTextBox CssClass="e-outline" @bind-Value="@produk.NamaItem" Placeholder="Nama Item" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+                <SfTextBox CssClass="e-outline" @bind-Value="@produk.NamaItem" Placeholder="Nama Produk" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
 
             </div>
             <div class="form-group">
@@ -55,7 +55,7 @@
 
             </div>
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="IcAcct" DataSource="AkunSet" Placeholder="Akun Set" FloatLabelType="FloatLabelType.Auto" @bind-Value="@produk.AcctSet">
+                <SfComboBox TValue="string" TItem="IcAcct" DataSource="AkunSet" Placeholder="AkunSet" FloatLabelType="FloatLabelType.Auto" @bind-Value="@produk.AcctSet">
                     <DropDownListEvents TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="Description" Value="AcctSet"></ComboBoxFieldSettings>
                 </SfComboBox>
