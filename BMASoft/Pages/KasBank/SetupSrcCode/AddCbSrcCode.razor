@@ -1,0 +1,89 @@
+﻿@page "/AddCbSrcCode"
+@using BMASoft.Data.Models
+@using System.ComponentModel.DataAnnotations
+@inject BMASoft.Services.IKasBankService service
+@inject BMASoft.Services.ILedgerService serviceGl
+@inject NavigationManager navigationmanager
+@using Newtonsoft.Json
+
+<div class="container">
+    <div class="master">
+        <a href="/SetupCbBank">Back</a>
+        <h2>Edit Source Code</h2>
+
+        <EditForm Model="@bank" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <br />
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@bank.SrcCode" Placeholder="Source Code" FloatLabelType="FloatLabelType.Auto" style="text-transform:uppercase"></SfTextBox>
+
+            </div>
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@bank.NamaSrc" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+
+            </div>
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="GL Akun" FloatLabelType="FloatLabelType.Auto" @bind-Value="@bank.GlAcct">
+                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
+                </SfComboBox>
+                <ValidationMessage For="@(() => bank.GlAcct)" />
+            </div>
+           
+
+
+            <div class="float-md-right">
+                <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
+            </div>
+
+
+        </EditForm>
+
+    </div>
+</div>
+
+@code{
+
+
+    SrcCodeView bank = new SrcCodeView();
+    private List<GlAccount> GlAccounts;
+
+    public int GlAccountId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Transh.Tanggal = DateTime.Now;
+
+        await LoadGlAccounts();
+
+    }
+
+    private async Task HandleValidSubmit()
+    {
+
+        var newEdit = await service.AddSrcCode(bank);
+        if (newEdit)
+        {
+            //   await ExportToPdf(Transh);
+        }
+
+        navigationmanager.NavigateTo("SetupCbBank", false);
+
+        //add = !add;
+        //StateHasChanged();
+
+    }
+
+    public void OnChangeAkun(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        var itemData = JsonConvert.DeserializeObject<GlAccount>(args.ItemData != null ? args.ItemData.ToString() : "");
+        this.GlAccountId = itemData.GlAccountId;
+
+    }
+
+    async Task LoadGlAccounts()
+    {
+        GlAccounts = await serviceGl.GetGlAccount();
+    }
+}

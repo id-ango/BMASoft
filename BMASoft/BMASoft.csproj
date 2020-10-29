@@ -53,10 +53,4 @@
     <None Include="Pages\Piutang\TransPiutang\TransArIn.razor" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\KasBank\SetupSrcCode\" />
-    <Folder Include="Pages\KasBank\TransBank\" />
-    <Folder Include="Pages\KasBank\SetupBank\" />
-  </ItemGroup>
-
 </Project>

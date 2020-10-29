@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace BMASoft.Data
 {
+    public class TipeGl
+    {
+        public string NamaTipe { get; set; }
+    }
 
     public class JnsBrng
     {
@@ -24,24 +28,24 @@ namespace BMASoft.Data
 
     public class SeedDataService
     {
-                      
+
         public Task<JnsBrng[]> GetTipeProduk()
         {
             JnsBrng[] jnsBrngs = new JnsBrng[]
             {
                 new JnsBrng()
                 {
-                   
+
                     NamaJenis = "Stock"
                 },
                  new JnsBrng()
                 {
-                  
+
                     NamaJenis = "Service"
                 },
                   new JnsBrng()
                 {
-                   
+
                     NamaJenis = "Consumable"
                 },
             };
@@ -86,18 +90,41 @@ namespace BMASoft.Data
 
                     NamaMethod = "Moving Avarage"
                 },
-                new CostingMethod()               
+                new CostingMethod()
                 {
 
                     NamaMethod = "Standard Cost"
                 },
-               
+
             };
 
             return Task.FromResult(jnsMethod);
         }
-    }
 
+        public Task<TipeGl[]> GetTipeGl()
+        {
+            TipeGl[] jnsTipe = new TipeGl[]
+            {
+                new TipeGl()
+                {
+
+                    NamaTipe = "Balance Sheet"
+                },
+                 new TipeGl()
+                {
+
+                    NamaTipe = "Profit/Loss"
+                },
+                  new TipeGl()
+                {
+
+                    NamaTipe = "Retained Earning"
+                },
+            };
+
+            return Task.FromResult(jnsTipe);
+        }
+    }
 }
 
 

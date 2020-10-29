@@ -1,7 +1,7 @@
-﻿@page "/SetupGlAccount"
+﻿@page "/SetupSrcCode"
 @using BMASoft.Data.Models
 @using System.ComponentModel.DataAnnotations
-@inject BMASoft.Services.ILedgerService service
+@inject BMASoft.Services.IKasBankService service
 @inject NavigationManager navigationmanager
 
 <style>
@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-md-6">
 
-                <h1>Setup Akun Set</h1>
+                <h1>Setup Source Code</h1>
                 <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
 
                 <br />
@@ -50,10 +50,10 @@
                     <GridColumn HeaderText="" Width="50">
                         <Template>
                             @{
-                                var trans2 = (context as GlAccount);
+                                var trans2 = (context as CbSrcCode);
 
-                                <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.GlAccountId))"></SfButton>
-                                <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.GlAccountId))"></SfButton>
+                                <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.CbSrcCodeId))"></SfButton>
+                                <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.CbSrcCodeId))"></SfButton>
 
                             }
 
@@ -61,12 +61,10 @@
 
                     </GridColumn>
 
-                    <GridColumn Field=@nameof(GlAccount.GlAcct) HeaderText="Kode" Width="50"></GridColumn>
-                    <GridColumn Field=@nameof(GlAccount.GlNama) HeaderText="Nama" Width="70"></GridColumn>
-                    <GridColumn Field=@nameof(GlAccount.GlTipe) HeaderText="Akun 1" Width="170"></GridColumn>
-                    <GridColumn Field=@nameof(GlAccount.Acct2) HeaderText="Akun 2" Width="80"></GridColumn>
-                    <GridColumn Field=@nameof(GlAccount.Acct3) HeaderText="Akun 3" Width="60"></GridColumn>
-
+                    <GridColumn Field=@nameof(CbSrcCode.SrcCode) HeaderText="Source Code" Width="60"></GridColumn>
+                    <GridColumn Field=@nameof(CbSrcCode.NamaSrc) HeaderText="Keterangan" Width="170"></GridColumn>
+                    <GridColumn Field=@nameof(CbSrcCode.GlAcct) HeaderText=" GL Akun" Width="70"></GridColumn>
+                    <GridColumn Field=@nameof(CbSrcCode.Grp) HeaderText="Group" Width="70"></GridColumn>
                 </GridColumns>
             </SfGrid>
 
@@ -98,7 +96,7 @@
 
 @code {
 
-    private List<ApAcct> toDoList;
+    private List<CbSrcCode> toDoList;
     private bool TblButton { get; set; } = true;
     private bool IsAdd { get; set; } = false;
     private bool IsRubah { get; set; } = false;
@@ -106,7 +104,7 @@
 
     private int status { get; set; }
 
-    ApAcctView supplier = new ApAcctView();
+    BankView banks = new BankView();
 
 
 
@@ -114,13 +112,16 @@
     protected override async Task OnInitializedAsync()
     {
 
-        await LoadApAkunSet();
+        await LoadBank();
 
     }
 
-    async Task LoadApAkunSet()
+    async Task LoadBank()
     {
-        toDoList = await service.GetApAkunSet();
+
+        toDoList = await service.GetSrcCode();
+
+
     }
 
     private void simpan(bool jadisimpan)
@@ -132,18 +133,18 @@
 
     private void Tambah()
     {
-        navigationmanager.NavigateTo("AddApAkunSet");
+        navigationmanager.NavigateTo("AddCbSrcCode");
     }
 
-    private void Rubah(int xSupplier)
+    private void Rubah(int xKdBank)
     {
-        navigationmanager.NavigateTo($"EditApAkunSet/{xSupplier}");
+        navigationmanager.NavigateTo($"EditCbSrcCode/{xKdBank}");
     }
 
-    private void Hapus(int xSupplier)
+    private void Hapus(int xKdBank)
     {
         this.IsHapus = true;
-        this.status = xSupplier;
+        this.status = xKdBank;
 
 
     }
@@ -151,12 +152,12 @@
     private async void OkkClick()
     {
 
-        var HapusStatus = await service.DelAkunSet(this.status);
+        var HapusStatus = await service.DelSrcCode(this.status);
         this.IsHapus = false;
 
         //      StateHasChanged();
 
-        navigationmanager.NavigateTo("SetupApAkunSet", true);
+        navigationmanager.NavigateTo("SetupCbSrcCode", true);
         //  await LoadBank();
         //  await OnInitializedAsync();
     }
@@ -168,7 +169,7 @@
 
         //    StateHasChanged();
 
-        navigationmanager.NavigateTo("SetupApAkunSet", false);
+        navigationmanager.NavigateTo("SetupCbSrcCode", false);
         //    await LoadBank();
         //      await OnInitializedAsync();
     }

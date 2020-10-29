@@ -19,13 +19,15 @@ namespace BMASoft.Services
     public interface IKasBankService
     {
         Task<List<CbBank>> GetBank();
+        CbBank GetBankId(int id);
         Task<bool> AddBank(BankView banks);
         Task<bool> EditBank(BankView banks);
-        Task<bool> DelBank(BankView banks);
+        Task<bool> DelBank(int banks);
         Task<List<CbSrcCode>> GetSrcCode();
+        CbSrcCode GetSrcCodeId(int id);
         Task<bool> AddSrcCode(SrcCodeView codeview);
         Task<bool> EditSrcCode(SrcCodeView codeview);
-        Task<bool> DelSrcCode(SrcCodeView codeview);
+        Task<bool> DelSrcCode(int codeview);
         Task<CbTransH> GetTrans(int id);
         Task<List<CbTransH>> GetTransH();
         Task<List<CbTransH>> Get3TransH();
@@ -50,6 +52,11 @@ namespace BMASoft.Services
         public async Task<List<CbBank>> GetBank()
         {
             return await _context.Banks.ToListAsync();
+        }
+
+        public CbBank GetBankId(int id)
+        {
+            return _context.Banks.Where(x => x.CbBankId == id).FirstOrDefault();
         }
 
         public async Task<bool> AddBank(BankView banks)
@@ -110,11 +117,11 @@ namespace BMASoft.Services
            
         }
 
-        public async Task<bool> DelBank(BankView banks)
+        public async Task<bool> DelBank(int banks)
         {
             try
             {
-                var ExistingBank = _context.Banks.Where(x => x.CbBankId == banks.bankId).FirstOrDefault();
+                var ExistingBank = _context.Banks.Where(x => x.CbBankId == banks).FirstOrDefault();
                 if (ExistingBank != null)
                 {
                     _context.Banks.Remove(ExistingBank);
@@ -137,6 +144,11 @@ namespace BMASoft.Services
         public async Task<List<CbSrcCode>> GetSrcCode()
         {
             return await _context.CbSrcCodes.ToListAsync();
+        }
+
+        public CbSrcCode GetSrcCodeId(int id)
+        {
+            return _context.CbSrcCodes.Where(x => x.CbSrcCodeId == id).FirstOrDefault();
         }
 
         public async Task<bool> AddSrcCode(SrcCodeView codeview)
@@ -187,11 +199,11 @@ namespace BMASoft.Services
 
         }
 
-        public async Task<bool> DelSrcCode(SrcCodeView codeview)
+        public async Task<bool> DelSrcCode(int codeview)
         {
             try
             {
-                var ExistingSrcCode = _context.CbSrcCodes.Where(x => x.CbSrcCodeId == codeview.SrcCodeId).FirstOrDefault();
+                var ExistingSrcCode = _context.CbSrcCodes.Where(x => x.CbSrcCodeId == codeview).FirstOrDefault();
                 if (ExistingSrcCode != null)
                 {
                     _context.CbSrcCodes.Remove(ExistingSrcCode);

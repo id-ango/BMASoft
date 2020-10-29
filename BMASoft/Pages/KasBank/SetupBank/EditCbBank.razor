@@ -1,0 +1,111 @@
+﻿@page "/EditCbBank/{Id:int}"
+@using BMASoft.Data.Models
+@using System.ComponentModel.DataAnnotations
+@inject BMASoft.Services.IKasBankService service
+@inject BMASoft.Services.ILedgerService serviceGl
+@inject NavigationManager navigationmanager
+@using Newtonsoft.Json
+
+<div class="container">
+    <div class="master">
+        <a href="/SetupApAKunSet">Back</a>
+
+        <h2>Edit Akun Set</h2>
+
+        <EditForm Model="@bank" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <br />
+            
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@bank.kdbank" Placeholder="Kode Bank" FloatLabelType="FloatLabelType.Auto"  disabled="disabled"></SfTextBox>
+
+            </div>
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@bank.namabank" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+
+            </div>
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Payment Disc" FloatLabelType="FloatLabelType.Auto" @bind-Value="@bank.Acctset">
+                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
+                </SfComboBox>
+                <ValidationMessage For="@(() => bank.Acctset)" />
+            </div>
+            <div class="form-group">
+                <SfNumericTextBox CssClass="e-outline" @bind-Value="@bank.SldAWal" Placeholder="Saldo Awal" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
+
+            </div>
+            <div class="form-group">
+                <SfNumericTextBox CssClass="e-outline" @bind-Value="@bank.KSldAwal" Placeholder="Beginning Balance" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
+
+            </div>
+
+
+            <div class="float-md-right">
+                <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
+            </div>
+
+
+        </EditForm>
+
+    </div>
+</div>
+
+@code{
+
+    [Parameter] public int Id { get; set; }
+
+    BankView bank = new BankView();
+    CbBank Bank = new CbBank();
+    private List<GlAccount> GlAccounts;
+
+    public int GlAccountId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Transh.Tanggal = DateTime.Now;
+
+        LoadBank();
+        await LoadGlAccounts();
+    }
+
+    void LoadBank()
+    {
+        Bank = service.GetBankId(Id);
+        bank.bankId = Bank.CbBankId;
+        bank.Acctset = Bank.Acctset;
+        bank.namabank = Bank.NmBank;
+        bank.SldAWal = Bank.SldAWal;
+        bank.KSldAwal = Bank.KSldAwal;
+        bank.kurs = Bank.Kurs;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+
+        var newEdit = await service.EditBank(bank);
+        if (newEdit)
+        {
+            //   await ExportToPdf(Transh);
+        }
+
+        navigationmanager.NavigateTo("SetupCbBank", false);
+
+        //add = !add;
+        //StateHasChanged();
+
+    }
+
+    public void OnChangeAkun(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        var itemData = JsonConvert.DeserializeObject<GlAccount>(args.ItemData != null ? args.ItemData.ToString() : "");
+        this.GlAccountId = itemData.GlAccountId;
+
+    }
+
+    async Task LoadGlAccounts()
+    {
+        GlAccounts = await serviceGl.GetGlAccount();
+    }
+}
