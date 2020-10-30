@@ -10,9 +10,9 @@
 
 <div class="container">
     <div class="master">
-        <a href="/SetupApAKunSet">Back</a>
+        <a href="/SetupCbBank">Back</a>
 
-        <h2>Edit Akun Set</h2>
+        <h2>Edit KAS/BANK</h2>
 
         <EditForm Model="@bank" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
@@ -95,6 +95,7 @@
     {
         Bank = service.GetBankId(Id);
         bank.bankId = Bank.CbBankId;
+        bank.kdbank = Bank.KodeBank;
         bank.Acctset = Bank.Acctset;
         bank.namabank = Bank.NmBank;
         bank.SldAWal = Bank.SldAWal;

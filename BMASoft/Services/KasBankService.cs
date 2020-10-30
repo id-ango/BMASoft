@@ -70,6 +70,7 @@ namespace BMASoft.Services
                     KodeBank = banks.kdbank.ToUpper(),
                     NmBank = banks.namabank,
                     Kurs = banks.kurs,
+                    Acctset = banks.Acctset,
                     ClrDate = banks.ClrDate,
                     SldAWal = banks.SldAWal,
                     KSldAwal = banks.KSldAwal,
@@ -99,6 +100,7 @@ namespace BMASoft.Services
                 {
                     ExistingBank.NmBank = banks.namabank;
                     ExistingBank.Kurs = banks.kurs;
+                    ExistingBank.Acctset = banks.Acctset;
                     ExistingBank.ClrDate = banks.ClrDate;                  
                     ExistingBank.SldAWal = banks.SldAWal;
                     ExistingBank.KSldAwal = banks.KSldAwal;

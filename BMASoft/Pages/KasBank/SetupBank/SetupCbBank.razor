@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-md-6">
 
-                <h1>Setup Distribution Code</h1>
+                <h1>Setup KAS/BANK</h1>
                 <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
 
                 <br />
@@ -61,11 +61,11 @@
 
                     </GridColumn>
 
-                    <GridColumn Field=@nameof(CbBank.KodeBank) HeaderText="Kode" Width="50"></GridColumn>
-                    <GridColumn Field=@nameof(CbBank.NmBank) HeaderText="Nama" Width="70"></GridColumn>
-                    <GridColumn Field=@nameof(CbBank.Saldo) HeaderText="Akun 1" Format="N2" Width="90"></GridColumn>
-                    <GridColumn Field=@nameof(CbBank.KSaldo) HeaderText="Akun 1" Format="N2" Width="90"></GridColumn>
-                    <GridColumn Field=@nameof(CbBank.Kurs) HeaderText="Akun 1" Width="50"></GridColumn>
+                    <GridColumn Field=@nameof(CbBank.KodeBank) HeaderText="Kode" Width="30"></GridColumn>
+                    <GridColumn Field=@nameof(CbBank.NmBank) HeaderText="Nama Bank" Width="70"></GridColumn>
+                    <GridColumn Field=@nameof(CbBank.Saldo) HeaderText="Saldo" Format="N2" Width="70" ></GridColumn>
+                    <GridColumn Field=@nameof(CbBank.KSaldo) HeaderText="Balance" Format="N2" Width="70"></GridColumn>
+                    <GridColumn Field=@nameof(CbBank.Kurs) HeaderText="Kurs" Width="50"></GridColumn>
                 </GridColumns>
             </SfGrid>
 
