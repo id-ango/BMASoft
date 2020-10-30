@@ -105,6 +105,7 @@ namespace BMASoft.Services
                     ExistingBank.Saldo = banks.SldAWal;
                     ExistingBank.KSaldo = banks.KSldAwal;
                     ExistingBank.Status = banks.Status;
+                    ExistingBank.Kurs = banks.kurs;
 
                     _context.Banks.Update(ExistingBank);
                     await _context.SaveChangesAsync();
