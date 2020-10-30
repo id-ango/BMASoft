@@ -17,7 +17,7 @@
             <ValidationSummary />
             <br />
             <div class="form-group">
-                <SfTextBox CssClass="e-outline" @bind-Value="@supplier.AcctSet" Placeholder="Akun Set" FloatLabelType="FloatLabelType.Auto" disabled="disabled"></SfTextBox>
+                <SfTextBox CssClass="e-outline" @bind-Value="@supplier.AcctSet" Placeholder="AkunSet" FloatLabelType="FloatLabelType.Auto" disabled="disabled"></SfTextBox>
 
             </div>
             <div class="form-group">
@@ -25,7 +25,7 @@
 
             </div>
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Payable Control" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Acct1">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Inventory" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Acct1">
                     <DropDownListEvents TValue="string" ValueChange="OnChangeAkun"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
@@ -33,34 +33,21 @@
             </div>
 
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Payment Disc" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Acct2">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Receipt" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Acct2">
                     <DropDownListEvents TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => supplier.Acct2)" />
             </div>
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Tax" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Acct3">
+                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="TAdjustment" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Acct3">
                     <DropDownListEvents TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => supplier.Acct3)" />
             </div>
 
-            <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Ongkos Kirim" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Acct4">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
-                    <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
-                </SfComboBox>
-                <ValidationMessage For="@(() => supplier.Acct4)" />
-            </div>
-            <div class="form-group">
-                <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="Uang Muka" FloatLabelType="FloatLabelType.Auto" @bind-Value="@supplier.Acct5">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
-                    <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
-                </SfComboBox>
-                <ValidationMessage For="@(() => supplier.Acct5)" />
-            </div>
+           
 
             <div class="float-md-right">
                 <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>

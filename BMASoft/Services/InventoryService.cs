@@ -367,8 +367,6 @@ namespace BMASoft.Services
 
                 return false;
             }
-
-
         }
 
         public async Task<bool> EditIcCat(IcCatView codeview)

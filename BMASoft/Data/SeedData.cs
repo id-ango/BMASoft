@@ -10,6 +10,10 @@ namespace BMASoft.Data
     {
         public string NamaTipe { get; set; }
     }
+    public class StatusTax
+    {
+        public string TaxStatus { get; set; }
+    }
 
     public class JnsBrng
     {
@@ -28,6 +32,26 @@ namespace BMASoft.Data
 
     public class SeedDataService
     {
+        public Task<StatusTax[]> GetTax()
+        {
+            StatusTax[] pajak = new StatusTax[]
+            {
+                new StatusTax()
+                {
+
+                    TaxStatus = "Tax"
+                },
+                 new StatusTax()
+                {
+
+                    TaxStatus = "Non"
+                },
+                
+            };
+
+            return Task.FromResult(pajak);
+        }
+
 
         public Task<JnsBrng[]> GetTipeProduk()
         {

@@ -74,7 +74,8 @@ namespace BMASoft.Services
                     SldAWal = banks.SldAWal,
                     KSldAwal = banks.KSldAwal,
                     Saldo =  banks.SldAWal,
-                    KSaldo = banks.KSldAwal
+                    KSaldo = banks.KSldAwal,
+                    Status = banks.Status
 
                 };
                 _context.Banks.Add(Bank);
@@ -103,6 +104,7 @@ namespace BMASoft.Services
                     ExistingBank.KSldAwal = banks.KSldAwal;
                     ExistingBank.Saldo = banks.SldAWal;
                     ExistingBank.KSaldo = banks.KSldAwal;
+                    ExistingBank.Status = banks.Status;
 
                     _context.Banks.Update(ExistingBank);
                     await _context.SaveChangesAsync();
@@ -123,11 +125,15 @@ namespace BMASoft.Services
             try
             {
                 var ExistingBank = _context.Banks.Where(x => x.CbBankId == banks).FirstOrDefault();
-                if (ExistingBank != null)
+                if (ExistingBank != null && ExistingBank.Saldo == 0)
                 {
                     _context.Banks.Remove(ExistingBank);
                     await _context.SaveChangesAsync();
                     return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -135,7 +141,7 @@ namespace BMASoft.Services
                 throw ex;
             }
 
-            return false;
+           
           
         }
         #endregion Bank Class

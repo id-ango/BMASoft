@@ -28,6 +28,7 @@ namespace BMASoft.Data.Models
         public decimal Saldo { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal KSaldo { get; set; }
+        public string Status { get; set; }
         public bool NonPpn { get; set; }
         public bool Pajak { get; set; }
         public string GrpBank { get; set; }
@@ -162,6 +163,8 @@ namespace BMASoft.Data.Models
         public decimal Saldo { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal KSaldo { get; set; }
+        [Required]
+        public string Status { get; set; }
         public bool NonPpn { get; set; }
         public bool Pajak { get; set; }
     }
