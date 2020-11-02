@@ -307,50 +307,61 @@ namespace BMASoft.Services
             //string test = codeview.SrcCode.ToUpper();
             //var cekFirst = _context.CbSrcCodes.Where(x => x.SrcCode == test).ToList();
 
-            CbTransH transH = new CbTransH
-            {                
-                DocNo = trans.DocNo,
-                KodeBank = trans.KodeBank.ToUpper(),
-                Tanggal = trans.Tanggal,
-                Keterangan = trans.Keterangan,
-                Kurs = trans.Kurs,
-                Saldo = trans.Saldo,
-                KSaldo = trans.KSaldo,
-                CbTransDs = new List<CbTransD>()
-            };
-            foreach (var item in trans.TransDs)
-            {
-                transH.CbTransDs.Add(new CbTransD()
-                {
-                    SrcCode = item.SrcCode,
-                    Keterangan = item.Keterangan,
-                    Terima = item.Terima,
-                    Bayar = item.Bayar,
-                    KTerima = item.KTerima,
-                    KBayar = item.KBayar,
-                    KValue = item.KValue,
-                    Jumlah = item.Jumlah,
-                    KJumlah = item.KJumlah,
-                    Kurs = item.Kurs
-                });
-            }
+           
 
             try
             {
                 var ExistingTrans = _context.CbTransHs.Where(x => x.CbTransHId == trans.CbTransHId).FirstOrDefault();
                 if (ExistingTrans != null)
                 {
-                    transH.DocNo = ExistingTrans.DocNo;                    
+                                    
                     _context.CbTransHs.Remove(ExistingTrans);
+
                     var bank = (from e in _context.Banks where e.KodeBank == trans.KodeBank select e).FirstOrDefault();
                     bank.Saldo -= ExistingTrans.Saldo;
                     bank.KSaldo -= ExistingTrans.KSaldo;
+                    _context.Banks.Update(bank);
+
+                    /* update */
+
+                    CbTransH transH = new CbTransH
+                    {
+                      //  transH.DocNo = ExistingTrans.DocNo;
+                        DocNo = ExistingTrans.DocNo,
+                        KodeBank = trans.KodeBank.ToUpper(),
+                        Tanggal = trans.Tanggal,
+                        Keterangan = trans.Keterangan,
+                        Kurs = trans.Kurs,
+                        Saldo = trans.Saldo,
+                        KSaldo = trans.KSaldo,
+                        CbTransDs = new List<CbTransD>()
+                    };
+                    foreach (var item in trans.TransDs)
+                    {
+                        transH.CbTransDs.Add(new CbTransD()
+                        {
+                            SrcCode = item.SrcCode,
+                            Keterangan = item.Keterangan,
+                            Terima = item.Terima,
+                            Bayar = item.Bayar,
+                            KTerima = item.KTerima,
+                            KBayar = item.KBayar,
+                            KValue = item.KValue,
+                            Jumlah = item.Jumlah,
+                            KJumlah = item.KJumlah,
+                            Kurs = item.Kurs
+                        });
+                    }
                     bank.Saldo += trans.Saldo;
                     bank.KSaldo += trans.KSaldo;
+
                     _context.Banks.Update(bank);
                     _context.CbTransHs.Add(transH);
                     await _context.SaveChangesAsync();
                     return true;
+                } else
+                {
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -358,7 +369,7 @@ namespace BMASoft.Services
                 throw ex;
             }
 
-            return false;
+           
 
 
         }

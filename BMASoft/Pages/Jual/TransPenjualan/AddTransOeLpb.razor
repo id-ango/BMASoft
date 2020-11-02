@@ -4,9 +4,12 @@
 @inject BMASoft.Services.IInventoryService serviceInv
 @inject BMASoft.Services.ISalesService service
 @inject BMASoft.Services.IReceivableService serviceAR
+@inject SeedDataService seedDataService
+@using BMASoft.Data
 @using Newtonsoft.Json
 @inject Microsoft.JSInterop.IJSRuntime JS
 @using  System.IO
+
 
 <style>
     .e-edit-icon::before {
@@ -62,7 +65,7 @@
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="ArCust" DataSource="customer" Placeholder="Customer" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Customer">
-                    <DropDownListEvents TValue="string"  ValueChange="OnChangeCustomer"></DropDownListEvents>
+                    <DropDownListEvents TValue="string" ValueChange="OnChangeCustomer"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="Customer"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.Customer)" />
@@ -75,12 +78,19 @@
 
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="IcLokasi" DataSource="lokasi" Placeholder="Masuk Lokasi" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Lokasi">
-                    <DropDownListEvents TValue="string" ></DropDownListEvents>
+                    <DropDownListEvents TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLokasi" Value="Lokasi"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.Lokasi)" />
             </div>
 
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="StatusTax" DataSource="pajak" Placeholder="Status" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Status">
+                    <DropDownListEvents TValue="string"></DropDownListEvents>                
+                    <ComboBoxFieldSettings Text="TaxStatus" Value="TaxStatus"></ComboBoxFieldSettings>
+                </SfComboBox>
+
+            </div>
 
 
         </EditForm>
@@ -104,19 +114,19 @@
                     {
                         @foreach (var detail in Transh.OeTransDs)
                         {
-                    <tr>
-                        <td>@detail.ItemCode</td>
-                        <td>@detail.NamaItem</td>
-                        <td>@detail.Satuan</td>
-                        <td>@detail.Qty.ToString("#,##0.##")</td>
-                        <td>@detail.Harga.ToString("#,##0.##")</td>
-                        <td>@detail.Discount.ToString("#,##0.##")</td>
-                        <td>@detail.UpdateJumlah.ToString("#,##0.##")</td>
-                        <td>
-                            <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(detail))"></SfButton>
-                            <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(detail))"></SfButton>
-                        </td>
-                    </tr>
+                            <tr>
+                                <td>@detail.ItemCode</td>
+                                <td>@detail.NamaItem</td>
+                                <td>@detail.Satuan</td>
+                                <td>@detail.Qty.ToString("#,##0.##")</td>
+                                <td>@detail.Harga.ToString("#,##0.##")</td>
+                                <td>@detail.Discount.ToString("#,##0.##")</td>
+                                <td>@detail.UpdateJumlah.ToString("#,##0.##")</td>
+                                <td>
+                                    <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(detail))"></SfButton>
+                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(detail))"></SfButton>
+                                </td>
+                            </tr>
                         }
                     }
 
@@ -141,7 +151,7 @@
         </div>
 
         <div class="form-group">
-           
+
             <SfNumericTextBox CssClass="e-outline" @bind-Value="@Transh.PpnPersen" Placeholder="Persen PPn" FloatLabelType="FloatLabelType.Auto" @onchange="rubahppn"></SfNumericTextBox>
 
         </div>
@@ -151,7 +161,7 @@
         </div>
 
         <div class="form-group">
-           
+
             <SfNumericTextBox CssClass="e-outline" @bind-Value="@Transh.Ongkos" Placeholder="BIaya KOeim" FloatLabelType="FloatLabelType.Auto"></SfNumericTextBox>
 
         </div>
@@ -181,7 +191,7 @@
             </div>
             <div class="form-group">
                 <SfTextBox CssClass="e-outline" @bind-Value="@Transd.NamaItem" Multiline="true" Placeholder="Nama Item" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
-              
+
             </div>
 
             <div class="container">
@@ -240,6 +250,8 @@
     private List<IcLokasi> lokasi;
     private List<IcItem> itemcode;
     private List<ArCust> customer;
+    private StatusTax[] pajak;
+
     private OeTransDView Transd = new OeTransDView();
     private OeTransDView TransK = new OeTransDView();
     //   private List<TransDView> TransDs = new List<TransDView>();
@@ -294,7 +306,7 @@
     private void rubahppn()
     {
 
-        var persen = Transh.TtlJumlah * (Transh.PpnPersen/100);
+        var persen = Transh.TtlJumlah * (Transh.PpnPersen / 100);
 
         Transh.Ppn = persen;
     }
@@ -347,8 +359,8 @@
                 Persen = Transd.Persen,
                 Discount = Transd.Discount,
                 HrgCost = Transd.HrgCost,
-                Cost = Transd.HrgCost*Transd.Qty,
-                JumDpp = Transd.Qty*Transd.Harga,
+                Cost = Transd.HrgCost * Transd.Qty,
+                JumDpp = Transd.Qty * Transd.Harga,
                 Jumlah = Transd.UpdateJumlah
 
                 //   NamaItem = serviceInv.GetIcItemProduk(Transd.ItemCode).NamaItem,
@@ -413,7 +425,7 @@
 
     private async Task HandleValidSubmit()
     {
-         Transh.NamaCust = this.namacustomer;
+        Transh.NamaCust = this.namacustomer;
         var newEdit = await service.AddTransH(Transh);
         if (newEdit)
         {

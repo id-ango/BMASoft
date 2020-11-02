@@ -6,6 +6,8 @@
 @inject BMASoft.Services.IReceivableService serviceAR
 @using Newtonsoft.Json
 @inject Microsoft.JSInterop.IJSRuntime JS
+@inject SeedDataService seedDataService
+@using BMASoft.Data
 
 
 <style>
@@ -70,7 +72,7 @@
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="ArCust" DataSource="Customers" Placeholder="Customer" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Customer">
-                    <DropDownListEvents TValue="string"  ValueChange="OnChangeCustomer"></DropDownListEvents>
+                    <DropDownListEvents TValue="string" ValueChange="OnChangeCustomer"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="Customer"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.Customer)" />
@@ -87,6 +89,14 @@
                     <ComboBoxFieldSettings Text="NamaLokasi" Value="Lokasi"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.Lokasi)" />
+            </div>
+
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="StatusTax" DataSource="pajak" Placeholder="Status" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Status">
+                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="TaxStatus" Value="TaxStatus"></ComboBoxFieldSettings>
+                </SfComboBox>
+
             </div>
 
         </EditForm>
@@ -252,6 +262,8 @@
     private List<IcLokasi> lokasi;
     private List<IcItem> itemcode;
     private List<ArCust> Customers;
+    private StatusTax[] pajak;
+
     private OeTransDView Transd = new OeTransDView();
     private OeTransDView TransK = new OeTransDView();
 
@@ -323,6 +335,7 @@
         Transh.Ongkos = TransAll.Ongkos;
         Transh.DPayment = TransAll.DPayment;
         Transh.Keterangan = TransAll.Keterangan;
+        Transh.Status = TransAll.Status;
 
         this.namacustomer = TransAll.NamaCust;
 

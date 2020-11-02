@@ -41,6 +41,7 @@ namespace BMASoft.Data.Models
         public string Keterangan { get; set; }
         public string Cek { get; set; }
         public bool Pajak { get; set; }
+        public string Status { get; set; }
         public List<IrTransD>  IrTransDs { get; set; }
 
     }
@@ -155,6 +156,7 @@ namespace BMASoft.Data.Models
         public string Keterangan { get; set; }
         public string Cek { get; set; }
         public bool Pajak { get; set; }
+        public string Status { get; set; }
         public List<IrTransDView> IrTransDs { get; set; }
 
     }
