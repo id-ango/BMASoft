@@ -2,7 +2,10 @@
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager navigationmanager
 @inject BMASoft.Services.IKasBankService service
-@using Newtonsoft.Json 
+@using Newtonsoft.Json
+@inject Microsoft.JSInterop.IJSRuntime JS
+@using BMASoft.Printing
+@using System.IO
 
 <style>
     .e-edit-icon::before {
@@ -50,33 +53,33 @@
                 <h2 style="color:blue">@Transh.DocNo</h2>
             </div>
         </div>
-   
-            <EditForm Model="@Transh" OnValidSubmit="HandleValidSubmit">
-                <DataAnnotationsValidator />
-                <div class=" row float-md-right">
-                    <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
-                </div>
 
-                <label>@kurs</label> <br />
-                <div class="form-group">
-                    <SfComboBox TValue="string" TItem="CbBank" DataSource="banks" Placeholder="Select Bank" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.KodeBank">
-                        <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
-                        <ComboBoxFieldSettings Text="NmBank" Value="KodeBank"></ComboBoxFieldSettings>
-                    </SfComboBox>
-                    <ValidationMessage For="@(() => Transh.KodeBank)" />
-                </div>
+        <EditForm Model="@Transh" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <div class=" row float-md-right">
+                <SfButton CssClass="e-primary" IconCss="e-icons e-save-icon" Type="submit">Simpan</SfButton>
+            </div>
 
-                <div class="form-group">
-                    <SfDatePicker TValue="DateTime" @bind-Value="Transh.Tanggal" Placeholder="Tanggal" FloatLabelType="FloatLabelType.Auto" Format="dd-MMM-yy">
-                    </SfDatePicker>
-                    <ValidationMessage For="@(() => Transh.Tanggal)" />
-                </div>
-                <div class="form-group">
-                    <SfTextBox CssClass="e-outline" @bind-Value="@Transh.Keterangan" Multiline="true" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
-                    <ValidationMessage For="@(() => Transh.Keterangan)" />
-                </div>
-            </EditForm>
-    
+            <label>@kurs</label> <br />
+            <div class="form-group">
+                <SfComboBox TValue="string" TItem="CbBank" DataSource="banks" Placeholder="Select Bank" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.KodeBank">
+                    <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
+                    <ComboBoxFieldSettings Text="NmBank" Value="KodeBank"></ComboBoxFieldSettings>
+                </SfComboBox>
+                <ValidationMessage For="@(() => Transh.KodeBank)" />
+            </div>
+
+            <div class="form-group">
+                <SfDatePicker TValue="DateTime" @bind-Value="Transh.Tanggal" Placeholder="Tanggal" FloatLabelType="FloatLabelType.Auto" Format="dd-MMM-yy">
+                </SfDatePicker>
+                <ValidationMessage For="@(() => Transh.Tanggal)" />
+            </div>
+            <div class="form-group">
+                <SfTextBox CssClass="e-outline" @bind-Value="@Transh.Keterangan" Multiline="true" Placeholder="Keterangan" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+                <ValidationMessage For="@(() => Transh.Keterangan)" />
+            </div>
+        </EditForm>
+
 
         <div class="details">
 
@@ -188,7 +191,7 @@
     <DialogTemplates>
         <Content>
             <div class="form-group col">
-                <SfComboBox TValue="string" TItem="CbSrcCode" DataSource="srccode" Placeholder="Select Code" FloatLabelType="FloatLabelType.Auto" @bind-Value="@TransK.SrcCode" >
+                <SfComboBox TValue="string" TItem="CbSrcCode" DataSource="srccode" Placeholder="Select Code" FloatLabelType="FloatLabelType.Auto" @bind-Value="@TransK.SrcCode">
                     <ComboBoxFieldSettings Text="NamaSrc" Value="SrcCode"></ComboBoxFieldSettings>
                 </SfComboBox>
 
@@ -280,7 +283,7 @@
         Transh.KodeBank = TransAll.KodeBank;
         kurs = TransAll.Kurs;
         Transh.Keterangan = TransAll.Keterangan;
-        foreach(var item in TransAll.CbTransDs)
+        foreach (var item in TransAll.CbTransDs)
         {
             Transh.TransDs.Add(new TransDView
             {
@@ -325,7 +328,7 @@
         }
 
         Transd = new TransDView();
-     //   StateHasChanged();
+        //   StateHasChanged();
     }
 
     private void OkkClick()
@@ -348,7 +351,7 @@
         }
 
         TransK = new TransDView();
-    //    StateHasChanged();
+        //    StateHasChanged();
     }
 
     private void CancelClick()
@@ -490,10 +493,24 @@
     {
 
         var newEdit = await service.EditTransH(Transh);
-
+        if (newEdit != null)
+        {
+            //  await ExportToPdf(Transh);
+            //  GeneratePDF(newEdit);
+             string Url = "/printbuktikasbank";
+             await JS.InvokeAsync<object>("open", Url, "_blank");
+          
+        }
         navigationmanager.NavigateTo("TransBank", false);
         //add = !add;
         //StateHasChanged();
 
+    }
+
+    public async void GeneratePDF(CbTransH trans)
+    {
+        BuktiKasBank service = new BuktiKasBank();
+        MemoryStream documentStream = service.CreatePdfDocument(trans);
+        await JS.SaveAs("BuktiKasBank.pdf", documentStream.ToArray());
     }
 }

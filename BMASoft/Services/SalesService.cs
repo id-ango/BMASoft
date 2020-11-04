@@ -107,7 +107,7 @@ namespace BMASoft.Services
 
                 OeTransH transH = new OeTransH
                 {
-                    NoLpb = GetNumber(),
+                    NoLpb = trans.Status == "Tax" ? GetNumberTax() : GetNumber(),
                     Customer = trans.Customer.ToUpper(),
                     NamaCust = trans.NamaCust,
                     Lokasi = trans.Lokasi.ToUpper(),
@@ -121,6 +121,7 @@ namespace BMASoft.Services
                     DPayment = trans.DPayment,
                     Tagihan = trans.Tagihan,
                     TotalQty = trans.TotalQty,
+                    Status = trans.Status,
                     Kode = "94",
                     Cek = "1",
 
@@ -379,7 +380,7 @@ namespace BMASoft.Services
                         /* update nya */
                         OeTransH transH = new OeTransH
                         {
-                            NoLpb = trans.NoLpb,
+                            NoLpb = (ExistingTrans.Status == trans.Status ? trans.NoLpb : (trans.Status == "Tax" ? GetNumberTax() : GetNumber())),
                             Customer = trans.Customer.ToUpper(),
                             NamaCust = trans.NamaCust,
                             Lokasi = trans.Lokasi.ToUpper(),
@@ -393,10 +394,10 @@ namespace BMASoft.Services
                             DPayment = trans.DPayment,
                             Tagihan = trans.Tagihan,
                             TotalQty = trans.TotalQty,
+                            Status = trans.Status,
                             Kode = "94",
                             Cek = "1",
-
-                           
+                          
 
                             OeTransDs = new List<OeTransD>()
                         };
@@ -410,9 +411,7 @@ namespace BMASoft.Services
                                     mQty5 = (item.Jumlah - item.Discount) - (item.Qty / transH.TotalQty * transH.Ppn) + (item.Qty / transH.TotalQty * transH.Ongkos);
                                 }
 
-                                
-
-
+ 
                                 IcItem cekItem = _context.IcItems.Where(x => x.ItemCode == item.ItemCode).FirstOrDefault();
                                 if (cekItem != null)
                                 {
@@ -518,6 +517,40 @@ namespace BMASoft.Services
         public string GetNumber()
         {
             string kodeno = "PJL";
+            string kodeurut = kodeno + '-';
+            string thnbln = DateTime.Now.ToString("yyMM");
+            string xbukti = kodeurut + thnbln.Substring(0, 2) + '2' + thnbln.Substring(2, 2) + '-';
+            var maxvalue = "";
+            var maxlist = _context.OeTransHs.Where(x => x.NoLpb.Substring(0, 10).Equals(xbukti)).ToList();
+            if (maxlist != null)
+            {
+                maxvalue = maxlist.Max(x => x.NoLpb);
+
+            }
+
+            //            var maxvalue = (from e in db.CbTransHs where  e.Docno.Substring(0, 7) == kodeno + thnbln select e).Max();
+            string nourut = "00000";
+            if (maxvalue == null)
+            {
+                nourut = "00000";
+            }
+            else
+            {
+                nourut = maxvalue.Substring(10, 5);
+            }
+
+            //  nourut =Convert.ToString(Int32.Parse(nourut) + 1);
+
+
+            string cAngNo = xbukti + (Int32.Parse(nourut) + 1).ToString("00000");
+            // var maxvalue = (from e in db.AptTranss where e.NoRef.Substring(0, 7) == "ANG" + cAngNo select e.NoRef.Max()).FirstOrDefault();
+            return cAngNo;
+
+        }
+
+        public string GetNumberTax()
+        {
+            string kodeno = "SLS";
             string kodeurut = kodeno + '-';
             string thnbln = DateTime.Now.ToString("yyMM");
             string xbukti = kodeurut + thnbln.Substring(0, 2) + '2' + thnbln.Substring(2, 2) + '-';

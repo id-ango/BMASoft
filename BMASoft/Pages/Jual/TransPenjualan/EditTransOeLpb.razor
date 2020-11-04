@@ -295,6 +295,7 @@
         // Transh.Tanggal = DateTime.Now;
 
         LoadCustomers();
+        pajak = await seedDataService.GetTax();
 
         await Loadlokasi();
         await Loaditem();

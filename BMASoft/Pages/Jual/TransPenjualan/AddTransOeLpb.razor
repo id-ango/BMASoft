@@ -282,6 +282,7 @@
         Loadcustomer();
         await Loadlokasi();
         await Loaditem();
+        pajak = await seedDataService.GetTax();
     }
 
     void Loadcustomer()

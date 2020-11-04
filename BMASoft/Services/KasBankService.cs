@@ -13,6 +13,7 @@ using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
 using Syncfusion.Drawing;
+using Newtonsoft.Json;
 
 namespace BMASoft.Services
 {
@@ -32,8 +33,8 @@ namespace BMASoft.Services
         Task<List<CbTransH>> GetTransH();
         Task<List<CbTransH>> Get3TransH();
         Task<List<CbTransD>> GetTransD();
-        Task<bool> AddTransH(TranshView transH);
-        Task<bool> EditTransH(TranshView transH);
+        Task<CbTransH> AddTransH(TranshView transH);
+        Task<CbTransH> EditTransH(TranshView transH);
         Task<bool> DelTransH(int id);
         MemoryStream PdfBuktiBank(TranshView trans);
     }
@@ -259,7 +260,7 @@ namespace BMASoft.Services
             return await _context.CbTransDs.ToListAsync();
         }
 
-        public async Task<bool> AddTransH(TranshView trans)
+        public async Task<CbTransH> AddTransH(TranshView trans)
         {
             //string test = codeview.SrcCode.ToUpper();
             //var cekFirst = _context.CbSrcCodes.Where(x => x.SrcCode == test).ToList();
@@ -297,12 +298,14 @@ namespace BMASoft.Services
             _context.Banks.Update(bank);
             _context.CbTransHs.Add(transH);
             await _context.SaveChangesAsync();
-            return true;
+            
+            return transH;
+           // return true;
 
 
         }
 
-        public async Task<bool> EditTransH(TranshView trans)
+        public async Task<CbTransH> EditTransH(TranshView trans)
         {
             //string test = codeview.SrcCode.ToUpper();
             //var cekFirst = _context.CbSrcCodes.Where(x => x.SrcCode == test).ToList();
@@ -358,10 +361,12 @@ namespace BMASoft.Services
                     _context.Banks.Update(bank);
                     _context.CbTransHs.Add(transH);
                     await _context.SaveChangesAsync();
-                    return true;
+
+                    return transH;
+                 //   return true;
                 } else
                 {
-                    return false;
+                    return ExistingTrans;
                 }
             }
             catch (Exception ex)

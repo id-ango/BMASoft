@@ -7,6 +7,9 @@
 @inject SeedDataService seedDataService
 @using BMASoft.Data
 @using Newtonsoft.Json
+@inject Microsoft.JSInterop.IJSRuntime JS
+@using BMASoft.Printing
+@using System.IO
 
 <div class="container">
     <div class="master">
@@ -91,7 +94,8 @@
         var newEdit = await service.AddBank(bank);
         if (newEdit)
         {
-            //   await ExportToPdf(Transh);
+           
+              
         }
 
         navigationmanager.NavigateTo("SetupCbBank", false);
@@ -112,4 +116,6 @@
     {
         GlAccounts = await serviceGl.GetGlAccount();
     }
+
+   
 }

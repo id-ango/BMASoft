@@ -2,9 +2,11 @@
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager navigationmanager
 @inject BMASoft.Services.IKasBankService service
-@using Newtonsoft.Json 
+@using Newtonsoft.Json
+
 @inject Microsoft.JSInterop.IJSRuntime JS
-@using  System.IO
+@using BMASoft.Printing
+@using System.IO
 
 <style>
     .e-edit-icon::before {
@@ -458,9 +460,12 @@
     {
         Transh.Kurs = kurs;
         var newEdit = await service.AddTransH(Transh);
-        if (newEdit)
+        if (newEdit != null)
         {
-            await ExportToPdf(Transh);
+            //  await ExportToPdf(Transh);
+            // GeneratePDF(newEdit);
+            string Url = "/printbuktikasbank";
+            await JS.InvokeAsync<object>("open", Url, "_blank");
         }
 
         navigationmanager.NavigateTo("TransBank", false);
@@ -469,11 +474,18 @@
 
     }
 
-    protected async Task ExportToPdf(TranshView trans)
+    public async void GeneratePDF(CbTransH trans)
     {
-        using (MemoryStream excelStream = service.PdfBuktiBank(trans))
-        {
-            await JS.SaveAs("Sample.pdf", excelStream.ToArray());
-        }
+        BuktiKasBank service = new BuktiKasBank();
+        MemoryStream documentStream = service.CreatePdfDocument(trans);
+        await JS.SaveAs("BuktiKasBank.pdf", documentStream.ToArray());
     }
+
+    //protected async Task ExportToPdf(TranshView trans)
+    //{
+    //    using (MemoryStream excelStream = service.PdfBuktiBank(trans))
+    //    {
+    //        await JS.SaveAs("Sample.pdf", excelStream.ToArray());
+    //    }
+    //}
 }

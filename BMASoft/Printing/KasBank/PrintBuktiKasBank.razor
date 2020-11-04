@@ -1,0 +1,44 @@
+﻿@layout PrintLayout
+
+@page "/printbuktikasbank"
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager navigationmanager
+@inject BMASoft.Services.IKasBankService service
+@using Newtonsoft.Json
+
+@inject Microsoft.JSInterop.IJSRuntime JS
+@using BMASoft.Printing
+@using System.IO
+
+
+
+<table style="width:100%">
+    <tr>
+        <th style="width:30%">
+            <div style="float:left;padding:20px 50px">
+                <strong style="font-size:18px"><u>THE GRANDSTAND</u></strong><br />
+                <span style="font-size:12px;margin-bottom:0px;padding:0 0px 0px 0px">Jl. Raya Kupang Indah No. 9</span><br />
+                <span style="font-size:12px;margin-bottom:0px;padding:0 0px 0px 0px">Surabaya</span>
+            </div>
+        </th>
+        <th style="width:40%">
+
+            <div align="center" style="padding:20px 50px">
+                <h3 align="center"><u>BUKTI PENERIMAAN</u></h3><br />
+            </div>
+        </th>
+        <th style="width:30%">
+            <div style="padding:20px 50px">
+                @*<strong>Nomor   :</strong>        <span>@Model.Bukti</span><br />
+                    <strong>Tanggal :</strong>        <span>@string.Format("{0:d}", @Model.Tanggal)</span>*@
+                <strong>Nomor   :</strong>
+                <strong>Tanggal :</strong>
+            </div>
+        </th>
+    </tr>
+
+</table>
+
+@code {
+
+}
