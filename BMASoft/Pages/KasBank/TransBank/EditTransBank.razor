@@ -495,11 +495,16 @@
         var newEdit = await service.EditTransH(Transh);
         if (newEdit != null)
         {
+            var id = newEdit.CbTransHId.ToString().Trim();
+
             //  await ExportToPdf(Transh);
             //  GeneratePDF(newEdit);
-             string Url = "/printbuktikasbank";
-             await JS.InvokeAsync<object>("open", Url, "_blank");
-          
+            navigationmanager.NavigateTo($"printbuktikasbank/{id}");
+
+            //navigationmanager.NavigateTo("TransBank", false);
+            //string Url = "/printbuktikasbank/" + id;
+            //await JS.InvokeAsync<object>("open", Url, "_blank");
+
         }
         navigationmanager.NavigateTo("TransBank", false);
         //add = !add;

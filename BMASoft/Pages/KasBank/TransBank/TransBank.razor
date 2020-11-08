@@ -2,6 +2,9 @@
 @inject NavigationManager navigationmanager
 @inject BMASoft.Services.IKasBankService service
 
+@inject Microsoft.JSInterop.IJSRuntime JS
+@using BMASoft.Printing
+@using System.IO
 
 <style>
     .e-edit-icon::before {
@@ -47,12 +50,13 @@ else
                     <GridEvents RowSelected="RowSelecthandler" TValue="CbTransH"></GridEvents>
 
                     <GridColumns>
-                        <GridColumn HeaderText="" Width="50">
+                        <GridColumn HeaderText="" Width="70">
                             <Template>
                                 @{
                                     var trans2 = (context as CbTransH);
                                     <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.CbTransHId))"></SfButton>
                                     <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.CbTransHId))"></SfButton>
+                                    <SfButton CssClass="e-small e-success" IconCss="e-icons e-print-icon" @onclick="(() => Cetak(trans2.CbTransHId))"></SfButton>
                                 }
                             </Template>
                         </GridColumn>
@@ -150,10 +154,23 @@ else
 
     }
 
-    private async void OkkClick()
+    private void Cetak(int xKdBank)
     {
 
-        var HapusStatus = await service.DelTransH(this.id);
+        var id = xKdBank.ToString().Trim();
+        navigationmanager.NavigateTo($"printbuktikasbank/{id}");
+
+        //  await ExportToPdf(Transh);
+        //  GeneratePDF(newEdit);
+        //string Url = "/printbuktikasbank/" + id;
+        //JS.InvokeAsync<object>("open", Url, "_blank");
+    }
+
+
+    private  void OkkClick()
+    {
+
+        var HapusStatus =  service.DelTransH(this.id);
         this.IsVisible = false;
 
         //      StateHasChanged();
@@ -175,6 +192,7 @@ else
         //      await OnInitializedAsync();
     }
 
-   
+
+
 
 }

@@ -6,30 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrationsold\**" />
     <Compile Remove="Pages\KasBank\Laporan\**" />
+    <Content Remove="Migrationsold\**" />
     <Content Remove="Pages\KasBank\Laporan\**" />
+    <EmbeddedResource Remove="Migrationsold\**" />
     <EmbeddedResource Remove="Pages\KasBank\Laporan\**" />
+    <None Remove="Migrationsold\**" />
     <None Remove="Pages\KasBank\Laporan\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Data\FileUtil.cs" />
-    <Compile Remove="Migrations\20200723102913_rubahTransh.cs" />
-    <Compile Remove="Migrations\20200723102913_rubahTransh.Designer.cs" />
-    <Compile Remove="Migrations\20200725022915_ubahksaldo.cs" />
-    <Compile Remove="Migrations\20200725022915_ubahksaldo.Designer.cs" />
-    <Compile Remove="Migrations\20200810003122_namacust.cs" />
-    <Compile Remove="Migrations\20200810003122_namacust.Designer.cs" />
-    <Compile Remove="Migrations\20200827034454_startap.cs" />
-    <Compile Remove="Migrations\20200827034454_startap.Designer.cs" />
-    <Compile Remove="Migrations\20200912005930_inventory1.cs" />
-    <Compile Remove="Migrations\20200912005930_inventory1.Designer.cs" />
-    <Compile Remove="Migrations\20200912011422_inventory.cs" />
-    <Compile Remove="Migrations\20200912011422_inventory.Designer.cs" />
-    <Compile Remove="Migrations\20200912012018_inventory.cs" />
-    <Compile Remove="Migrations\20200912012018_inventory.Designer.cs" />
-    <Compile Remove="Migrations\20201004045829_pajak.cs" />
-    <Compile Remove="Migrations\20201004045829_pajak.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

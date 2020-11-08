@@ -72,10 +72,10 @@
                 <ValidationMessage For="@(() => Transh.Keterangan)" />
             </div>
 
-            <div class="form-group">
+            @*<div class="form-group">
                 <SfTextBox CssClass="e-outline" @bind-Value="@Transh.KodeDoc" Placeholder="Kode Bukti" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
                 <ValidationMessage For="@(() => Transh.KodeDoc)" />
-            </div>
+            </div>*@
 
         </EditForm>
         <div class="details">
@@ -459,16 +459,21 @@
     private async Task HandleValidSubmit()
     {
         Transh.Kurs = kurs;
+        Transh.KodeDoc = Transh.KodeBank;
         var newEdit = await service.AddTransH(Transh);
         if (newEdit != null)
         {
             //  await ExportToPdf(Transh);
             // GeneratePDF(newEdit);
-            string Url = "/printbuktikasbank";
-            await JS.InvokeAsync<object>("open", Url, "_blank");
+            var id = newEdit.CbTransHId.ToString().Trim();
+            navigationmanager.NavigateTo($"printbuktikasbank/{id}");
+            //  await ExportToPdf(Transh);
+            //  GeneratePDF(newEdit);
+            //string Url = "/printbuktikasbank/"+id;
+            //await JS.InvokeAsync<object>("open", Url, "_blank");
         }
 
-        navigationmanager.NavigateTo("TransBank", false);
+      //  navigationmanager.NavigateTo("TransBank", false);
         //add = !add;
         //StateHasChanged();
 

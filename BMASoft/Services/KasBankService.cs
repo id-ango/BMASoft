@@ -235,7 +235,10 @@ namespace BMASoft.Services
         #endregion srcode Class
 
         #region Transaksi Bank Class
-
+        public async Task<CbTransH> GetTransDoc(string docno)
+        {
+            return await _context.CbTransHs.Include(p => p.CbTransDs).Where(x => x.DocNo == docno).FirstOrDefaultAsync();
+        }
         public async Task<CbTransH> GetTrans(int id)
         {
             return await _context.CbTransHs.Include(p => p.CbTransDs).Where(x =>x.CbTransHId == id).FirstOrDefaultAsync();
@@ -298,8 +301,10 @@ namespace BMASoft.Services
             _context.Banks.Update(bank);
             _context.CbTransHs.Add(transH);
             await _context.SaveChangesAsync();
-            
-            return transH;
+
+            var TempTrans = GetTransDoc(transH.DocNo);
+
+            return await TempTrans;
            // return true;
 
 
@@ -408,7 +413,7 @@ namespace BMASoft.Services
 
         public string GetNumber(string kodeno)
         {
-            string kodeurut = kodeno + '-';
+            string kodeurut = kodeno + " -";
             string thnbln = DateTime.Now.ToString("yyMM");
             string xbukti = kodeurut + thnbln.Substring(0,2)+'2'+ thnbln.Substring(2,2)+'-';
             var maxvalue = "";

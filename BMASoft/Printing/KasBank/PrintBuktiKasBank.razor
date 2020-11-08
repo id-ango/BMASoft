@@ -1,6 +1,6 @@
 ﻿@layout PrintLayout
 
-@page "/printbuktikasbank"
+@page "/printbuktikasbank/{id:int}"
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager navigationmanager
 @inject BMASoft.Services.IKasBankService service
@@ -12,33 +12,179 @@
 
 
 
-<table style="width:100%">
-    <tr>
-        <th style="width:30%">
-            <div style="float:left;padding:20px 50px">
-                <strong style="font-size:18px"><u>THE GRANDSTAND</u></strong><br />
-                <span style="font-size:12px;margin-bottom:0px;padding:0 0px 0px 0px">Jl. Raya Kupang Indah No. 9</span><br />
-                <span style="font-size:12px;margin-bottom:0px;padding:0 0px 0px 0px">Surabaya</span>
-            </div>
-        </th>
-        <th style="width:40%">
 
-            <div align="center" style="padding:20px 50px">
-                <h3 align="center"><u>BUKTI PENERIMAAN</u></h3><br />
-            </div>
-        </th>
-        <th style="width:30%">
-            <div style="padding:20px 50px">
-                @*<strong>Nomor   :</strong>        <span>@Model.Bukti</span><br />
-                    <strong>Tanggal :</strong>        <span>@string.Format("{0:d}", @Model.Tanggal)</span>*@
-                <strong>Nomor   :</strong>
-                <strong>Tanggal :</strong>
-            </div>
-        </th>
-    </tr>
+<head>
 
-</table>
+   
+    <style type="text/css" media="print">
+        .dontprint {
+            display: none;
+        }
+    </style>
+</head>
+
+
+<div class="dontprint">
+    <a href="/TransBank">Back</a>
+
+</div>
+
+
+<div class="container-fluid">
+    <table style="width:100%">
+        <tr>
+            <th style="width:30%">
+                <div style="float:left;padding:20px 50px">
+                    <strong style="font-size:18px"><u>CV BMA TEKNIK</u></strong><br />
+                    <span style="font-size:12px;margin-bottom:0px;padding:0 0px 0px 0px">Pucang Sewu VII/1B</span><br />
+                    <span style="font-size:12px;margin-bottom:0px;padding:0 0px 0px 0px">Surabaya</span>
+                </div>
+            </th>
+            <th style="width:40%">
+
+                <div align="center" style="padding:20px 30px">
+                    @*<h3 align="center"><u>Bukti @TransAll.KodeBank @((@TransAll.Saldo<0) ? "Keluar" : "Masuk") </u></h3><br />*@
+                    <h4 align="center"><u>TRANSAKSI KAS/BANK</u></h4><br />
+                    
+                </div>
+            </th>
+            <th style="width:30%">
+                <div style="padding:20px 30px">
+                    <strong>Nomor   :</strong>        <span>@TransAll.DocNo</span><br />
+                    <strong>Tanggal :</strong>        <span>@string.Format("{0:d}", @TransAll.Tanggal)</span>
+
+                </div>
+            </th>
+        </tr>
+
+    </table>
+</div>
+<div class="container-fluid">
+    @{
+        decimal nJumlah = 0;
+
+        <table style="width:100%">
+            <thead style="border:solid ">
+                <tr>
+                    <th style="width:5%">No</th>
+                    <th style="width:75%;text-align:center"><span style="margin-right:15px;">Keterangan</span> </th>
+                    <th style="width:20%;text-align:center">Jumlah</th>
+                </tr>
+            </thead>
+            <tbody style="border:solid">
+
+                @{
+                    decimal nNo = 0;
+
+
+                    foreach (var item in TransAll.CbTransDs)
+                    {
+                        nNo = nNo + 1;
+                        nJumlah = nJumlah + ((item.Terima) - (item.Bayar));
+
+                        <tr>
+                            <td>@nNo</td>
+                            <td>@item.Keterangan</td>
+                            <td style="text-align:right;margin-right:15px"><span>@string.Format("{0:n2}", (item.Terima - item.Bayar))</span></td>
+                        </tr>
+
+                    }
+                    if (nNo < 8)
+                    {
+                        for (var i = nNo; i < 8; i++)
+                        {
+                            @*<tr>
+                        <td style="color:white">. </td>
+                        <td> </td>
+                        <td> </td>
+                    </tr>*@
+                            <tr style="height:50px"> <td colspan="3"></td></tr>
+                        }
+                    }
+
+                }
+
+            </tbody>
+            <tbody>
+                <tr style="height:20px"> <td colspan="3"></td></tr>
+            </tbody>
+            <tfoot style="border:solid">
+
+                <tr>
+                    <td style="border:solid" colspan="2">@TransAll.Keterangan</td>
+                    <td style="text-align:right;margin-right:15px"><strong>@string.Format("{0:n2}", @nJumlah)</strong></td>
+                </tr>
+            </tfoot>
+
+        </table>
+    }
+</div>
+<br />
+
+<div class="container-fluid">
+    <table style="width:100%;border:solid">
+        <tr>
+            <th style="width:33%;border:solid">
+                <div align="center">
+                    <strong>Mengetahui</strong> <br /><br /><br /><br />
+                </div>
+            </th>
+            <th style="width:34%;border:solid">
+                <div align="center">
+                    <strong>Pembuat</strong> <br /><br /><br /><br />
+                </div>
+            </th>
+            <th style="width:33%;border:solid">
+                <div align="center">
+                    <strong>Akunting</strong> <br /><br /><br /><br />
+                </div>
+            </th>
+        </tr>
+    </table>
+</div>
+<br />
+<br />
+
+
+
+
 
 @code {
+    [Parameter] public int Id { get; set; }
 
+    private TranshView Transh = new TranshView() { TransDs = new List<TransDView>() };
+    private CbTransH TransAll = new CbTransH() { CbTransDs = new List<CbTransD>() };
+    private List<CbBank> banks;
+    private List<CbSrcCode> srccode;
+    private TransDView Transd = new TransDView();
+    private TransDView TransK = new TransDView();
+    //   private List<TransDView> TransDs = new List<TransDView>();
+    private string enabled { get; set; }
+
+    public string kurs { get; set; } = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Transh.Tanggal = DateTime.Now;
+
+        await LoadBank();
+        await LoadSrcCode();
+        await LoadTrans();
+    }
+
+    async Task LoadBank()
+    {
+        banks = await service.GetBank();
+    }
+
+    async Task LoadSrcCode()
+    {
+        srccode = await service.GetSrcCode();
+    }
+
+    async Task LoadTrans()
+    {
+        TransAll = await service.GetTrans(Id);
+       
+    }
 }
