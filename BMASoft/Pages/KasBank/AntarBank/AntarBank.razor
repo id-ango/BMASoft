@@ -1,0 +1,192 @@
+﻿@page "/AntarBank"
+@inject NavigationManager navigationmanager
+@inject BMASoft.Services.IKasBankService service
+
+@inject Microsoft.JSInterop.IJSRuntime JS
+@using BMASoft.Printing
+@using System.IO
+
+<style>
+    .e-edit-icon::before {
+        content: '\ea9a';
+    }
+
+    .e-delete-icon::before {
+        content: '\e94a';
+    }
+
+    .e-print-icon::before {
+        content: '\e34b';
+    }
+
+    .e-search:before {
+        content: '\e993';
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-6">
+        <h1>Transaksi Bank</h1>
+    </div>
+    <div class="col-6">
+        <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
+    </div>
+</div>
+
+@if (toDoList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="col-lg-12 control-section">
+        <div class="content-wrapper">
+            <div class="row">
+
+                <SfGrid SelectedRowIndex="2" Height="200" DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true" Toolbar="@(new List<string>() { "Search" })">
+                    <GridGroupSettings Columns="@GroupedColumns"></GridGroupSettings>
+                    <GridPageSettings PageCount="5" PageSizes="true"></GridPageSettings>
+                    <GridEvents RowSelected="RowSelecthandler" TValue="CbTransfer"></GridEvents>
+
+                    <GridColumns>
+                        <GridColumn HeaderText="" Width="70">
+                            <Template>
+                                @{
+                                    var trans2 = (context as CbTransfer);
+                                    <SfButton CssClass="e-small e-success" IconCss="e-icons e-edit-icon" @onclick="(() => Rubah(trans2.CbTransferId))"></SfButton>
+                                    <SfButton CssClass="e-small e-danger" IconCss="e-icons e-delete-icon" @onclick="(() => Hapus(trans2.CbTransferId))"></SfButton>
+                                    <SfButton CssClass="e-small e-success" IconCss="e-icons e-print-icon" @onclick="(() => Cetak(trans2.CbTransferId))"></SfButton>
+                                }
+                            </Template>
+                        </GridColumn>
+                       
+                        <GridColumn Field=@nameof(CbTransfer.DocNo) HeaderText="No Bukti" Width="100"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransfer.Tanggal) HeaderText="Tanggal" Format="d" Type="ColumnType.Date" Width="60"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransfer.Keterangan) HeaderText="Keterangan" Width="170"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransfer.Saldo) HeaderText="Saldo" Format="N2" Width="100"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransfer.KodeBank1) HeaderText="Dari Bank" Width="50"></GridColumn>
+                        <GridColumn Field=@nameof(CbTransfer.KodeBank2) HeaderText="Ke Bank" Width="50"></GridColumn>
+                    </GridColumns>
+                </SfGrid>
+
+                
+            </div>
+
+        </div>
+    </div>
+
+    <SfDialog @bind-Visible="@IsVisible" Width="400px" ShowCloseIcon="true" IsModal="true">
+        <DialogTemplates>
+            <Header>
+                Delete Items
+            </Header>
+            <Content>
+                Are you sure you want to permanently delete these items ?
+            </Content>
+        </DialogTemplates>
+
+        <DialogButtons>
+            <DialogButton OnClick="@OkkClick" Content="OK" IsPrimary="true" />
+            <DialogButton OnClick="@CancelClick" Content="Cancel" />
+        </DialogButtons>
+    </SfDialog>
+}
+
+
+@code {
+
+    private int id { get; set; }
+
+    private List<CbTransfer> toDoList;
+  
+    //    private CbTransH TransAll = new CbTransH() ;
+    //  private CbTransH TransAll = new CbTransH() { CbTransDs = new List<CbTransD>() };
+
+    public string[] GroupedColumns = new string[] { "KodeBank" };
+    public string SelectedDoc { get; set; }
+    public int? RowIndex { get; set; } = 1003;
+    public void RowSelecthandler(RowSelectEventArgs<CbTransfer> Args)
+    {
+        SelectedDoc = Args.Data.DocNo;
+        RowIndex = Args.Data.CbTransferId;
+    }
+
+    private bool IsVisible { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await LoadBank();
+
+    }
+
+    async Task LoadBank()
+    {
+
+        toDoList = await service.GetTransfer();
+       
+    }
+
+    private void Tambah()
+    {
+        navigationmanager.NavigateTo("AddTransfer");
+    }
+
+
+
+    private void Rubah(int xKdBank)
+    {
+        navigationmanager.NavigateTo($"EditTransfer/{xKdBank}");
+
+    }
+
+    private void Hapus(int xKdBank)
+    {
+        this.IsVisible = true;
+        this.id = xKdBank;
+
+    }
+
+    private void Cetak(int xKdBank)
+    {
+
+        var id = xKdBank.ToString().Trim();
+        navigationmanager.NavigateTo($"printantarbank/{id}");
+
+        //  await ExportToPdf(Transh);
+        //  GeneratePDF(newEdit);
+        //string Url = "/printbuktikasbank/" + id;
+        //JS.InvokeAsync<object>("open", Url, "_blank");
+    }
+
+
+    private void OkkClick()
+    {
+
+        var HapusStatus = service.DelTransH(this.id);
+        this.IsVisible = false;
+
+        //      StateHasChanged();
+
+        navigationmanager.NavigateTo("AntarBank", true);
+        //  await LoadBank();
+        //  await OnInitializedAsync();
+    }
+
+    private void CancelClick()
+    {
+
+        this.IsVisible = false;
+
+        //    StateHasChanged();
+
+        navigationmanager.NavigateTo("AntarBank", false);
+        //    await LoadBank();
+        //      await OnInitializedAsync();
+    }
+
+
+
+
+}

@@ -36,6 +36,9 @@ namespace BMASoft.Services
         Task<CbTransH> AddTransH(TranshView transH);
         Task<CbTransH> EditTransH(TranshView transH);
         Task<bool> DelTransH(int id);
+        Task<CbTransfer> GetTransferId(int id);
+        Task<List<CbTransfer>> GetTransfer();
+
         MemoryStream PdfBuktiBank(TranshView trans);
     }
 
@@ -234,6 +237,118 @@ namespace BMASoft.Services
         }
         #endregion srcode Class
 
+        #region Transfer Antar Bank
+        public async Task<CbTransfer> GetTransferDoc(string docno)
+        {
+            return await _context.CbTransfers.Where(x => x.DocNo == docno).FirstOrDefaultAsync();
+        }
+
+        public async Task<CbTransfer> GetTransferId(int id)
+        {
+            return await _context.CbTransfers.Where(x => x.CbTransferId == id).FirstOrDefaultAsync();
+        }
+
+        public Task<List<CbTransfer>> GetTransfer()
+        {
+         
+            return _context.CbTransfers.OrderByDescending(x => x.Tanggal).ToListAsync();
+
+        }
+
+
+        public async Task<CbTransfer> AddTransfer(TransferView trans)
+        {
+            //string test = codeview.SrcCode.ToUpper();
+            //var cekFirst = _context.CbSrcCodes.Where(x => x.SrcCode == test).ToList();
+
+            CbTransfer transfer = new CbTransfer
+            {
+                DocNo = GetNumberTrf("TRF"),
+                Tanggal = trans.Tanggal,
+                Keterangan = trans.Keterangan,
+                Kurs = trans.Kurs,
+                Saldo = trans.Saldo,
+                KSaldo = trans.KSaldo,
+                KodeBank1 = trans.KodeBank1.ToUpper(),
+                KodeBank2 = trans.KodeBank2.ToUpper()
+            };
+
+            CbTransH transH = new CbTransH
+            {
+                DocNo = GetNumber('T'+trans.KodeBank1.ToUpper().Trim()),
+                KodeBank = trans.KodeBank1.ToUpper(),
+                Tanggal = trans.Tanggal,
+                Keterangan = trans.Keterangan,
+                Kurs = trans.Kurs,
+                Saldo = trans.Saldo,
+                KSaldo = trans.KSaldo,
+                CbTransDs = new List<CbTransD>()
+            };
+            
+                transH.CbTransDs.Add(new CbTransD()
+                {
+                    SrcCode = "CB",
+                    Keterangan = trans.Keterangan,
+                    Terima = 0,
+                    Bayar = trans.Saldo,
+                    KTerima = 0,
+                    KBayar = trans.KSaldo,
+                    KValue = trans.KValue,
+                    Jumlah = -1*trans.Saldo,
+                    KJumlah = -1*trans.KSaldo,
+                    Kurs = trans.Kurs
+                });
+            
+            var bank = (from e in _context.Banks where e.KodeBank == trans.KodeBank1 select e).FirstOrDefault();
+            bank.Saldo -= trans.Saldo;
+            bank.KSaldo -= trans.KSaldo;
+            _context.Banks.Update(bank);
+            _context.CbTransHs.Add(transH);
+
+            /* ke bank */
+            CbTransH transHd = new CbTransH
+            {
+                DocNo = GetNumber('T' + trans.KodeBank2.ToUpper().Trim()),
+                KodeBank = trans.KodeBank1.ToUpper(),
+                Tanggal = trans.Tanggal,
+                Keterangan = trans.Keterangan,
+                Kurs = trans.Kurs,
+                Saldo = trans.Saldo,
+                KSaldo = trans.KSaldo,
+                CbTransDs = new List<CbTransD>()
+            };
+
+            transH.CbTransDs.Add(new CbTransD()
+            {
+                SrcCode = "CB",
+                Keterangan = trans.Keterangan,
+                Terima = trans.Saldo,
+                Bayar = 0,
+                KTerima = trans.KSaldo,
+                KBayar = 0,
+                KValue = trans.KValue,
+                Jumlah = trans.Saldo,
+                KJumlah = trans.KSaldo,
+                Kurs = trans.Kurs
+            });
+
+            var bankd = (from e in _context.Banks where e.KodeBank == trans.KodeBank2 select e).FirstOrDefault();
+            bankd.Saldo += trans.Saldo;
+            bankd.KSaldo += trans.KSaldo;
+            _context.Banks.Update(bankd);
+            _context.CbTransHs.Add(transHd);
+
+            await _context.SaveChangesAsync();
+
+            var TempTrans = GetTransferDoc(transfer.DocNo);
+
+            return await TempTrans;
+            // return true;
+
+
+        }
+        #endregion Transfer Antar Bank
+
         #region Transaksi Bank Class
         public async Task<CbTransH> GetTransDoc(string docno)
         {
@@ -418,6 +533,39 @@ namespace BMASoft.Services
             string xbukti = kodeurut + thnbln.Substring(0,2)+'2'+ thnbln.Substring(2,2)+'-';
             var maxvalue = "";
             var maxlist = _context.CbTransHs.Where(x => x.DocNo.Substring(0,10).Equals(xbukti)).ToList();
+            if (maxlist != null)
+            {
+                maxvalue = maxlist.Max(x => x.DocNo);
+
+            }
+
+            //            var maxvalue = (from e in db.CbTransHs where  e.Docno.Substring(0, 7) == kodeno + thnbln select e).Max();
+            string nourut = "00000";
+            if (maxvalue == null)
+            {
+                nourut = "00000";
+            }
+            else
+            {
+                nourut = maxvalue.Substring(10, 5);
+            }
+
+            //  nourut =Convert.ToString(Int32.Parse(nourut) + 1);
+
+
+            string cAngNo = xbukti + (Int32.Parse(nourut) + 1).ToString("00000");
+            // var maxvalue = (from e in db.AptTranss where e.NoRef.Substring(0, 7) == "ANG" + cAngNo select e.NoRef.Max()).FirstOrDefault();
+            return cAngNo;
+
+        }
+
+        public string GetNumberTrf(string kodeno)
+        {
+            string kodeurut = kodeno + " -";
+            string thnbln = DateTime.Now.ToString("yyMM");
+            string xbukti = kodeurut + thnbln.Substring(0, 2) + '2' + thnbln.Substring(2, 2) + '-';
+            var maxvalue = "";
+            var maxlist = _context.CbTransfers.Where(x => x.DocNo.Substring(0, 10).Equals(xbukti)).ToList();
             if (maxlist != null)
             {
                 maxvalue = maxlist.Max(x => x.DocNo);
