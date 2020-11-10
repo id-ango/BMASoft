@@ -6,13 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrationsold\**" />
     <Compile Remove="Pages\KasBank\Laporan\**" />
-    <Content Remove="Migrationsold\**" />
     <Content Remove="Pages\KasBank\Laporan\**" />
-    <EmbeddedResource Remove="Migrationsold\**" />
     <EmbeddedResource Remove="Pages\KasBank\Laporan\**" />
-    <None Remove="Migrationsold\**" />
     <None Remove="Pages\KasBank\Laporan\**" />
   </ItemGroup>
 

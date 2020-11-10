@@ -35,10 +35,10 @@ namespace BMASoft
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection2")));
             services.AddDbContext<BmaDbContext>(options =>
                options.UseSqlServer(
-                   Configuration.GetConnectionString("DefaultConnection")));
+                   Configuration.GetConnectionString("DefaultConnection2")));
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
