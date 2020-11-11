@@ -1,4 +1,4 @@
-﻿@page "/AntarBank"
+﻿@page "/TransAntarBank"
 @inject NavigationManager navigationmanager
 @inject BMASoft.Services.IKasBankService service
 
@@ -27,7 +27,7 @@
 
 <div class="row">
     <div class="col-6">
-        <h1>Transaksi Bank</h1>
+        <h1>Transaksi Transfer Antar Bank</h1>
     </div>
     <div class="col-6">
         <SfButton @onclick="Tambah" CssClass="e-primary">Add</SfButton>
@@ -44,7 +44,7 @@ else
         <div class="content-wrapper">
             <div class="row">
 
-                <SfGrid SelectedRowIndex="2" Height="200" DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true" Toolbar="@(new List<string>() { "Search" })">
+                <SfGrid SelectedRowIndex="2" Height="200" DataSource="@toDoList" AllowGrouping="true" AllowSorting="true" AllowPaging="true" Toolbar="@(new List<string>() { "Search" })" >
                     <GridGroupSettings Columns="@GroupedColumns"></GridGroupSettings>
                     <GridPageSettings PageCount="5" PageSizes="true"></GridPageSettings>
                     <GridEvents RowSelected="RowSelecthandler" TValue="CbTransfer"></GridEvents>
@@ -130,14 +130,14 @@ else
 
     private void Tambah()
     {
-        navigationmanager.NavigateTo("AddTransfer");
+        navigationmanager.NavigateTo("AddAntarBank");
     }
 
 
 
     private void Rubah(int xKdBank)
     {
-        navigationmanager.NavigateTo($"EditTransfer/{xKdBank}");
+        navigationmanager.NavigateTo($"EditAntarBank/{xKdBank}");
 
     }
 
