@@ -27,7 +27,7 @@
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="GL Akun" FloatLabelType="FloatLabelType.Auto" @bind-Value="@bank.GlAcct">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TItem="GlAccount" TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => bank.GlAcct)" />
@@ -89,7 +89,7 @@
 
     }
 
-    public void OnChangeAkun(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    public void OnChangeAkun(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, GlAccount> args)
     {
         var itemData = JsonConvert.DeserializeObject<GlAccount>(args.ItemData != null ? args.ItemData.ToString() : "");
         this.GlAccountId = itemData.GlAccountId;

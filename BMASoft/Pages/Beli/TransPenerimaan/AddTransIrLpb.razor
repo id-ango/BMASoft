@@ -61,8 +61,8 @@
                 <ValidationMessage For="@(() => Transh.Tanggal)" />
             </div>
             <div class="form-group">
-                <SfComboBox TValue="string" TItem="ApSuppl" DataSource="supplier" Placeholder="Supplier" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Supplier">
-                    <DropDownListEvents TValue="string" ValueChange="OnChangeSupplier"></DropDownListEvents>
+                <SfComboBox TValue="string" TItem="ApSuppl" DataSource="@supplier" Placeholder="Supplier" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Supplier">
+                    <ComboBoxEvents TItem="ApSuppl" TValue="string" ValueChange="OnChangeSupplier"></ComboBoxEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="Supplier"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.Supplier)" />
@@ -75,7 +75,7 @@
 
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="IcLokasi" DataSource="lokasi" Placeholder="Masuk Lokasi" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Lokasi">
-                    <DropDownListEvents TValue="string" ></DropDownListEvents>
+                    <DropDownListEvents  TItem="IcLokasi"  TValue="string" ></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLokasi" Value="Lokasi"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.Lokasi)" />
@@ -174,7 +174,7 @@
         <Content>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="IcItem" DataSource="itemcode" Placeholder="Select Item" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transd.ItemCode">
-                    <DropDownListEvents TValue="string" ValueChange="OnChangeItem"></DropDownListEvents>
+                    <DropDownListEvents TItem="IcItem" TValue="string" ValueChange="OnChangeItem"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="ItemCode"></ComboBoxFieldSettings>
                 </SfComboBox>
 
@@ -307,10 +307,12 @@
         var Discount = price * Transd.Persen / 100;
         Transd.Discount = Discount;
     }
-    public void OnChangeSupplier(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    public void OnChangeSupplier(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, ApSuppl> args)
     {
         var supplier = JsonConvert.DeserializeObject<ApSuppl>(args.ItemData != null ? args.ItemData.ToString() : "");
         this.namasupplier = supplier.NamaSup;
+
+        // this.namasupplier = args.ItemData?.NamaSup;
 
     }
 
@@ -321,7 +323,7 @@
 
     //}
 
-    public void OnChangeItem(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    public void OnChangeItem(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, IcItem> args)
     {
         var itemData = JsonConvert.DeserializeObject<IcItem>(args.ItemData != null ? args.ItemData.ToString() : "");
         if (itemData != null)

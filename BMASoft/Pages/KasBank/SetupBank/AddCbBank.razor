@@ -30,7 +30,7 @@
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="GlAccount" DataSource="GlAccounts" Placeholder="GL Akun" FloatLabelType="FloatLabelType.Auto" @bind-Value="@bank.Acctset">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TItem="GlAccount" TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="GlAcct"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => bank.Acctset)" />
@@ -55,7 +55,7 @@
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="StatusTax" DataSource="satuan" Placeholder="Status" FloatLabelType="FloatLabelType.Auto" @bind-Value="@bank.Status">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TItem="StatusTax" TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="TaxStatus" Value="TaxStatus"></ComboBoxFieldSettings>
                 </SfComboBox>
 

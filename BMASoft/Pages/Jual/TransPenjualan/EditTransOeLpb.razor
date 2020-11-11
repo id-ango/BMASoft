@@ -72,7 +72,7 @@
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="ArCust" DataSource="Customers" Placeholder="Customer" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Customer">
-                    <DropDownListEvents TValue="string" ValueChange="OnChangeCustomer"></DropDownListEvents>
+                    <DropDownListEvents TItem="ArCust" TValue="string" ValueChange="OnChangeCustomer"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="Customer"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.Customer)" />
@@ -85,7 +85,7 @@
 
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="IcLokasi" DataSource="lokasi" Placeholder="Masuk Lokasi" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Lokasi">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TItem="IcLokasi" TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLokasi" Value="Lokasi"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.Lokasi)" />
@@ -93,7 +93,7 @@
 
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="StatusTax" DataSource="pajak" Placeholder="Status" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Status">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TItem="StatusTax" TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="TaxStatus" Value="TaxStatus"></ComboBoxFieldSettings>
                 </SfComboBox>
 
@@ -193,7 +193,7 @@
         <Content>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="IcItem" DataSource="itemcode" Placeholder="Select Item" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transd.ItemCode">
-                    <DropDownListEvents TValue="string" ValueChange="OnChangeItem"></DropDownListEvents>
+                    <DropDownListEvents TItem="IcItem" TValue="string" ValueChange="OnChangeItem"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="ItemCode"></ComboBoxFieldSettings>
                 </SfComboBox>
 
@@ -377,13 +377,13 @@
         Transd.Discount = Discount;
     }
 
-    public void OnChangeCustomer(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    public void OnChangeCustomer(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, ArCust> args)
     {
         var customer = JsonConvert.DeserializeObject<ArCust>(args.ItemData != null ? args.ItemData.ToString() : "");
         this.namacustomer = customer.NamaCust;
     }
 
-    public void OnChangeItem(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    public void OnChangeItem(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, IcItem> args)
     {
         var itemData = JsonConvert.DeserializeObject<IcItem>(args.ItemData != null ? args.ItemData.ToString() : "");
         if (itemData != null)

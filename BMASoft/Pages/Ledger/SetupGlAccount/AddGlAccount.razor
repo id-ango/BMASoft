@@ -28,7 +28,7 @@
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="TipeGl" DataSource="satuan" Placeholder="Tipe GL" FloatLabelType="FloatLabelType.Auto" @bind-Value="@produk.TipeGL">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TItem="TipeGl" TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaTipe" Value="NamaTipe"></ComboBoxFieldSettings>
                 </SfComboBox>
 

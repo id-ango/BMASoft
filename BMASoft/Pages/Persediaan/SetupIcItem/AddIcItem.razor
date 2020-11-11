@@ -28,42 +28,42 @@
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="SatuanBarang" DataSource="satuan" Placeholder="Satuan" FloatLabelType="FloatLabelType.Auto" @bind-Value="@produk.Satuan">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TItem="SatuanBarang" TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaSatuan" Value="NamaSatuan"></ComboBoxFieldSettings>
                 </SfComboBox>
 
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="IcDiv" DataSource="DivisiSet" Placeholder="Divisi" FloatLabelType="FloatLabelType.Auto" @bind-Value="@produk.Divisi">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TItem="IcDiv" TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaDiv" Value="Divisi"></ComboBoxFieldSettings>
                 </SfComboBox>
 
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="JnsBrng" DataSource="tipebarang" Placeholder="Tipe Produk" FloatLabelType="FloatLabelType.Auto" @bind-Value="@produk.JnsBrng">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TItem="JnsBrng" TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaJenis" Value="NamaJenis"></ComboBoxFieldSettings>
                 </SfComboBox>
 
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="CostingMethod" DataSource="jnsmethod" Placeholder="Costing Method" FloatLabelType="FloatLabelType.Auto" @bind-Value="@produk.CostMethod">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TItem="CostingMethod" TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaMethod" Value="NamaMethod"></ComboBoxFieldSettings>
                 </SfComboBox>
 
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="IcAcct" DataSource="AkunSet" Placeholder="AkunSet" FloatLabelType="FloatLabelType.Auto" @bind-Value="@produk.AcctSet">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TItem="IcAcct" TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="Description" Value="AcctSet"></ComboBoxFieldSettings>
                 </SfComboBox>
 
             </div>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="IcCat" DataSource="CategorySet" Placeholder="Category" FloatLabelType="FloatLabelType.Auto" @bind-Value="@produk.Category">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TItem="IcCat" TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="Description" Value="Category"></ComboBoxFieldSettings>
                 </SfComboBox>
 

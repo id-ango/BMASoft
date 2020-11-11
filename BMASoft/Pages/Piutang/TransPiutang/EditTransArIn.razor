@@ -60,7 +60,7 @@
 
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="ArCust" DataSource="customers" Placeholder="Select Customer" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Customer">
-                    <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
+                    <DropDownListEvents TItem="ArCust" TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="Customer"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.ArCustId)" />
@@ -234,7 +234,7 @@
 
 
 
-    public void OnChangeBank(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    public void OnChangeBank(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, ArCust> args)
     {
         var itemData = JsonConvert.DeserializeObject<ArCust>(args.ItemData != null ? args.ItemData.ToString() : "");
         this.CustomerId = itemData.ArCustId;

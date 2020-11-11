@@ -71,7 +71,7 @@
 
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="IcLokasi" DataSource="suppliers" Placeholder="Dari Lokasi" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Lokasi">
-                    <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
+                    <DropDownListEvents TItem="IcLokasi" TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLokasi" Value="Lokasi"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.Lokasi)" />
@@ -79,7 +79,7 @@
 
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="IcLokasi" DataSource="suppliers" Placeholder="Pindah Ke Lokasi" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.Lokasi2">
-                    <DropDownListEvents TValue="string"></DropDownListEvents>
+                    <DropDownListEvents TItem="IcLokasi" TValue="string"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLokasi" Value="Lokasi"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.Lokasi2)" />
@@ -139,7 +139,7 @@
         <Content>
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="IcItem" DataSource="srccode" Placeholder="Select Item" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transd.ItemCode">
-                    <DropDownListEvents TValue="string" ValueChange="OnChangeItem"></DropDownListEvents>
+                    <DropDownListEvents TItem="IcItem" TValue="string" ValueChange="OnChangeItem"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NamaLengkap" Value="ItemCode"></ComboBoxFieldSettings>
                 </SfComboBox>
 
@@ -200,8 +200,8 @@
     {
         // Transh.Tanggal = DateTime.Now;
 
-       await  Loadsuppliers();
-       await  LoadSrcCode();
+        await  Loadsuppliers();
+        await  LoadSrcCode();
         LoadTrans();
     }
 
@@ -241,14 +241,13 @@
 
 
 
-    public void OnChangeBank(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    public void OnChangeBank(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, IcLokasi> args)
     {
-        var itemData = JsonConvert.DeserializeObject<ApSuppl>(args.ItemData != null ? args.ItemData.ToString() : "");
-        this.SupplierId = itemData.ApSupplId;
-
+        var lokasiData = JsonConvert.DeserializeObject<IcLokasi>(args.ItemData != null ? args.ItemData.ToString() : "");
+        this.SupplierId = lokasiData.IcLokasiId;
     }
 
-    public void OnChangeItem(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    public void OnChangeItem(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, IcItem> args)
     {
         var itemData = JsonConvert.DeserializeObject<IcItem>(args.ItemData != null ? args.ItemData.ToString() : "");
 

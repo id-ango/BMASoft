@@ -56,7 +56,7 @@
             <label>@kurs</label> <br />
             <div class="form-group">
                 <SfComboBox TValue="string" TItem="CbBank" DataSource="banks" Placeholder="Select Bank" FloatLabelType="FloatLabelType.Auto" @bind-Value="@Transh.KodeBank">
-                    <DropDownListEvents TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
+                    <DropDownListEvents TItem="CbBank" TValue="string" ValueChange="OnChangeBank"></DropDownListEvents>
                     <ComboBoxFieldSettings Text="NmBank" Value="KodeBank"></ComboBoxFieldSettings>
                 </SfComboBox>
                 <ValidationMessage For="@(() => Transh.KodeBank)" />
@@ -270,7 +270,7 @@
 
     }
 
-    public void OnChangeBank(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    public void OnChangeBank(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, CbBank> args)
     {
         var itemData = JsonConvert.DeserializeObject<CbBank>(args.ItemData != null ? args.ItemData.ToString() : "");
         this.kurs = itemData?.Kurs;
